@@ -1,4 +1,5 @@
 import { createTheme, CSSProperties, responsiveFontSizes } from "@mui/material";
+import "@fontsource/roboto";
 
 export const defaultStyles: CSSProperties = {
   html: {
