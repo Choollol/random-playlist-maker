@@ -1,3 +1,4 @@
+import TestButton from "@/components/TestButton";
 import { defaultStyles, muiTheme } from "@/lib/styling/defaultStyling";
 import "@/styles/globals.css";
 import { GlobalStyles, ThemeProvider } from "@mui/material";
@@ -10,6 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={muiTheme}>
       {globalStyles}
 
+      <TestButton />
       <Component {...pageProps} />
     </ThemeProvider>
   );

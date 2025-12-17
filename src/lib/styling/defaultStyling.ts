@@ -11,8 +11,8 @@ export const defaultStyles: CSSProperties = {
     overflowX: "hidden",
     color: "var(--foreground)",
     background: "var(--background)",
-    "-webkit-font-smoothing": "antialiased",
-    "-moz-osx-font-smoothing": "grayscale",
+    WebKitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale",
   },
   a: {
     color: "inherit",
