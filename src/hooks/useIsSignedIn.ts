@@ -1,4 +1,4 @@
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/authClient";
 
 /**
  * @returns Whether the user is logged in and authenticated.
