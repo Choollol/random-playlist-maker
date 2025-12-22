@@ -1,6 +1,10 @@
-import { ENV } from "@/env";
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
-  baseURL: ENV.BETTER_AUTH_URL,
-});
+export const authClient = createAuthClient({});
+
+export const signInGoogle = async () => {
+  const data = await authClient.signIn.social({
+    provider: "google",
+  });
+  console.log(data);
+};
