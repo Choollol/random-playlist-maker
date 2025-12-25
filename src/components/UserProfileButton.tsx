@@ -6,7 +6,6 @@ import { Button } from "@mui/material";
  * Shown when user _is_ signed in.
  */
 const UserProfileButton = () => {
-  console.log("profile");
   const handleClick = () => {
     authClient.signOut();
   };
