@@ -22,7 +22,7 @@ export const defaultStyles: CSSProperties = {
 
 const headerCommonStyles: CSSProperties = {};
 
-let muiTheme = createTheme({
+let theme = createTheme({
   components: {
     MuiTypography: {
       styleOverrides: {
@@ -54,6 +54,6 @@ let muiTheme = createTheme({
   },
 });
 
-muiTheme = responsiveFontSizes(muiTheme);
+theme = responsiveFontSizes(theme);
 
-export { muiTheme };
+export { theme };
