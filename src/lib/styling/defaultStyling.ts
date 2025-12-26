@@ -1,28 +1,17 @@
-import { createTheme, CSSProperties, responsiveFontSizes } from "@mui/material";
+import {
+  createTheme,
+  CSSProperties,
+  responsiveFontSizes,
+  Theme,
+} from "@mui/material";
 import "@fontsource/roboto";
-
-export const defaultStyles: CSSProperties = {
-  html: {
-    maxWidth: "100vw",
-    overflowX: "hidden",
-  },
-  body: {
-    maxWidth: "100vw",
-    overflowX: "hidden",
-    color: "var(--foreground)",
-    background: "var(--background)",
-    WebKitFontSmoothing: "antialiased",
-    MozOsxFontSmoothing: "grayscale",
-  },
-  a: {
-    color: "inherit",
-    textDecoration: "none",
-  },
-};
 
 const headerCommonStyles: CSSProperties = {};
 
 let theme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
   components: {
     MuiTypography: {
       styleOverrides: {
@@ -55,5 +44,18 @@ let theme = createTheme({
 });
 
 theme = responsiveFontSizes(theme);
+
+export const defaultStyles: CSSProperties = {
+  body: {
+    WebKitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale",
+    color: (theme: Theme) => theme.palette.text.primary,
+    background: (theme: Theme) => theme.palette.background,
+  },
+  a: {
+    color: "inherit",
+    textDecoration: "none",
+  },
+};
 
 export { theme };
