@@ -45,6 +45,9 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1
     devDependencies:
+      '@types/gapi.client.youtube-v3':
+        specifier: ^0.0.4
+        version: 0.0.4
       '@types/node':
         specifier: ^20
         version: 20.19.25
@@ -438,6 +441,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
+  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
+    resolution: {integrity: sha512-Jeo/KZqK39DI6ExXHcJ4lqnn1O/wEqboQ6eQ8WnNpu5eJ7wUnX/C5KazOgs1aRhnIB/dVzDe8wm62nmtkMIoaw==}
+
+  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20251222':
+    resolution: {integrity: sha512-ojFtNLlS33j6HtpR3O2aTO0JD1jhzKYuTnIARiOJx3lzjjzaq1LbdmQu6GklIbXHc9vVTiDqGeA16pG/3fpdqA==}
+
   '@mui/core-downloads-tracker@7.3.6':
     resolution: {integrity: sha512-QaYtTHlr8kDFN5mE1wbvVARRKH7Fdw1ZuOjBJcFdVpfNfRYKF3QLT4rt+WaB6CKJvpqxRsmEo0kpYinhH5GeHg==}
 
@@ -623,6 +632,15 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/gapi.client.discovery-v1@0.0.4':
+    resolution: {integrity: sha512-uevhRumNE65F5mf2gABLaReOmbFSXONuzFZjNR3dYv6BmkHg+wciubHrfBAsp3554zNo3Dcg6dUAlwMqQfpwjQ==}
+
+  '@types/gapi.client.youtube-v3@0.0.4':
+    resolution: {integrity: sha512-7dcXOiB3O//IzVXMmH0Avjczy0mbOpXfPo4mupXvL2spKXXpwjXiDwU/PEm8weExH3qzP3HxGbZTFKTWS4fo5w==}
+
+  '@types/gapi.client@1.0.8':
+    resolution: {integrity: sha512-qJQUmmumbYym3Amax0S8CVzuSngcXsC1fJdwRS2zeW5lM63zXkw4wJFP+bG0jzgi0R6EsJKoHnGNVTDbOyG1ng==}
 
   '@types/gapi@0.0.47':
     resolution: {integrity: sha512-/ZsLuq6BffMgbKMtZyDZ8vwQvTyKhKQ1G2K6VyWCgtHHhfSSXbk4+4JwImZiTjWNXfI2q1ZStAwFFHSkNoTkHA==}
@@ -2681,6 +2699,16 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
+    dependencies:
+      '@types/gapi.client': 1.0.8
+      '@types/gapi.client.discovery-v1': 0.0.4
+
+  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20251222':
+    dependencies:
+      '@types/gapi.client': 1.0.8
+      '@types/gapi.client.discovery-v1': 0.0.4
+
   '@mui/core-downloads-tracker@7.3.6': {}
 
   '@mui/material@7.3.6(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react@19.2.0))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
@@ -2836,6 +2864,16 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.8': {}
+
+  '@types/gapi.client.discovery-v1@0.0.4':
+    dependencies:
+      '@maxim_mazurok/gapi.client.discovery-v1': 0.4.20200806
+
+  '@types/gapi.client.youtube-v3@0.0.4':
+    dependencies:
+      '@maxim_mazurok/gapi.client.youtube-v3': 0.1.20251222
+
+  '@types/gapi.client@1.0.8': {}
 
   '@types/gapi@0.0.47': {}
 

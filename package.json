@@ -23,6 +23,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@types/gapi.client.youtube-v3": "^0.0.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
