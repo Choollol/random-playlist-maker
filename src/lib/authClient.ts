@@ -1,10 +1,11 @@
+import { GOOGLE_SCOPES } from "@/lib/utils/gapiUtils";
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({});
 
-export const signInGoogle = async () => {
-  const data = await authClient.signIn.social({
+export const signInGoogle = () => {
+  authClient.signIn.social({
     provider: "google",
+    scopes: [GOOGLE_SCOPES],
   });
-  console.log(data);
 };

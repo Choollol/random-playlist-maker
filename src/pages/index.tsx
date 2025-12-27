@@ -1,17 +1,49 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Typography } from "@mui/material";
 import { ENV } from "@/env";
 import TestButton from "@/components/TestButton";
 import ManageAccountButton from "@/components/ManageAccountButton";
+import CreatePlaylistForm from "@/components/CreatePlaylistForm";
+import Script from "next/script";
+import { useCallback, useEffect, useState } from "react";
+import { setEnvVariables } from "@/lib/utils/envUtils";
+import useIsSignedIn from "@/hooks/useIsSignedIn";
+import { initGapiClient } from "@/lib/utils/gapiUtils";
 
 interface Props {
-  url: string;
-  apiKey: string;
-  clientId: string;
+  googleApiKey: string;
+  googleClientId: string;
 }
 
-export default function Home({ url, apiKey, clientId }: Props) {
+export default function Home({ googleApiKey, googleClientId }: Props) {
+  const isSignedIn = useIsSignedIn();
+
+  const [isGapiLoaded, setIsGapiLoaded] = useState(false);
+
+  useEffect(
+    () => {
+      setEnvVariables(googleApiKey, googleClientId);
+    },
+    // Dependencies should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const initGapi = useCallback(() => {
+    if (isSignedIn && isGapiLoaded) {
+      initGapiClient();
+    }
+  }, [isSignedIn, isGapiLoaded]);
+
+  useEffect(() => {
+    initGapi();
+  }, [initGapi]);
+
+  const handleGapiLoad = () => {
+    gapi.load("client", () => {
+      setIsGapiLoaded(true);
+    });
+  };
+
   return (
     <>
       <Head>
@@ -20,75 +52,23 @@ export default function Home({ url, apiKey, clientId }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://apis.google.com/js/api.js" onLoad={handleGapiLoad} />
       <div>
         <main>
-          <TestButton url={url} apiKey={apiKey} clientId={clientId} />
+          <TestButton />
           <ManageAccountButton />
-          <Image
-            src="/next.svg"
-            alt="Next.js logo"
-            width={100}
-            height={20}
-            priority
-          />
-          <div>
-            <Typography variant="h1">
-              To get started, edit the index.tsx file.
-            </Typography>
-            <Typography>
-              Looking for a starting point or more instructions? Head over to{" "}
-              <a
-                href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Templates
-              </a>{" "}
-              or the{" "}
-              <a
-                href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learning
-              </a>{" "}
-              center.
-            </Typography>
-          </div>
-          <div>
-            <a
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={16}
-                height={16}
-              />
-              Deploy Now
-            </a>
-            <a
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Documentation
-            </a>
-          </div>
+          <CreatePlaylistForm />
         </main>
       </div>
     </>
   );
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps = async (): Promise<{ props: Props }> => {
   return {
     props: {
-      url: ENV.BETTER_AUTH_URL,
-      apiKey: ENV.GOOGLE_API_KEY,
-      clientId: ENV.GOOGLE_CLIENT_ID,
+      googleApiKey: ENV.GOOGLE_API_KEY,
+      googleClientId: ENV.GOOGLE_CLIENT_ID,
     },
   };
 };
