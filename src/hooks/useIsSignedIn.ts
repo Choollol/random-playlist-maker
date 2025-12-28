@@ -1,11 +1,12 @@
 import { authClient } from "@/lib/authClient";
+import { isSessionValid } from "@/lib/utils/authUtils";
 
 /**
  * @returns Whether the user is logged in and authenticated.
  */
 const useIsSignedIn = (): boolean => {
   const session = authClient.useSession();
-  return session.data !== null;
+  return isSessionValid(session);
 };
 
 export default useIsSignedIn;

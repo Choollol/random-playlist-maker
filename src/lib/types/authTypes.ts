@@ -1,3 +1,5 @@
 import { authClient } from "@/lib/authClient";
 
-export type UseSessionResult = ReturnType<typeof authClient.useSession>;
+export type AuthSession =
+  | ReturnType<typeof authClient.useSession>
+  | Awaited<ReturnType<typeof authClient.getSession>>;
