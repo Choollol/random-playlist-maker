@@ -3,11 +3,8 @@ import { ENV } from "@/env";
 import TestButton from "@/components/TestButton";
 import ManageAccountButton from "@/components/ManageAccountButton";
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
-import Script from "next/script";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setEnvVariables } from "@/lib/utils/envUtils";
-import useIsSignedIn from "@/hooks/useIsSignedIn";
-import { initGapiClient } from "@/lib/utils/gapiUtils";
 
 interface Props {
   googleApiKey: string;
@@ -15,10 +12,6 @@ interface Props {
 }
 
 export default function Home({ googleApiKey, googleClientId }: Props) {
-  const isSignedIn = useIsSignedIn();
-
-  const [isGapiLoaded, setIsGapiLoaded] = useState(false);
-
   useEffect(
     () => {
       setEnvVariables(googleApiKey, googleClientId);
@@ -28,22 +21,6 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
     []
   );
 
-  const initGapi = useCallback(() => {
-    if (isSignedIn && isGapiLoaded) {
-      initGapiClient();
-    }
-  }, [isSignedIn, isGapiLoaded]);
-
-  useEffect(() => {
-    initGapi();
-  }, [initGapi]);
-
-  const handleGapiLoad = () => {
-    gapi.load("client", () => {
-      setIsGapiLoaded(true);
-    });
-  };
-
   return (
     <>
       <Head>
@@ -52,7 +29,6 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Script src="https://apis.google.com/js/api.js" onLoad={handleGapiLoad} />
       <div>
         <main>
           <TestButton />
