@@ -1,15 +1,20 @@
-import { Button } from "@mui/material";
-import { FormEvent } from "react";
+import { Button, TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
+
+interface FormData {
+  ignorePlaylistIdsText: string;
+}
 
 const CreatePlaylistForm = () => {
-  const handleSubmit = (event: FormEvent<HTMLElement>) => {
-    event.preventDefault();
+  const { register, handleSubmit } = useForm<FormData>();
 
-    console.log("submitted");
+  const submitForm = (formData: FormData) => {
+    console.log(formData.ignorePlaylistIdsText);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(submitForm)}>
+      <TextField {...register("ignorePlaylistIdsText")} />
       <Button type="submit">Submit</Button>
     </form>
   );
