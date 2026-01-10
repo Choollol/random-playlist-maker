@@ -1,11 +1,10 @@
-import { getPlaylists } from "@/lib/utils/playlistUtils";
+import { createRandomizedPlaylist } from "@/lib/playlistManagement";
 
 const TestButton = () => {
   const handleClick = async () => {
     console.log("Test button clicked");
 
-    const playlists = await getPlaylists();
-    console.log(playlists);
+    await createRandomizedPlaylist(10, "unlisted");
   };
   return (
     <>

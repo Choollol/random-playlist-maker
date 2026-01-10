@@ -1,29 +1,13 @@
 import {
   PlaylistRequestCallback,
   ConditionalPlaylistType,
+  PrivacyStatus,
 } from "@/lib/types/gapiTypes";
-import { isUserSignedIn } from "@/lib/utils/authUtils";
+import { PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/utils/gapiUtils";
 
 const MAX_PAGINATED_ITEM_RESULTS = 50;
 
-export const getPlaylists = async () => {
-  const isSignedIn = await isUserSignedIn();
-
-  if (!isSignedIn) {
-    console.log("not signed in");
-    return;
-  }
-
-  const playlists = await getPaginatedItems(
-    gapi.client.youtube.playlists.list,
-    {
-      part: "snippet",
-      mine: true,
-    }
-  );
-
-  return playlists;
-};
+export const DEFAULT_EXCLUDED_PLAYLIST_NAMES = new Set(["Liked Videos"]);
 
 /**
  * Common API for retrieving all playlists or playlistItems
@@ -32,7 +16,7 @@ export const getPlaylists = async () => {
  * @param requestOptions Options to pass as the argument to `requestCallback`.
  * @returns Array of items whose type should be correct based on the given callback.
  */
-const getPaginatedItems = async <
+export const getPaginatedItems = async <
   RequestCallback extends PlaylistRequestCallback,
   RequestOptions extends NonNullable<
     ConditionalPlaylistType<
@@ -77,3 +61,47 @@ const getPaginatedItems = async <
 
   return items;
 };
+
+export async function createPlaylistWithItems(
+  videoIds: string[],
+  playlistTitle: string,
+  privacyStatus: PrivacyStatus
+): Promise<gapi.client.youtube.Playlist> {
+  const response = await gapi.client.youtube.playlists.insert({
+    part: "id, snippet, status",
+    resource: {
+      snippet: {
+        title: playlistTitle,
+      },
+      status: {
+        privacyStatus: privacyStatus,
+      },
+    },
+  });
+  const playlist: gapi.client.youtube.Playlist = JSON.parse(response.body);
+  console.log("Created playlist", playlist);
+
+  for (const playlistItemId of videoIds) {
+    console.log(
+      `Adding video with id ${playlistItemId} to playlist with id ${playlist.id}`
+    );
+    await gapi.client.youtube.playlistItems.insert({
+      part: "snippet",
+      resource: {
+        snippet: {
+          playlistId: playlist.id,
+          resourceId: {
+            kind: PLAYLIST_ITEM_RESOURCE_KIND,
+            videoId: playlistItemId,
+          },
+        },
+      },
+    });
+  }
+
+  console.log(
+    `Created playlist ${playlistTitle} with ${videoIds.length} items`
+  );
+
+  return playlist;
+}

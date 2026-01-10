@@ -3,6 +3,8 @@ import { googleApiKey } from "@/lib/utils/envUtils";
 
 export const GOOGLE_SCOPES = "https://www.googleapis.com/auth/youtube";
 
+export const PLAYLIST_ITEM_RESOURCE_KIND = "youtube#video";
+
 export const initGapiClient = async () => {
   await gapi.client.init({
     apiKey: googleApiKey,

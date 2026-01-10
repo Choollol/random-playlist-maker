@@ -5,8 +5,7 @@ export type PlaylistRequestCallback =
 /**
  * Narrows down between two types depending on the given playlist-related request callback.
  *
- * @param RequestCallbackType A function belonging to `gapi.client.youtube.playlists` or
- *                            `gapi.client.youtube.playlistItems` (list, update, insert, delete).
+ * @param RequestCallbackType `gapi.client.youtube.playlists.list` or `gapi.client.youtube.playlistItems.list`.
  * @param PlaylistType Narrowed type if callback is part of the playlists API
  * @param PlaylistItemType Narrowed type if callback is part of the playlistItems API
  */
@@ -14,6 +13,8 @@ export type ConditionalPlaylistType<
   RequestCallbackType,
   PlaylistType,
   PlaylistItemType
-> = RequestCallbackType extends keyof typeof gapi.client.youtube.playlists
+> = RequestCallbackType extends typeof gapi.client.youtube.playlists.list
   ? PlaylistType
   : PlaylistItemType;
+
+export type PrivacyStatus = "public" | "unlisted" | "private";
