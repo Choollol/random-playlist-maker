@@ -5,7 +5,7 @@ export const GOOGLE_SCOPES = "https://www.googleapis.com/auth/youtube";
 
 export const PLAYLIST_ITEM_RESOURCE_KIND = "youtube#video";
 
-export const initGapiClient = async () => {
+export async function initGapiClient() {
   await gapi.client.init({
     apiKey: googleApiKey,
     discoveryDocs: [
@@ -21,4 +21,4 @@ export const initGapiClient = async () => {
       access_token: accessToken,
     });
   }
-};
+}

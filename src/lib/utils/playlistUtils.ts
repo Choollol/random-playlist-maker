@@ -16,7 +16,7 @@ export const DEFAULT_EXCLUDED_PLAYLIST_NAMES = new Set(["Liked Videos"]);
  * @param requestOptions Options to pass as the argument to `requestCallback`.
  * @returns Array of items whose type should be correct based on the given callback.
  */
-export const getPaginatedItems = async <
+export async function getPaginatedItems<
   RequestCallback extends PlaylistRequestCallback,
   RequestOptions extends NonNullable<
     ConditionalPlaylistType<
@@ -25,10 +25,7 @@ export const getPaginatedItems = async <
       Parameters<typeof gapi.client.youtube.playlistItems.list>[0]
     >
   >
->(
-  requestCallback: RequestCallback,
-  requestOptions: RequestOptions
-) => {
+>(requestCallback: RequestCallback, requestOptions: RequestOptions) {
   type ResponseData = ConditionalPlaylistType<
     RequestCallback,
     gapi.client.youtube.PlaylistListResponse,
@@ -60,7 +57,7 @@ export const getPaginatedItems = async <
   } while (pageToken !== undefined);
 
   return items;
-};
+}
 
 export async function createPlaylistWithItems(
   videoIds: string[],
