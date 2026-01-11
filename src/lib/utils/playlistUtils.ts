@@ -9,6 +9,14 @@ const MAX_PAGINATED_ITEM_RESULTS = 50;
 
 export const DEFAULT_EXCLUDED_PLAYLIST_NAMES = new Set(["Liked Videos"]);
 
+export const MIN_VIDEO_COUNT = 1;
+export const MAX_VIDEO_COUNT = 50;
+export const DEFAULT_VIDEO_COUNT = 20;
+
+export const DEFAULT_PRIVACY_LEVEL: PrivacyStatus = PrivacyStatus.Public;
+
+export const DEFAULT_PLAYLIST_TITLE = "My PickSome";
+
 /**
  * Common API for retrieving all playlists or playlistItems
  *

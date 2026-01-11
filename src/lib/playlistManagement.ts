@@ -11,21 +11,39 @@ interface PlaylistItems {
   [key: string]: gapi.client.youtube.PlaylistItem;
 }
 
+export interface CreateRandomizedPlaylistOptions {
+  playlistTitle: string;
+  numPlaylistItems: number;
+  privacyStatus: PrivacyStatus;
+}
+
 let playlists: gapi.client.youtube.Playlist[] = [];
 let playlistItems: PlaylistItems;
 let videoIds: string[];
 
-export const createRandomizedPlaylist = async (
-  numPlaylistItems: number,
-  privacyStatus: PrivacyStatus
-) => {
+export const createRandomizedPlaylist = async ({
+  playlistTitle,
+  numPlaylistItems,
+  privacyStatus,
+}: CreateRandomizedPlaylistOptions) => {
+  const isSignedIn = await isUserSignedIn();
+
+  if (!isSignedIn) {
+    console.log("not signed in");
+    return [];
+  }
+
   if (!videoIds?.length) {
     await retrievePlaylistItems();
   }
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
 
-  await createPlaylistWithVideos(selectedVideoIds, "zzzasdasd", privacyStatus);
+  await createPlaylistWithVideos(
+    selectedVideoIds,
+    playlistTitle,
+    privacyStatus
+  );
 };
 
 export const retrievePlaylistItems = async () => {
@@ -72,13 +90,6 @@ export const retrievePlaylistItems = async () => {
 };
 
 export const retrievePlaylists = async () => {
-  const isSignedIn = await isUserSignedIn();
-
-  if (!isSignedIn) {
-    console.log("not signed in");
-    return [];
-  }
-
   playlists = await fetchPlaylists();
 };
 

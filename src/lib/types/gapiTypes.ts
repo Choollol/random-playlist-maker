@@ -17,4 +17,8 @@ export type ConditionalPlaylistType<
   ? PlaylistType
   : PlaylistItemType;
 
-export type PrivacyStatus = "public" | "unlisted" | "private";
+export enum PrivacyStatus {
+  Public = "public",
+  Unlisted = "unlisted",
+  Private = "private",
+}
