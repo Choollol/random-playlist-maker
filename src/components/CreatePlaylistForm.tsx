@@ -2,7 +2,7 @@ import {
   createRandomizedPlaylist,
   CreateRandomizedPlaylistOptions,
 } from "@/lib/playlistManagement";
-import { Button, MenuItem, Select, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import NumberField from "./NumberField";
 import {
@@ -22,6 +22,7 @@ const CreatePlaylistForm = () => {
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
+
     // createRandomizedPlaylist({
     //   playlistTitle: formData.playlistTitle,
     //   numPlaylistItems: formData.numPlaylistItems,
@@ -36,7 +37,7 @@ const CreatePlaylistForm = () => {
         defaultValue={DEFAULT_PLAYLIST_TITLE}
       />
       <NumberField
-        {...(register("numPlaylistItems"), { required: true })}
+        {...register("numPlaylistItems", { required: true })}
         defaultValue={DEFAULT_VIDEO_COUNT}
         min={MIN_VIDEO_COUNT}
         max={MAX_VIDEO_COUNT}
