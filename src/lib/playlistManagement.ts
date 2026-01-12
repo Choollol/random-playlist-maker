@@ -1,7 +1,7 @@
 import {
   getUserPlaylistData,
   saveUserPlaylistData,
-} from "@/lib/localStorageManagement";
+} from "@/lib/storageManagement";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { getRandomElements } from "@/lib/utils/arrayUtils";
