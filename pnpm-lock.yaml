@@ -38,6 +38,9 @@ importers:
       googleapis:
         specifier: ^169.0.0
         version: 169.0.0
+      idb:
+        specifier: ^8.0.3
+        version: 8.0.3
       next:
         specifier: 16.0.7
         version: 16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -492,8 +495,8 @@ packages:
   '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
     resolution: {integrity: sha512-Jeo/KZqK39DI6ExXHcJ4lqnn1O/wEqboQ6eQ8WnNpu5eJ7wUnX/C5KazOgs1aRhnIB/dVzDe8wm62nmtkMIoaw==}
 
-  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260108':
-    resolution: {integrity: sha512-6nIMnVdhagjEe9n5fPx+mupoZuMZ0fk1giJsCkunNLitvA4UUuzvHgrh8rvejT9FUOZioSk1nIZddQwmT2cr3g==}
+  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260112':
+    resolution: {integrity: sha512-bD2f/f/4oBKKkecnhuAAly13PpsKgH+EvVQbfQ+IDWRx2Y5OB2Mc9eEbC5oFdgarrvoYVYZxGJeFz+05ZqTfsw==}
 
   '@mui/core-downloads-tracker@7.3.6':
     resolution: {integrity: sha512-QaYtTHlr8kDFN5mE1wbvVARRKH7Fdw1ZuOjBJcFdVpfNfRYKF3QLT4rt+WaB6CKJvpqxRsmEo0kpYinhH5GeHg==}
@@ -1575,6 +1578,9 @@ packages:
   https-proxy-agent@7.0.6:
     resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
     engines: {node: '>= 14'}
+
+  idb@8.0.3:
+    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -2840,7 +2846,7 @@ snapshots:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
 
-  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260108':
+  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260112':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
@@ -3015,7 +3021,7 @@ snapshots:
 
   '@types/gapi.client.youtube-v3@0.0.4':
     dependencies:
-      '@maxim_mazurok/gapi.client.youtube-v3': 0.1.20260108
+      '@maxim_mazurok/gapi.client.youtube-v3': 0.1.20260112
 
   '@types/gapi.client@1.0.8': {}
 
@@ -4049,6 +4055,8 @@ snapshots:
       debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
+
+  idb@8.0.3: {}
 
   ignore@5.3.2: {}
 
