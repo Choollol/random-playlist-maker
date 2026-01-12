@@ -4,12 +4,14 @@ import {
   PrivacyStatus,
   Playlist,
   PlaylistItem,
+  PlaylistListParams,
+  PlaylistItemListParams,
 } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { addArrayElementsToSet } from "@/lib/utils/arrayUtils";
 import { PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/utils/gapiUtils";
 
-const MAX_PAGINATED_ITEM_RESULTS = 50;
+export const MAX_PAGINATED_ITEM_RESULTS = 50;
 
 export const PLAYLIST_PART = "snippet";
 export const PLAYLIST_ITEM_PART = "snippet, contentDetails";
@@ -40,8 +42,8 @@ export async function getPaginatedItems<
   RequestOptions extends NonNullable<
     ConditionalPlaylistType<
       RequestCallback,
-      Parameters<typeof gapi.client.youtube.playlists.list>[0],
-      Parameters<typeof gapi.client.youtube.playlistItems.list>[0]
+      PlaylistListParams,
+      PlaylistItemListParams
     >
   >,
   ResponseData extends ConditionalPlaylistType<
@@ -156,4 +158,33 @@ export function trimPlaylistItemProperties(playlistItem: PlaylistItem) {
   delete playlistItem.snippet?.resourceId?.playlistId;
   delete playlistItem.snippet?.videoOwnerChannelId;
   delete playlistItem.snippet?.videoOwnerChannelTitle;
+}
+
+/**
+ * Given an etag, check if a playlist's data has changed on YouTube's side.
+ *
+ * @param cachedEtag The cached etag.
+ * @param playlistId The ID of the playlist being checked.
+ * @returns `null` if the playlist hasn't changed, the new etag otherwise.
+ */
+export async function checkPlaylistEtag(
+  cachedEtag: string,
+  playlistId: string
+): Promise<string | null> {
+  const response = await gapi.client.request({
+    path: "https://www.googleapis.com/youtube/v3/playlists",
+    method: "GET",
+    params: { part: "id", id: playlistId },
+    headers: {
+      "If-None-Match": cachedEtag,
+    },
+  });
+  if (response.status === 304) {
+    return null;
+  }
+  const body: gapi.client.youtube.PlaylistListResponse = JSON.parse(
+    response.body
+  );
+  const newEtag = body.etag!;
+  return newEtag;
 }

@@ -7,6 +7,7 @@ import { PlaylistData } from "@/lib/types/playlistTypes";
 import { getRandomElements } from "@/lib/utils/arrayUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
+  checkPlaylistEtag,
   createPlaylistWithVideos,
   getPaginatedItems,
   getVideoIdsFromPlaylistData,
@@ -69,6 +70,8 @@ export async function retrievePlaylistData() {
   videoIds = getVideoIdsFromPlaylistData(playlistData);
 
   saveUserPlaylistData(userId, playlistData);
+
+  console.log("Finished retrieving playlist data!");
 }
 
 async function retrievePlaylists() {
@@ -91,28 +94,38 @@ async function retrievePlaylists() {
       playlistItems: [],
     };
   });
-  console.log(playlistData);
 }
 
 async function retreivePlaylistItems() {
   const length = Object.keys(playlistData).length;
   let index = 0;
   for (const data of Object.values(playlistData)) {
-    console.log(
-      `Getting items for ${index + 1} of ${length} playlists: ${
-        data.playlist.snippet?.title
-      }`
-    );
-    const items = await getPaginatedItems(
-      gapi.client.youtube.playlistItems.list,
-      {
-        part: PLAYLIST_ITEM_PART,
-        playlistId: data.playlist.id,
-      }
-    );
-    items.forEach(trimPlaylistItemProperties);
+    const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
-    data.playlistItems = items;
+    if (etag !== null) {
+      console.log(
+        `Fetching items for ${index + 1} of ${length} playlists: ${
+          data.playlist.snippet?.title
+        }`
+      );
+      const items = await getPaginatedItems(
+        gapi.client.youtube.playlistItems.list,
+        {
+          part: PLAYLIST_ITEM_PART,
+          playlistId: data.playlist.id,
+        }
+      );
+      items.forEach(trimPlaylistItemProperties);
+
+      data.etag = etag;
+      data.playlistItems = items;
+    } else {
+      console.log(
+        `Getting items from cache for ${index + 1} of ${length} playlists: ${
+          data.playlist.snippet?.title
+        }`
+      );
+    }
 
     index++;
   }

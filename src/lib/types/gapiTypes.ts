@@ -25,3 +25,11 @@ export enum PrivacyStatus {
 
 export type Playlist = gapi.client.youtube.Playlist;
 export type PlaylistItem = gapi.client.youtube.PlaylistItem;
+
+export type PlaylistListParams = Parameters<
+  typeof gapi.client.youtube.playlists.list
+>[0];
+
+export type PlaylistItemListParams = Parameters<
+  typeof gapi.client.youtube.playlistItems.list
+>[0];
