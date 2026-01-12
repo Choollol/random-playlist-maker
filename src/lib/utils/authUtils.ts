@@ -9,3 +9,7 @@ export async function isUserSignedIn(): Promise<boolean> {
 export function isSessionValid(session: AuthSession) {
   return session.data !== null;
 }
+
+export async function getUserId() {
+  return (await authClient.getSession()).data!.user.id.toString();
+}

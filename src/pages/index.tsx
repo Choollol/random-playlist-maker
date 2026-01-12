@@ -5,6 +5,7 @@ import ManageAccountButton from "@/components/ManageAccountButton";
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
 import { useEffect } from "react";
 import { setEnvVariables } from "@/lib/utils/envUtils";
+import useIsSignedIn from "@/hooks/useIsSignedIn";
 
 interface Props {
   googleApiKey: string;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function Home({ googleApiKey, googleClientId }: Props) {
+  const isSignedIn = useIsSignedIn();
+
   useEffect(
     () => {
       setEnvVariables(googleApiKey, googleClientId);
@@ -33,7 +36,7 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
         <main>
           <TestButton />
           <ManageAccountButton />
-          <CreatePlaylistForm />
+          {isSignedIn ? <CreatePlaylistForm /> : <p>Not signed in</p>}
         </main>
       </div>
     </>

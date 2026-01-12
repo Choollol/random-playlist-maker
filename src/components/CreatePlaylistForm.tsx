@@ -1,6 +1,7 @@
 import {
   createRandomizedPlaylist,
   CreateRandomizedPlaylistOptions,
+  retrievePlaylistData,
 } from "@/lib/playlistManagement";
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -14,11 +15,17 @@ import {
 } from "@/lib/utils/playlistUtils";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
+import { useEffect } from "react";
+import { useExternalScriptStore } from "@/store/useExternalScriptStore";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
 const CreatePlaylistForm = () => {
   const { register, handleSubmit } = useForm<FormData>();
+
+  const isGapiLoaded = useExternalScriptStore(
+    (state) => state.isGapiInitialized
+  );
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
@@ -29,6 +36,12 @@ const CreatePlaylistForm = () => {
     //   privacyStatus: formData.privacyStatus,
     // });
   };
+
+  useEffect(() => {
+    if (isGapiLoaded) {
+      retrievePlaylistData();
+    }
+  }, [isGapiLoaded]);
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>

@@ -41,3 +41,12 @@ export function getRandomElements<T>(arr: T[], numElements: number): T[] {
 
   return selected;
 }
+
+/**
+ * Adds all the elements of an array to a set.
+ */
+export function addArrayElementsToSet<T>(set: Set<T>, array: Array<T>) {
+  for (const item of array) {
+    set.add(item);
+  }
+}

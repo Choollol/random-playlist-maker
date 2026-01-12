@@ -22,3 +22,6 @@ export enum PrivacyStatus {
   Unlisted = "unlisted",
   Private = "private",
 }
+
+export type Playlist = gapi.client.youtube.Playlist;
+export type PlaylistItem = gapi.client.youtube.PlaylistItem;

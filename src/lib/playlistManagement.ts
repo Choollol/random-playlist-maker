@@ -1,15 +1,20 @@
-import { PrivacyStatus } from "@/lib/types/gapiTypes";
-import { getRandomElements } from "@/lib/utils/arrayUtils";
-import { isUserSignedIn } from "@/lib/utils/authUtils";
 import {
-  createPlaylistWithItems as createPlaylistWithVideos,
-  DEFAULT_EXCLUDED_PLAYLIST_NAMES,
+  getUserPlaylistData,
+  saveUserPlaylistData,
+} from "@/lib/localStorageManagement";
+import { PrivacyStatus } from "@/lib/types/gapiTypes";
+import { PlaylistData } from "@/lib/types/playlistTypes";
+import { getRandomElements } from "@/lib/utils/arrayUtils";
+import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
+import {
+  createPlaylistWithVideos,
   getPaginatedItems,
+  getVideoIdsFromPlaylistData,
+  PLAYLIST_ITEM_PART,
+  PLAYLIST_PART,
+  trimPlaylistItemProperties,
+  trimPlaylistProperties,
 } from "@/lib/utils/playlistUtils";
-
-interface PlaylistItems {
-  [key: string]: gapi.client.youtube.PlaylistItem;
-}
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -17,24 +22,19 @@ export interface CreateRandomizedPlaylistOptions {
   privacyStatus: PrivacyStatus;
 }
 
-let playlists: gapi.client.youtube.Playlist[] = [];
-let playlistItems: PlaylistItems;
+let playlistData: PlaylistData;
 let videoIds: string[];
 
-export const createRandomizedPlaylist = async ({
+export async function createRandomizedPlaylist({
   playlistTitle,
   numPlaylistItems,
   privacyStatus,
-}: CreateRandomizedPlaylistOptions) => {
+}: CreateRandomizedPlaylistOptions) {
   const isSignedIn = await isUserSignedIn();
 
   if (!isSignedIn) {
     console.log("not signed in");
     return [];
-  }
-
-  if (!videoIds?.length) {
-    await retrievePlaylistItems();
   }
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
@@ -44,63 +44,76 @@ export const createRandomizedPlaylist = async ({
     playlistTitle,
     privacyStatus
   );
-};
+}
 
-export const retrievePlaylistItems = async () => {
+/**
+ * Retrieves all of the current user's playlist data.
+ * Loads from cached data when possible.
+ */
+export async function retrievePlaylistData() {
   await retrievePlaylists();
 
-  playlists = playlists.filter(
-    (playlist) => !DEFAULT_EXCLUDED_PLAYLIST_NAMES.has(playlist.snippet!.title!)
-  );
+  const userId = await getUserId();
 
-  playlistItems = {};
-
-  let index = 0;
-  for (const playlist of playlists) {
-    if (index == 10) {
-      break;
+  const storedData = getUserPlaylistData(userId);
+  if (storedData !== null) {
+    for (const [playlistId, data] of Object.entries(storedData)) {
+      if (Object.hasOwn(playlistData, playlistId)) {
+        playlistData[data.playlist.id!] = data;
+      }
     }
+  }
+
+  await retreivePlaylistItems();
+
+  videoIds = getVideoIdsFromPlaylistData(playlistData);
+
+  saveUserPlaylistData(userId, playlistData);
+}
+
+async function retrievePlaylists() {
+  const playlistList = await getPaginatedItems(
+    gapi.client.youtube.playlists.list,
+    {
+      part: PLAYLIST_PART,
+      mine: true,
+    }
+  );
+  playlistList.forEach(trimPlaylistProperties);
+
+  playlistData = {};
+
+  playlistList.forEach((playlist) => {
+    playlistData[playlist.id!] = {
+      playlist: playlist,
+      // Dummy data that will be replaced later
+      etag: "",
+      playlistItems: [],
+    };
+  });
+  console.log(playlistData);
+}
+
+async function retreivePlaylistItems() {
+  const length = Object.keys(playlistData).length;
+  let index = 0;
+  for (const data of Object.values(playlistData)) {
     console.log(
-      `Getting items for ${index + 1} of ${playlists.length} playlists: ${
-        playlist.snippet?.title
+      `Getting items for ${index + 1} of ${length} playlists: ${
+        data.playlist.snippet?.title
       }`
     );
     const items = await getPaginatedItems(
       gapi.client.youtube.playlistItems.list,
       {
-        part: "snippet, contentDetails",
-        playlistId: playlist.id,
+        part: PLAYLIST_ITEM_PART,
+        playlistId: data.playlist.id,
       }
     );
+    items.forEach(trimPlaylistItemProperties);
 
-    for (const playlistItem of items) {
-      if (
-        playlistItem.id !== undefined &&
-        playlistItems[playlistItem.id] === undefined
-      ) {
-        playlistItems[playlistItem.id] = playlistItem;
-      }
-    }
+    data.playlistItems = items;
+
     index++;
   }
-
-  videoIds = Object.entries(playlistItems).map(
-    ([_, playlistItem]) => playlistItem.contentDetails!.videoId!
-  );
-};
-
-export const retrievePlaylists = async () => {
-  playlists = await fetchPlaylists();
-};
-
-export const fetchPlaylists = async () => {
-  const playlists = await getPaginatedItems(
-    gapi.client.youtube.playlists.list,
-    {
-      part: "snippet, contentDetails",
-      mine: true,
-    }
-  );
-
-  return playlists;
-};
+}
