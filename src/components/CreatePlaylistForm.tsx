@@ -16,16 +16,14 @@ import {
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
 import { useEffect } from "react";
-import { useExternalScriptStore } from "@/store/useExternalScriptStore";
+import { useGapiStateStore } from "@/store/useExternalScriptStore";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
 const CreatePlaylistForm = () => {
   const { register, handleSubmit } = useForm<FormData>();
 
-  const isGapiLoaded = useExternalScriptStore(
-    (state) => state.isGapiInitialized
-  );
+  const isGapiLoaded = useGapiStateStore((state) => state.isGapiInitialized);
 
   const submitForm = (formData: FormData) => {
     console.log(formData);

@@ -5,7 +5,7 @@ const initialState = {
   isGapiInitialized: false,
 };
 
-export const useExternalScriptStore = create(
+export const useGapiStateStore = create(
   combine(initialState, (set) => ({
     setGapiInitialized: () => set({ isGapiInitialized: true }),
   }))
