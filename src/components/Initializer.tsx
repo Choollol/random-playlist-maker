@@ -1,6 +1,7 @@
 import { initDB } from "@/lib/db";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 const Initializer = () => {
   const {
@@ -8,7 +9,14 @@ const Initializer = () => {
     isDatabaseInitialized,
     setDatabaseInitialized,
     setEverythingInitialized,
-  } = useInitializationStateStore((state) => state);
+  } = useInitializationStateStore(
+    useShallow((state) => ({
+      isGapiInitialized: state.isGapiInitialized,
+      isDatabaseInitialized: state.isDatabaseInitialized,
+      setDatabaseInitialized: state.setDatabaseInitialized,
+      setEverythingInitialized: state.setEverythingInitialized,
+    }))
+  );
 
   useEffect(() => {
     (async () => {
