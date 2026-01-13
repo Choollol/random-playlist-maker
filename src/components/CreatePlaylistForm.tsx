@@ -16,14 +16,16 @@ import {
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
 import { useEffect } from "react";
-import { useGapiStateStore } from "@/store/useExternalScriptStore";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
 const CreatePlaylistForm = () => {
   const { register, handleSubmit } = useForm<FormData>();
 
-  const isGapiLoaded = useGapiStateStore((state) => state.isGapiInitialized);
+  const isEverythingInitialized = useInitializationStateStore(
+    (state) => state.isEverythingInitialized
+  );
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
@@ -36,10 +38,10 @@ const CreatePlaylistForm = () => {
   };
 
   useEffect(() => {
-    if (isGapiLoaded) {
+    if (isEverythingInitialized) {
       retrievePlaylistData();
     }
-  }, [isGapiLoaded]);
+  }, [isEverythingInitialized]);
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>

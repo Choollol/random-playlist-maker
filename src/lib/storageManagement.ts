@@ -1,3 +1,4 @@
+import { dbGet, dbSet } from "@/lib/db";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 
 enum LocalStorageKey {
@@ -10,31 +11,22 @@ interface AllUserData {
 
 let allUserData: AllUserData;
 
-export function getUserPlaylistData(userId: string): PlaylistData | null {
+export async function getUserPlaylistData(userId: string): Promise<PlaylistData | null> {
   if (allUserData === undefined) {
-    loadAllData();
+    await loadAllData();
   }
   return allUserData[userId] ?? null;
 }
 
-export function saveUserPlaylistData(
+export async function setUserPlaylistData(
   userId: string,
   playlistData: PlaylistData
 ) {
   allUserData[userId] = playlistData;
 
-  localStorage.setItem(
-    LocalStorageKey.AllUserData,
-    JSON.stringify(allUserData)
-  );
+  await dbSet(LocalStorageKey.AllUserData, allUserData);
 }
 
-function loadAllData() {
-  allUserData =
-    getLocalStorageItem<AllUserData>(LocalStorageKey.AllUserData) ?? {};
-}
-
-function getLocalStorageItem<T>(key: string): T | null {
-  const item = localStorage.getItem(key);
-  return item !== null ? JSON.parse(item) : item;
+async function loadAllData() {
+  allUserData = await dbGet<AllUserData>(LocalStorageKey.AllUserData) ?? {};
 }

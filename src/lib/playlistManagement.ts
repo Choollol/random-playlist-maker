@@ -1,6 +1,6 @@
 import {
   getUserPlaylistData,
-  saveUserPlaylistData,
+  setUserPlaylistData,
 } from "@/lib/storageManagement";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
@@ -56,7 +56,7 @@ export async function retrievePlaylistData() {
 
   const userId = await getUserId();
 
-  const storedData = getUserPlaylistData(userId);
+  const storedData = await getUserPlaylistData(userId);
   if (storedData !== null) {
     for (const [playlistId, data] of Object.entries(storedData)) {
       if (Object.hasOwn(playlistData, playlistId)) {
@@ -69,7 +69,7 @@ export async function retrievePlaylistData() {
 
   videoIds = getVideoIdsFromPlaylistData(playlistData);
 
-  saveUserPlaylistData(userId, playlistData);
+  await setUserPlaylistData(userId, playlistData);
 
   console.log("Finished retrieving playlist data!");
 }

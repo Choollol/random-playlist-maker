@@ -1,7 +1,8 @@
+import Initializer from "@/components/Initializer";
 import useIsSignedIn from "@/hooks/useIsSignedIn";
 import { defaultStyles, theme } from "@/lib/styling/defaultStyling";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
-import { useGapiStateStore } from "@/store/useExternalScriptStore";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import type { AppProps } from "next/app";
 import Script from "next/script";
@@ -11,7 +12,8 @@ const globalStyles = <GlobalStyles styles={defaultStyles} />;
 
 export default function App({ Component, pageProps }: AppProps) {
   const isSignedIn = useIsSignedIn();
-  const setGapiInitialized = useGapiStateStore(
+
+  const setGapiInitialized = useInitializationStateStore(
     (state) => state.setGapiInitialized
   );
 
@@ -38,6 +40,8 @@ export default function App({ Component, pageProps }: AppProps) {
       {globalStyles}
 
       <Script src="https://apis.google.com/js/api.js" onLoad={handleGapiLoad} />
+
+      <Initializer />
 
       <Component {...pageProps} />
     </ThemeProvider>
