@@ -11,5 +11,5 @@ export function isSessionValid(session: AuthSession) {
 }
 
 export async function getUserId() {
-  return (await authClient.getSession()).data!.user.id.toString();
+  return (await authClient.getSession()).data!.user.email!;
 }
