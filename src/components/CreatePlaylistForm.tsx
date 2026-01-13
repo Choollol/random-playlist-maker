@@ -1,8 +1,4 @@
-import {
-  createRandomizedPlaylist,
-  CreateRandomizedPlaylistOptions,
-  retrievePlaylistData,
-} from "@/lib/playlistManagement";
+import { CreateRandomizedPlaylistOptions } from "@/lib/playlistManagement";
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import NumberField from "./NumberField";
@@ -15,17 +11,11 @@ import {
 } from "@/lib/utils/playlistUtils";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
-import { useEffect } from "react";
-import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
 const CreatePlaylistForm = () => {
   const { register, handleSubmit } = useForm<FormData>();
-
-  const isEverythingInitialized = useInitializationStateStore(
-    (state) => state.isEverythingInitialized
-  );
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
@@ -36,12 +26,6 @@ const CreatePlaylistForm = () => {
     //   privacyStatus: formData.privacyStatus,
     // });
   };
-
-  useEffect(() => {
-    if (isEverythingInitialized) {
-      retrievePlaylistData();
-    }
-  }, [isEverythingInitialized]);
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
