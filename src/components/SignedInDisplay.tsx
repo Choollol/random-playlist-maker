@@ -1,6 +1,7 @@
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useEffect } from "react";
 
 const SignedInDisplay = () => {
@@ -8,11 +9,18 @@ const SignedInDisplay = () => {
     (state) => state.isEverythingInitialized
   );
 
+  const setPlaylistsRetrieved = usePlaylistDataStore(
+    (state) => state.setPlaylistsRetrieved
+  );
+
   useEffect(() => {
     if (isEverythingInitialized) {
-      retrievePlaylistData();
+      (async () => {
+        await retrievePlaylistData();
+        setPlaylistsRetrieved();
+      })();
     }
-  }, [isEverythingInitialized]);
+  }, [isEverythingInitialized, setPlaylistsRetrieved]);
 
   return (
     <>

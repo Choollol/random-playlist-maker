@@ -1,4 +1,8 @@
-import { CreateRandomizedPlaylistOptions } from "@/lib/playlistManagement";
+import {
+  createRandomizedPlaylist,
+  CreateRandomizedPlaylistOptions,
+  getPlaylistNames,
+} from "@/lib/playlistManagement";
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import NumberField from "./NumberField";
@@ -11,20 +15,22 @@ import {
 } from "@/lib/utils/playlistUtils";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
+import ControlledAutocomplete from "@/components/ControlledAutocomplete";
+import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
 const CreatePlaylistForm = () => {
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit, control } = useForm<FormData>();
+
+  const arePlaylistsRetrieved = usePlaylistDataStore(
+    (state) => state.arePlaylistsRetrieved
+  );
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
 
-    // createRandomizedPlaylist({
-    //   playlistTitle: formData.playlistTitle,
-    //   numPlaylistItems: formData.numPlaylistItems,
-    //   privacyStatus: formData.privacyStatus,
-    // });
+    createRandomizedPlaylist(formData);
   };
 
   return (
@@ -43,6 +49,16 @@ const CreatePlaylistForm = () => {
         {...register("privacyStatus")}
         values={Object.values(PrivacyStatus)}
         defaultValue={DEFAULT_PRIVACY_LEVEL}
+      />
+      <ControlledAutocomplete
+        name="excludedPlaylistNames"
+        control={control}
+        defaultValue={[]}
+        multiple
+        options={arePlaylistsRetrieved ? getPlaylistNames() : []}
+        renderInput={(params) => (
+          <TextField {...params} label="Playlists to exclude" />
+        )}
       />
       <Button type="submit">Submit</Button>
     </form>

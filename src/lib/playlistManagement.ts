@@ -4,7 +4,7 @@ import {
 } from "@/lib/storageManagement";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { getRandomElements } from "@/lib/utils/arrayUtils";
+import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
   checkPlaylistEtag,
@@ -21,6 +21,7 @@ export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
   numPlaylistItems: number;
   privacyStatus: PrivacyStatus;
+  excludedPlaylistNames: string[];
 }
 
 let playlistData: PlaylistData;
@@ -30,12 +31,17 @@ export async function createRandomizedPlaylist({
   playlistTitle,
   numPlaylistItems,
   privacyStatus,
+  excludedPlaylistNames,
 }: CreateRandomizedPlaylistOptions) {
   const isSignedIn = await isUserSignedIn();
 
   if (!isSignedIn) {
     console.log("not signed in");
     return [];
+  }
+
+  if (excludedPlaylistNames.length > 0) {
+    updateVideoIds(excludedPlaylistNames);
   }
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
@@ -67,7 +73,7 @@ export async function retrievePlaylistData() {
 
   await retreivePlaylistItems();
 
-  videoIds = getVideoIdsFromPlaylistData(playlistData);
+  updateVideoIds();
 
   await setUserPlaylistData(userId, playlistData);
 
@@ -130,3 +136,16 @@ async function retreivePlaylistItems() {
     index++;
   }
 }
+
+export function getPlaylistNames(): string[] {
+  return Object.values(playlistData).map(
+    (data) => data.playlist.snippet!.title!
+  );
+}
+
+function updateVideoIds(excludedPlaylistNames: string[] = []) {
+  videoIds = getVideoIdsFromPlaylistData(playlistData, excludedPlaylistNames);
+}
+
+// Uncomment this during development, comment it any other times
+// export { playlistData, videoIds };

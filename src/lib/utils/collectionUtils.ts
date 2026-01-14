@@ -50,3 +50,9 @@ export function addArrayElementsToSet<T>(set: Set<T>, array: Array<T>) {
     set.add(item);
   }
 }
+
+export function createSetFromArray<T>(array: Array<T>): Set<T> {
+  const set = new Set<T>();
+  addArrayElementsToSet(set, array);
+  return set;
+}

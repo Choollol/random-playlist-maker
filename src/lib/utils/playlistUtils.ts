@@ -8,7 +8,10 @@ import {
   PlaylistItemListParams,
 } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { addArrayElementsToSet } from "@/lib/utils/arrayUtils";
+import {
+  addArrayElementsToSet,
+  createSetFromArray,
+} from "@/lib/utils/collectionUtils";
 import { PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/utils/gapiUtils";
 
 export const MAX_PAGINATED_ITEM_RESULTS = 50;
@@ -118,15 +121,24 @@ export async function createPlaylistWithVideos(
   );
 }
 
-export function getVideoIdsFromPlaylistData(playlistData: PlaylistData) {
+export function getVideoIdsFromPlaylistData(
+  playlistData: PlaylistData,
+  excludedPlaylistNames: string[]
+) {
+  const excludedPlaylistNamesSet = createSetFromArray(excludedPlaylistNames);
   const uniqueVideoIds = new Set<string>();
   for (const data of Object.values(playlistData)) {
-    addArrayElementsToSet(
-      uniqueVideoIds,
-      data.playlistItems.map(
-        (playlistItem) => playlistItem.contentDetails!.videoId!
-      )
-    );
+    const playlistTitle = data.playlist.snippet!.title!;
+    if (!excludedPlaylistNamesSet.has(playlistTitle)) {
+      addArrayElementsToSet(
+        uniqueVideoIds,
+        data.playlistItems.map(
+          (playlistItem) => playlistItem.contentDetails!.videoId!
+        )
+      );
+    } else {
+      console.log(`Excluding playlist ${playlistTitle}`);
+    }
   }
   return Array.from(uniqueVideoIds);
 }
