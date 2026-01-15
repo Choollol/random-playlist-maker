@@ -1,9 +1,30 @@
+import { theme } from "@/lib/styling/defaultStyling";
 import { SxProps } from "@mui/material";
 
-export type StyleProps = SxProps;
+export type StyleProps = SxProps<typeof theme>;
 
-export interface Styles {
+interface Styles {
   [key: string]: StyleProps;
+}
+
+/**
+ * A layer of abstraction around creating styles.
+ *
+ * ```typescript
+ *
+ *   const styles = createStyles({
+ *     someComponent: {
+ *       someStyleProperty: "someValue",
+ *     },
+ *   });
+ *
+ * ```
+ *
+ * @param styles An object that contains all the custom styles for a specific component.
+ * @returns The given object but with autocomplete for properties.
+ */
+export function createStyles<const T extends Styles>(styles: T) {
+  return styles;
 }
 
 /**

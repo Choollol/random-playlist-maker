@@ -27,6 +27,8 @@ export const DEFAULT_PRIVACY_LEVEL: PrivacyStatus = PrivacyStatus.Public;
 
 export const DEFAULT_PLAYLIST_TITLE = "My PickSome";
 
+export const EMPTY_STATE_MESSAGE = null;
+
 /**
  * Common API for retrieving all playlists or playlistItems
  *

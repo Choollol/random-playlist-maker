@@ -1,4 +1,5 @@
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
+import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
@@ -24,6 +25,10 @@ const SignedInDisplay = () => {
 
   return (
     <>
+      <StatusMessageOverlay
+        title="title"
+        message="long message yep yep ype yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep yep"
+      />
       <CreatePlaylistForm />
     </>
   );

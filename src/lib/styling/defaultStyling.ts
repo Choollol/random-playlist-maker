@@ -6,11 +6,23 @@ import {
 } from "@mui/material";
 import "@fontsource/roboto";
 
+declare module "@mui/material/styles" {
+  interface ZIndex {
+    overlay: number;
+  }
+}
+
 const headerCommonStyles: CSSProperties = {};
+
+const defaultMuiTheme = createTheme();
 
 let theme = createTheme({
   colorSchemes: {
     dark: true,
+  },
+  zIndex: {
+    ...defaultMuiTheme.zIndex,
+    overlay: 1600,
   },
   components: {
     MuiTypography: {
