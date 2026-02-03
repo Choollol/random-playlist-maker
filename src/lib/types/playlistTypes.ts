@@ -7,3 +7,10 @@ export interface PlaylistData {
     playlistItems: PlaylistItem[];
   };
 }
+
+/**
+ * Make this a `string[]` when each element needs to be on a different line.
+ */
+export type OverlayMessage = string | string[] | null;
+
+export type SetMessageCallback = (message: OverlayMessage) => void;

@@ -3,7 +3,7 @@ import {
   setUserPlaylistData,
 } from "@/lib/storageManagement";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
-import { PlaylistData } from "@/lib/types/playlistTypes";
+import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
 import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
@@ -49,7 +49,7 @@ export async function createRandomizedPlaylist({
   await createPlaylistWithVideos(
     selectedVideoIds,
     playlistTitle,
-    privacyStatus
+    privacyStatus,
   );
 }
 
@@ -57,9 +57,13 @@ export async function createRandomizedPlaylist({
  * Retrieves all of the current user's playlist data.
  * Loads from cached data when possible.
  */
-export async function retrievePlaylistData() {
+export async function retrievePlaylistData(
+  setMessageCallback: SetMessageCallback,
+) {
+  setMessageCallback("Retrieving playlist data...");
   await retrievePlaylists();
 
+  setMessageCallback("Retrieving user data...");
   const userId = await getUserId();
 
   const storedData = await getUserPlaylistData(userId);
@@ -71,13 +75,15 @@ export async function retrievePlaylistData() {
     }
   }
 
-  await retreivePlaylistItems();
+  setMessageCallback("Retrieving video data...");
+  await retrievePlaylistItems(setMessageCallback);
 
   updateVideoIds();
 
+  setMessageCallback("Caching data...");
   await setUserPlaylistData(userId, playlistData);
 
-  console.log("Finished retrieving playlist data!");
+  setMessageCallback(null);
 }
 
 async function retrievePlaylists() {
@@ -86,7 +92,7 @@ async function retrievePlaylists() {
     {
       part: PLAYLIST_PART,
       mine: true,
-    }
+    },
   );
   playlistList.forEach(trimPlaylistProperties);
 
@@ -102,35 +108,33 @@ async function retrievePlaylists() {
   });
 }
 
-async function retreivePlaylistItems() {
+async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
   const length = Object.keys(playlistData).length;
   let index = 0;
   for (const data of Object.values(playlistData)) {
     const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
     if (etag !== null) {
-      console.log(
-        `Fetching items for ${index + 1} of ${length} playlists: ${
-          data.playlist.snippet?.title
-        }`
-      );
+      setMessageCallback([
+        `Fetching items for ${index + 1} of ${length} playlists:`,
+        data.playlist.snippet!.title!.toString(),
+      ]);
       const items = await getPaginatedItems(
         gapi.client.youtube.playlistItems.list,
         {
           part: PLAYLIST_ITEM_PART,
           playlistId: data.playlist.id,
-        }
+        },
       );
       items.forEach(trimPlaylistItemProperties);
 
       data.etag = etag;
       data.playlistItems = items;
     } else {
-      console.log(
-        `Getting items from cache for ${index + 1} of ${length} playlists: ${
-          data.playlist.snippet?.title
-        }`
-      );
+      setMessageCallback([
+        `Getting items from cache for ${index + 1} of ${length} playlists:`,
+        data.playlist.snippet!.title!.toString(),
+      ]);
     }
 
     index++;
@@ -139,7 +143,7 @@ async function retreivePlaylistItems() {
 
 export function getPlaylistNames(): string[] {
   return Object.values(playlistData).map(
-    (data) => data.playlist.snippet!.title!
+    (data) => data.playlist.snippet!.title!,
   );
 }
 

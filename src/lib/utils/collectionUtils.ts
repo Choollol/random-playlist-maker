@@ -1,4 +1,5 @@
 import { getRandomInt } from "@/lib/utils/numberUtils";
+import { ReactNode } from "react";
 
 /**
  * Swaps two elements of an array.
@@ -55,4 +56,19 @@ export function createSetFromArray<T>(array: Array<T>): Set<T> {
   const set = new Set<T>();
   addArrayElementsToSet(set, array);
   return set;
+}
+
+/**
+ * Joins the elements of an array with a given element (rather than a string).
+ * @returns A newly constructed array.
+ */
+export function joinWithElement(array: ReactNode[], element: ReactNode) {
+  const result: ReactNode[] = [];
+  array.forEach((value, index) => {
+    result.push(value);
+    if (index !== array.length - 1) {
+      result.push(element);
+    }
+  });
+  return result;
 }
