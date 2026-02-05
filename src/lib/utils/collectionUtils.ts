@@ -1,4 +1,4 @@
-import { getRandomInt } from "@/lib/utils/numberUtils";
+import { getRandomInt } from "@/lib/utils/miscUtils";
 
 /**
  * Swaps two elements of an array.

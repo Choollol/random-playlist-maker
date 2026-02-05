@@ -13,3 +13,12 @@ export function getRandomRange(min: number, max: number): number {
 export function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+/**
+ * Returns a promise that resolves after a given number of milliseconds.
+ *
+ * @param waitTimeMs Time to wait in milliseconds.
+ */
+export function waitForMs(waitTimeMs: number) {
+  return new Promise((res) => setTimeout(res, waitTimeMs));
+}

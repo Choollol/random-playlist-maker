@@ -18,6 +18,7 @@ import {
   trimPlaylistItemProperties,
   trimPlaylistProperties,
 } from "@/lib/utils/playlistUtils";
+import { waitForMs } from "@/lib/utils/miscUtils";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -55,9 +56,7 @@ export async function createRandomizedPlaylist({
     updateVideoIds(excludedPlaylistNames);
   }
 
-  await new Promise((res) =>
-    setTimeout(res, EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS),
-  );
+  await waitForMs(EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS);
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
 
@@ -114,14 +113,15 @@ export async function createPlaylistWithVideos(
     //   },
     // });
 
-    await new Promise((res) => setTimeout(res, 100));
+    // TEMP
+    await waitForMs(100);
   }
 
   setMessageCallback(
     `Created playlist ${playlistTitle} with ${videoIds.length} videos!`,
   );
 
-  await new Promise((res) => setTimeout(res, PLAYLIST_CREATED_MESSAGE_TIME_MS));
+  await waitForMs(PLAYLIST_CREATED_MESSAGE_TIME_MS);
 
   setMessageCallback(NO_OVERLAY_MESSAGE);
 }
