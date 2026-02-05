@@ -1,12 +1,7 @@
 import { createStyles } from "@/lib/styling/styling";
-import { OverlayMessage } from "@/lib/types/playlistTypes";
-import { joinWithElement } from "@/lib/utils/collectionUtils";
+import { isDefined } from "@/lib/utils/typeUtils";
+import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { Backdrop, Box, Stack, Typography } from "@mui/material";
-
-interface Props {
-  title: string;
-  message: OverlayMessage;
-}
 
 const styles = createStyles({
   container: (theme) => ({
@@ -31,17 +26,18 @@ const styles = createStyles({
 /**
  * Pass `null` to message to disable the overlay.
  */
-const StatusMessageOverlay = ({ title, message }: Props) => {
-  const text = Array.isArray(message) ? joinWithElement(message, <br />) : message;
-  return message !== null ? (
+const StatusMessageOverlay = () => {
+  const { overlayTitle, overlayMessage } = useOverlayMessageStore();
+
+  return isDefined(overlayMessage) ? (
     <Stack sx={styles.container}>
       <Backdrop open={true} />
 
       <Box sx={styles.textContainer}>
         <Typography variant="h2" sx={styles.title}>
-          {title}
+          {overlayTitle}
         </Typography>
-        <Typography variant="h5">{text}</Typography>
+        <Typography variant="h5">{overlayMessage}</Typography>
       </Box>
     </Stack>
   ) : null;

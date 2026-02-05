@@ -1,4 +1,5 @@
 import Initializer from "@/components/Initializer";
+import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import { defaultStyles, theme } from "@/lib/styling/defaultStyling";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import type { AppProps } from "next/app";
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Initializer isGapiLoaded={isGapiLoaded} />
 
       <Component {...pageProps} />
+      <StatusMessageOverlay />
     </ThemeProvider>
   );
 }

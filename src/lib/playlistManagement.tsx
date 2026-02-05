@@ -8,9 +8,11 @@ import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
   checkPlaylistEtag,
-  createPlaylistWithVideos,
+  EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS,
   getPaginatedItems,
   getVideoIdsFromPlaylistData,
+  NO_OVERLAY_MESSAGE,
+  PLAYLIST_CREATED_MESSAGE_TIME_MS,
   PLAYLIST_ITEM_PART,
   PLAYLIST_PART,
   trimPlaylistItemProperties,
@@ -22,6 +24,7 @@ export interface CreateRandomizedPlaylistOptions {
   numPlaylistItems: number;
   privacyStatus: PrivacyStatus;
   excludedPlaylistNames: string[];
+  setMessageCallback: SetMessageCallback;
 }
 
 let playlistData: PlaylistData;
@@ -32,6 +35,7 @@ export async function createRandomizedPlaylist({
   numPlaylistItems,
   privacyStatus,
   excludedPlaylistNames,
+  setMessageCallback,
 }: CreateRandomizedPlaylistOptions) {
   const isSignedIn = await isUserSignedIn();
 
@@ -41,8 +45,19 @@ export async function createRandomizedPlaylist({
   }
 
   if (excludedPlaylistNames.length > 0) {
+    setMessageCallback(
+      <>
+        Excluding playlists:
+        <br />
+        {excludedPlaylistNames.join(", ")}
+      </>,
+    );
     updateVideoIds(excludedPlaylistNames);
   }
+
+  await new Promise((res) =>
+    setTimeout(res, EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS),
+  );
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
 
@@ -50,7 +65,65 @@ export async function createRandomizedPlaylist({
     selectedVideoIds,
     playlistTitle,
     privacyStatus,
+    setMessageCallback,
   );
+}
+
+/**
+ * Creates a playlist for the auth user with the given videos.
+ */
+export async function createPlaylistWithVideos(
+  videoIds: string[],
+  playlistTitle: string,
+  privacyStatus: PrivacyStatus,
+  setMessageCallback: SetMessageCallback,
+) {
+  setMessageCallback(`Creating playlist ${playlistTitle}...`);
+  // FIXME
+  // const response = await gapi.client.youtube.playlists.insert({
+  //   part: "id, snippet, status",
+  //   resource: {
+  //     snippet: {
+  //       title: playlistTitle,
+  //     },
+  //     status: {
+  //       privacyStatus: privacyStatus,
+  //     },
+  //   },
+  // });
+  // const playlist: Playlist = JSON.parse(response.body);
+  const playlist = {
+    snippet: {
+      title: "test playlist",
+    },
+  };
+
+  setMessageCallback("Adding videos to playlist...");
+  for (const playlistItemId of videoIds) {
+    // FIXME
+    // await gapi.client.youtube.playlistItems.insert({
+    //   part: "snippet",
+    //   resource: {
+    //     snippet: {
+    //       playlistId: playlist.id,
+    //       resourceId: {
+    //         kind: PLAYLIST_ITEM_RESOURCE_KIND,
+    //         videoId: playlistItemId,
+    //       },
+    //     },
+    //   },
+    // });
+
+    await new Promise((res) => setTimeout(res, 100));
+  }
+
+  setMessageCallback(
+    `Created playlist ${playlistTitle} with ${videoIds.length} videos!`,
+  );
+
+  await new Promise((res) => setTimeout(res, PLAYLIST_CREATED_MESSAGE_TIME_MS));
+
+  setMessageCallback(NO_OVERLAY_MESSAGE);
 }
 
 /**
@@ -83,7 +156,7 @@ export async function retrievePlaylistData(
   setMessageCallback("Caching data...");
   await setUserPlaylistData(userId, playlistData);
 
-  setMessageCallback(null);
+  setMessageCallback(NO_OVERLAY_MESSAGE);
 }
 
 async function retrievePlaylists() {
@@ -115,10 +188,13 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
     const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
     if (etag !== null) {
-      setMessageCallback([
-        `Fetching items for ${index + 1} of ${length} playlists:`,
-        data.playlist.snippet!.title!.toString(),
-      ]);
+      setMessageCallback(
+        <>
+          {`Fetching items for ${index + 1} of ${length} playlists:`}
+          <br />
+          {data.playlist.snippet!.title!.toString()}
+        </>,
+      );
       const items = await getPaginatedItems(
         gapi.client.youtube.playlistItems.list,
         {
@@ -131,10 +207,13 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
       data.etag = etag;
       data.playlistItems = items;
     } else {
-      setMessageCallback([
-        `Getting items from cache for ${index + 1} of ${length} playlists:`,
-        data.playlist.snippet!.title!.toString(),
-      ]);
+      setMessageCallback(
+        <>
+          {`Getting items from cache for ${index + 1} of ${length} playlists:`}
+          <br />
+          {data.playlist.snippet!.title!.toString()}
+        </>,
+      );
     }
 
     index++;

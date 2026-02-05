@@ -1,12 +1,17 @@
-import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
-import { OverlayMessage } from "@/lib/types/playlistTypes";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
-const RetrievingPlaylistsOverlay = () => {
-  const [overlayMessage, setOverlayMessage] = useState<OverlayMessage>(null);
+const RetrievePlaylists = () => {
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
+    useShallow((state) => ({
+      setOverlayTitle: state.setOverlayTitle,
+      setOverlayMessage: state.setOverlayMessage,
+    })),
+  );
 
   const isEverythingInitialized = useInitializationStateStore(
     (state) => state.isEverythingInitialized,
@@ -19,15 +24,19 @@ const RetrievingPlaylistsOverlay = () => {
   useEffect(() => {
     if (isEverythingInitialized) {
       (async () => {
+        setOverlayTitle("Retrieving data...");
         await retrievePlaylistData(setOverlayMessage);
         setPlaylistsRetrieved();
       })();
     }
-  }, [isEverythingInitialized, setPlaylistsRetrieved]);
+  }, [
+    isEverythingInitialized,
+    setPlaylistsRetrieved,
+    setOverlayTitle,
+    setOverlayMessage,
+  ]);
 
-  return (
-    <StatusMessageOverlay title="Retrieving data..." message={overlayMessage} />
-  );
+  return null;
 };
 
-export default RetrievingPlaylistsOverlay;
+export default RetrievePlaylists;

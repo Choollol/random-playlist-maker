@@ -17,6 +17,8 @@ import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import SelectWrapper from "@/components/SelectWrapper";
 import ControlledAutocomplete from "@/components/ControlledAutocomplete";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
+import { useShallow } from "zustand/react/shallow";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
@@ -24,13 +26,24 @@ const CreatePlaylistForm = () => {
   const { register, handleSubmit, control } = useForm<FormData>();
 
   const arePlaylistsRetrieved = usePlaylistDataStore(
-    (state) => state.arePlaylistsRetrieved
+    (state) => state.arePlaylistsRetrieved,
+  );
+
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
+    useShallow((state) => ({
+      setOverlayTitle: state.setOverlayTitle,
+      setOverlayMessage: state.setOverlayMessage,
+    })),
   );
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
 
-    createRandomizedPlaylist(formData);
+    setOverlayTitle("Creating playlist...");
+    createRandomizedPlaylist({
+      ...formData,
+      setMessageCallback: setOverlayMessage,
+    });
   };
 
   return (

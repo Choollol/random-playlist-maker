@@ -1,10 +1,10 @@
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
-import RetrievingPlaylistsOverlay from "@/components/RetrievingPlaylistsOverlay";
+import RetrievePlaylists from "@/components/RetrievePlaylists";
 
 const SignedInDisplay = () => {
   return (
     <>
-      <RetrievingPlaylistsOverlay />
+      <RetrievePlaylists />
       <CreatePlaylistForm />
     </>
   );

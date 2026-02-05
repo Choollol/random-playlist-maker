@@ -12,7 +12,6 @@ import {
   addArrayElementsToSet,
   createSetFromArray,
 } from "@/lib/utils/collectionUtils";
-import { PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/utils/gapiUtils";
 
 export const MAX_PAGINATED_ITEM_RESULTS = 50;
 
@@ -27,7 +26,10 @@ export const DEFAULT_PRIVACY_LEVEL: PrivacyStatus = PrivacyStatus.Public;
 
 export const DEFAULT_PLAYLIST_TITLE = "My PickSome";
 
-export const EMPTY_STATE_MESSAGE = null;
+export const NO_OVERLAY_MESSAGE = null;
+
+export const PLAYLIST_CREATED_MESSAGE_TIME_MS = 2000;
+export const EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS = 1000;
 
 /**
  * Common API for retrieving all playlists or playlistItems
@@ -55,7 +57,7 @@ export async function getPaginatedItems<
     RequestCallback,
     gapi.client.youtube.PlaylistListResponse,
     gapi.client.youtube.PlaylistItemListResponse
-  >
+  >,
 >(requestCallback: RequestCallback, requestOptions: RequestOptions) {
   let items: ResourceType[] = [];
 
@@ -78,54 +80,9 @@ export async function getPaginatedItems<
   return items;
 }
 
-/**
- * Creates a playlist for the auth user with the given videos.
- */
-export async function createPlaylistWithVideos(
-  videoIds: string[],
-  playlistTitle: string,
-  privacyStatus: PrivacyStatus
-) {
-  const response = await gapi.client.youtube.playlists.insert({
-    part: "id, snippet, status",
-    resource: {
-      snippet: {
-        title: playlistTitle,
-      },
-      status: {
-        privacyStatus: privacyStatus,
-      },
-    },
-  });
-  const playlist: Playlist = JSON.parse(response.body);
-  console.log("Created playlist", playlist);
-
-  for (const playlistItemId of videoIds) {
-    console.log(
-      `Adding video with id ${playlistItemId} to playlist with id ${playlist.id}`
-    );
-    await gapi.client.youtube.playlistItems.insert({
-      part: "snippet",
-      resource: {
-        snippet: {
-          playlistId: playlist.id,
-          resourceId: {
-            kind: PLAYLIST_ITEM_RESOURCE_KIND,
-            videoId: playlistItemId,
-          },
-        },
-      },
-    });
-  }
-
-  console.log(
-    `Created playlist ${playlistTitle} with ${videoIds.length} items`
-  );
-}
-
 export function getVideoIdsFromPlaylistData(
   playlistData: PlaylistData,
-  excludedPlaylistNames: string[]
+  excludedPlaylistNames: string[],
 ) {
   const excludedPlaylistNamesSet = createSetFromArray(excludedPlaylistNames);
   const uniqueVideoIds = new Set<string>();
@@ -135,11 +92,9 @@ export function getVideoIdsFromPlaylistData(
       addArrayElementsToSet(
         uniqueVideoIds,
         data.playlistItems.map(
-          (playlistItem) => playlistItem.contentDetails!.videoId!
-        )
+          (playlistItem) => playlistItem.contentDetails!.videoId!,
+        ),
       );
-    } else {
-      console.log(`Excluding playlist ${playlistTitle}`);
     }
   }
   return Array.from(uniqueVideoIds);
@@ -183,7 +138,7 @@ export function trimPlaylistItemProperties(playlistItem: PlaylistItem) {
  */
 export async function checkPlaylistEtag(
   cachedEtag: string,
-  playlistId: string
+  playlistId: string,
 ): Promise<string | null> {
   const response = await gapi.client.request({
     path: "https://www.googleapis.com/youtube/v3/playlists",
@@ -197,7 +152,7 @@ export async function checkPlaylistEtag(
     return null;
   }
   const body: gapi.client.youtube.PlaylistListResponse = JSON.parse(
-    response.body
+    response.body,
   );
   const newEtag = body.etag!;
   return newEtag;
