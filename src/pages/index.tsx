@@ -22,7 +22,7 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
     },
     // Dependencies should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   return (
@@ -36,7 +36,6 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
       <div>
         <main>
           <TestButton />
-          <ManageAccountButton />
           {isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}
         </main>
       </div>

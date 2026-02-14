@@ -1,3 +1,4 @@
+import Header from "@/components/header/Header";
 import Initializer from "@/components/Initializer";
 import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import { defaultStyles, theme } from "@/lib/styling/defaultStyling";
@@ -26,7 +27,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Initializer isGapiLoaded={isGapiLoaded} />
 
+      <Header />
+
       <Component {...pageProps} />
+
       <StatusMessageOverlay />
     </ThemeProvider>
   );
