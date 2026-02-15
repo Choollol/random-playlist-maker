@@ -12,7 +12,7 @@ interface Styles {
  *
  * ```typescript
  *
- *   const styles = createStyles({
+ *   const styles = createStyleGroup({
  *     someComponent: {
  *       someStyleProperty: "someValue",
  *     },
@@ -23,7 +23,7 @@ interface Styles {
  * @param styles An object that contains all the custom styles for a specific component.
  * @returns The given object but with autocomplete for properties.
  */
-export function createStyles<const T extends Styles>(styles: T) {
+export function createStyleGroup<const T extends Styles>(styles: T) {
   return styles;
 }
 
@@ -42,7 +42,7 @@ export function createStyles<const T extends Styles>(styles: T) {
  */
 export function extendStyles(
   baseStyles: StyleProps,
-  overrideStyles: StyleProps
+  overrideStyles: StyleProps,
 ) {
   return { ...baseStyles, ...overrideStyles } as StyleProps;
 }

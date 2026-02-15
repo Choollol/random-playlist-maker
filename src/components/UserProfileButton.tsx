@@ -1,6 +1,6 @@
 import UserProfilePicture from "@/components/UserProfilePicture";
 import { authClient } from "@/lib/authClient";
-import { createStyles } from "@/lib/styling/styling";
+import { createStyleGroup } from "@/lib/styling/styling";
 import { Logout } from "@mui/icons-material";
 import {
   IconButton,
@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-const styles = createStyles({
+const styles = createStyleGroup({
   popover: {
     padding: "4px",
   },

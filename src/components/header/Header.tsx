@@ -1,9 +1,9 @@
 import HomeLinkButton from "@/components/header/HomeLinkButton";
 import ManageAccountButton from "@/components/ManageAccountButton";
-import { createStyles } from "@/lib/styling/styling";
+import { createStyleGroup } from "@/lib/styling/styling";
 import { AppBar, Box, Toolbar } from "@mui/material";
 
-const styles = createStyles({
+const styles = createStyleGroup({
   header: {
     position: "sticky",
   },

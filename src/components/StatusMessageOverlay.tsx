@@ -1,9 +1,9 @@
-import { createStyles } from "@/lib/styling/styling";
+import { createStyleGroup } from "@/lib/styling/styling";
 import { isDefined } from "@/lib/utils/typeUtils";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { Backdrop, Box, Stack, Typography } from "@mui/material";
 
-const styles = createStyles({
+const styles = createStyleGroup({
   container: (theme) => ({
     zIndex: theme.zIndex.overlay,
     position: "absolute",
