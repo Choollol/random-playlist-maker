@@ -19,23 +19,24 @@ import ControlledAutocomplete from "@/components/ControlledAutocomplete";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { createStyleGroup } from "@/lib/styling/styling";
+import useIsMobile from "@/hooks/useIsMobile";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
+const FORM_GAP = 2;
+
 const styles = createStyleGroup({
   form: (theme) => ({
-    width: "50%",
-    [theme.breakpoints.only("md")]: {
-      width: "60%",
-    },
-    [theme.breakpoints.down("md")]: {
-      width: "70%",
+    gap: FORM_GAP,
+    [theme.breakpoints.up("sm")]: {
+      width: "500px",
     },
     [theme.breakpoints.down("sm")]: {
       width: "90%",
     },
   }),
   twoInputContainer: {
+    gap: FORM_GAP,
     "& > *": {
       flexBasis: "50%",
     },
@@ -55,6 +56,8 @@ const CreatePlaylistForm = () => {
 
   const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore();
 
+  const isMobile = useIsMobile();
+
   const submitForm = (formData: FormData) => {
     console.log(formData);
 
@@ -69,14 +72,16 @@ const CreatePlaylistForm = () => {
     <Stack
       component={(props) => <form {...props} />}
       onSubmit={handleSubmit(submitForm)}
-      gap={2}
       sx={styles.form}
     >
       <TextField
         {...register("playlistTitle", { required: true })}
         defaultValue={DEFAULT_PLAYLIST_TITLE}
       />
-      <Stack sx={styles.twoInputContainer} direction="row">
+      <Stack
+        sx={styles.twoInputContainer}
+        direction={isMobile ? "column" : "row"}
+      >
         <NumberField
           {...register("numPlaylistItems", { required: true })}
           id="outlined-required"
