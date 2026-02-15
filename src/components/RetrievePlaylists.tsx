@@ -3,15 +3,9 @@ import { useInitializationStateStore } from "@/store/useInitializationStateStore
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useEffect } from "react";
-import { useShallow } from "zustand/react/shallow";
 
 const RetrievePlaylists = () => {
-  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
-    useShallow((state) => ({
-      setOverlayTitle: state.setOverlayTitle,
-      setOverlayMessage: state.setOverlayMessage,
-    })),
-  );
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore();
 
   const isEverythingInitialized = useInitializationStateStore(
     (state) => state.isEverythingInitialized,

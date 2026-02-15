@@ -18,7 +18,6 @@ import SelectWrapper from "@/components/SelectWrapper";
 import ControlledAutocomplete from "@/components/ControlledAutocomplete";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
-import { useShallow } from "zustand/react/shallow";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
@@ -29,12 +28,7 @@ const CreatePlaylistForm = () => {
     (state) => state.arePlaylistsRetrieved,
   );
 
-  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
-    useShallow((state) => ({
-      setOverlayTitle: state.setOverlayTitle,
-      setOverlayMessage: state.setOverlayMessage,
-    })),
-  );
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore();
 
   const submitForm = (formData: FormData) => {
     console.log(formData);
