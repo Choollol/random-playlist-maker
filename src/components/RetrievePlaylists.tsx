@@ -19,8 +19,12 @@ const RetrievePlaylists = () => {
     if (isEverythingInitialized) {
       (async () => {
         setOverlayTitle("Retrieving data...");
-        await retrievePlaylistData(setOverlayMessage);
-        setPlaylistsRetrieved();
+        const success = await retrievePlaylistData(setOverlayMessage);
+        if (success) {
+          setPlaylistsRetrieved();
+        } else {
+          console.error("Could not retrieve playlists!");
+        }
       })();
     }
   }, [

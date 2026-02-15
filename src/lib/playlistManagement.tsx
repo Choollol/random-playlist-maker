@@ -129,34 +129,43 @@ export async function createPlaylistWithVideos(
 /**
  * Retrieves all of the current user's playlist data.
  * Loads from cached data when possible.
+ *
+ * @returns `true` if success, `false` if error.
  */
 export async function retrievePlaylistData(
   setMessageCallback: SetMessageCallback,
 ) {
-  setMessageCallback("Retrieving playlist data...");
-  await retrievePlaylists();
+  try {
+    setMessageCallback("Retrieving playlist data...");
+    await retrievePlaylists();
 
-  setMessageCallback("Retrieving user data...");
-  const userId = await getUserId();
+    setMessageCallback("Retrieving user data...");
+    const userId = await getUserId();
 
-  const storedData = await getUserPlaylistData(userId);
-  if (storedData !== null) {
-    for (const [playlistId, data] of Object.entries(storedData)) {
-      if (Object.hasOwn(playlistData, playlistId)) {
-        playlistData[data.playlist.id!] = data;
+    const storedData = await getUserPlaylistData(userId);
+    if (storedData !== null) {
+      for (const [playlistId, data] of Object.entries(storedData)) {
+        if (Object.hasOwn(playlistData, playlistId)) {
+          playlistData[data.playlist.id!] = data;
+        }
       }
     }
+
+    setMessageCallback("Retrieving video data...");
+    await retrievePlaylistItems(setMessageCallback);
+
+    updateVideoIds();
+
+    setMessageCallback("Caching data...");
+    await setUserPlaylistData(userId, playlistData);
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  } finally {
+    setMessageCallback(NO_OVERLAY_MESSAGE);
   }
-
-  setMessageCallback("Retrieving video data...");
-  await retrievePlaylistItems(setMessageCallback);
-
-  updateVideoIds();
-
-  setMessageCallback("Caching data...");
-  await setUserPlaylistData(userId, playlistData);
-
-  setMessageCallback(NO_OVERLAY_MESSAGE);
 }
 
 async function retrievePlaylists() {

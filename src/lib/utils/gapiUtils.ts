@@ -20,5 +20,7 @@ export async function initGapiClient() {
     gapi.client.setToken({
       access_token: accessToken,
     });
+  } else {
+    console.error("Auth access token is undefined!");
   }
 }
