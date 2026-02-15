@@ -35,7 +35,7 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
       </Head>
       <div>
         <main>
-          <TestButton />
+          {/* <TestButton /> */}
           {isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}
         </main>
       </div>

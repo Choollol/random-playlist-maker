@@ -1,7 +1,6 @@
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
@@ -54,7 +53,7 @@ export default function NumberField({
         id={id}
         render={(props, state) => (
           <OutlinedInput
-            label={label}
+            label={`Enter a number between ${other.min} and ${other.max}`}
             inputRef={props.ref}
             value={state.inputValue}
             onBlur={props.onBlur}
@@ -105,9 +104,6 @@ export default function NumberField({
           />
         )}
       />
-      <FormHelperText sx={{ ml: 0, "&:empty": { mt: 0 } }}>
-        Enter a number between {other.min} and {other.max}
-      </FormHelperText>
     </BaseNumberField.Root>
   );
 }
