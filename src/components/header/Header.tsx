@@ -6,6 +6,7 @@ import { AppBar, Box, Toolbar } from "@mui/material";
 const styles = createStyleGroup({
   header: {
     position: "sticky",
+    height: 60,
   },
   centerSpace: {
     flexGrow: 1,
