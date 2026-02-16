@@ -1,11 +1,24 @@
 import { authClient } from "@/lib/authClient";
+import { showError } from "@/lib/error";
+import { useErrorMessageStore } from "@/store/useErrorMessageStore";
 import { Autocomplete, TextField } from "@mui/material";
 
 const TestButton = () => {
+  const clearErrorMessage = useErrorMessageStore(
+    (state) => state.clearErrorMessage,
+  );
+
   const handleClick = async () => {
     console.log("Test button clicked");
 
-    console.log(await authClient.accountInfo());
+    showError({ errorType: "recoverable", message: "hi" });
+    showError({
+      errorType: "unrecoverable",
+      message:
+        "Something went wrong while trying to do something. Please try again or reload the page.",
+      retryButtonText: "Try Again",
+      retryAction: clearErrorMessage,
+    });
   };
   return (
     <>

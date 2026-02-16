@@ -23,9 +23,6 @@ const styles = createStyleGroup({
   },
 });
 
-/**
- * Pass `null` to message to disable the overlay.
- */
 const StatusMessageOverlay = () => {
   const { overlayTitle, overlayMessage } = useOverlayMessageStore();
 

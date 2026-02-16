@@ -6,6 +6,8 @@ import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import type { AppProps } from "next/app";
 import Script from "next/script";
 import { useState } from "react";
+import { SnackbarProvider } from "notistack";
+import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
 
@@ -27,11 +29,14 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Initializer isGapiLoaded={isGapiLoaded} />
 
+      <SnackbarProvider />
+
       <Header />
 
       <Component {...pageProps} />
 
       <StatusMessageOverlay />
+      <ErrorMessageOverlay />
     </ThemeProvider>
   );
 }
