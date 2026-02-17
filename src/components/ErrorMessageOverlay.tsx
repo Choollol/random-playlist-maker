@@ -41,9 +41,11 @@ const ErrorMessageOverlay = () => {
         <DialogContent>
           <Typography>{message}</Typography>
         </DialogContent>
-        <DialogActions sx={styles.retryButton}>
-          <Button onClick={retryAction}>{retryButtonText}</Button>
-        </DialogActions>
+        {retryAction !== null && (
+          <DialogActions sx={styles.retryButton}>
+            <Button onClick={retryAction}>{retryButtonText}</Button>
+          </DialogActions>
+        )}
       </Dialog>
     </>
   ) : null;

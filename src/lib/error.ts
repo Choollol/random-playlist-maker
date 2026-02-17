@@ -1,4 +1,7 @@
-import { useErrorMessageStore } from "@/store/useErrorMessageStore";
+import {
+  useErrorMessageStore,
+  UseErrorMessageStoreState,
+} from "@/store/useErrorMessageStore";
 import { enqueueSnackbar } from "notistack";
 
 interface BaseErrorParams {
@@ -11,11 +14,9 @@ interface RecoverableErrorParams extends BaseErrorParams {
   errorType: "recoverable";
 }
 
-interface UnrecoverableErrorParams extends BaseErrorParams {
+type UnrecoverableErrorParams = BaseErrorParams & {
   errorType: "unrecoverable";
-  retryButtonText: string;
-  retryAction: () => void;
-}
+} & Omit<UseErrorMessageStoreState, "message">;
 
 export function showError(
   params: RecoverableErrorParams | UnrecoverableErrorParams,

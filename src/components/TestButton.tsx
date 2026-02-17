@@ -1,6 +1,9 @@
 import { authClient } from "@/lib/authClient";
 import { showError } from "@/lib/error";
-import { useErrorMessageStore } from "@/store/useErrorMessageStore";
+import {
+  NO_RETRY_ACTION,
+  useErrorMessageStore,
+} from "@/store/useErrorMessageStore";
 import { Autocomplete, TextField } from "@mui/material";
 
 const TestButton = () => {
@@ -17,7 +20,7 @@ const TestButton = () => {
       message:
         "Something went wrong while trying to do something. Please try again or reload the page.",
       retryButtonText: "Try Again",
-      retryAction: clearErrorMessage,
+      retryAction: NO_RETRY_ACTION,
     });
   };
   return (

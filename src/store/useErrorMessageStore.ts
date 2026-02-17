@@ -1,16 +1,18 @@
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
+export const NO_RETRY_ACTION = null;
+
 interface State {
   message: string | null;
   retryButtonText: string;
-  retryAction: () => void;
+  retryAction: (() => void) | typeof NO_RETRY_ACTION;
 }
 
 const initialState: State = {
   message: null,
   retryButtonText: "",
-  retryAction: () => undefined,
+  retryAction: NO_RETRY_ACTION,
 };
 
 export const useErrorMessageStore = create(
@@ -19,3 +21,5 @@ export const useErrorMessageStore = create(
     clearErrorMessage: () => set({ message: null }),
   })),
 );
+
+export { type State as UseErrorMessageStoreState };
