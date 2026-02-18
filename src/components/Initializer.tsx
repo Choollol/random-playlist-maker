@@ -31,8 +31,10 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   useEffect(() => {
     if (isSignedIn && isGapiLoaded) {
       (async function () {
-        await initGapiClient();
-        setGapiInitialized();
+        const success = await initGapiClient();
+        if (success) {
+          setGapiInitialized();
+        }
       })();
     }
   }, [isSignedIn, isGapiLoaded, setGapiInitialized]);

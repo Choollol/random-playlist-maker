@@ -7,10 +7,6 @@ import {
 import { Autocomplete, TextField } from "@mui/material";
 
 const TestButton = () => {
-  const clearErrorMessage = useErrorMessageStore(
-    (state) => state.clearErrorMessage,
-  );
-
   const handleClick = async () => {
     console.log("Test button clicked");
 
