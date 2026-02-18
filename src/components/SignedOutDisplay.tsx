@@ -1,5 +1,41 @@
+import GoogleSignInButton from "@/components/GoogleSignInButton";
+import { createStyleGroup } from "@/lib/styling/styling";
+import { Box, Stack, Typography } from "@mui/material";
+
+const styles = createStyleGroup({
+  pageContainer: {
+    alignItems: "center",
+    textAlign: "center",
+    margin: "max(40px, 10%) 20px 0px 20px",
+  },
+  contentContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    maxWidth: "700px",
+    gap: "20px",
+  },
+  title: {
+    marginBottom: "30px",
+  },
+});
+
 const SignedOutDisplay = () => {
-  return <div>Not signed in</div>;
+  return (
+    <Stack sx={styles.pageContainer}>
+      <Box sx={styles.contentContainer}>
+        <Typography variant="h3" sx={styles.title}>
+          Welcome to PickSome Playlist Maker!
+        </Typography>
+        <Typography variant="h5">
+          With this website, you can create randomized playlists with videos
+          chosen from your personal YouTube playlist library.
+        </Typography>
+        <Typography variant="h5">Sign in to get started!</Typography>
+        <GoogleSignInButton />
+      </Box>
+    </Stack>
+  );
 };
 
 export default SignedOutDisplay;
