@@ -25,7 +25,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
       setGapiInitialized: state.setGapiInitialized,
       setDatabaseInitialized: state.setDatabaseInitialized,
       setEverythingInitialized: state.setEverythingInitialized,
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -50,6 +50,6 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     }
   }, [isGapiInitialized, isDatabaseInitialized, setEverythingInitialized]);
 
-  return <></>;
+  return null;
 };
 export default Initializer;
