@@ -10,9 +10,9 @@ const TestButton = () => {
   const handleClick = async () => {
     console.log("Test button clicked");
 
-    showError({ errorType: "recoverable", message: "hi" });
+    showError({ type: "recoverable", message: "hi" });
     showError({
-      errorType: "unrecoverable",
+      type: "unrecoverable",
       message:
         "Something went wrong while trying to do something. Please try again or reload the page.",
       retryButtonText: "Try Again",

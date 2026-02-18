@@ -5,23 +5,23 @@ import {
 import { enqueueSnackbar } from "notistack";
 
 interface BaseErrorParams {
-  errorType: string;
+  type: string;
   message: string;
   error?: unknown;
 }
 
 interface RecoverableErrorParams extends BaseErrorParams {
-  errorType: "recoverable";
+  type: "recoverable";
 }
 
 type UnrecoverableErrorParams = BaseErrorParams & {
-  errorType: "unrecoverable";
+  type: "unrecoverable";
 } & Omit<UseErrorMessageStoreState, "message">;
 
 type ErrorParams = RecoverableErrorParams | UnrecoverableErrorParams;
 
 export function showError(params: ErrorParams) {
-  if (params.errorType === "recoverable") {
+  if (params.type === "recoverable") {
     showRecoverableError(params);
   } else {
     showUnrecoverableError(params);
@@ -50,7 +50,7 @@ function showUnrecoverableError({
 export function catchUnrecoverableError(
   errorParams: Omit<
     UnrecoverableErrorParams,
-    "errorType" | "retryAction" | "error"
+    "type" | "retryAction" | "error"
   > & { failureReturnValue: boolean },
   target: (...params: unknown[]) => unknown,
 ) {
@@ -60,7 +60,7 @@ export function catchUnrecoverableError(
   ) => {
     showError({
       ...errorParams,
-      errorType: "unrecoverable",
+      type: "unrecoverable",
       retryAction: () => func(...params),
       error: error,
     });

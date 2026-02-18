@@ -44,7 +44,7 @@ export async function createRandomizedPlaylist({
 
   if (!isSignedIn) {
     showError({
-      errorType: "unrecoverable",
+      type: "unrecoverable",
       message: "Please sign in to create playlists.",
       retryButtonText: "Sign In",
       retryAction: signInGoogle,
@@ -76,7 +76,7 @@ export async function createRandomizedPlaylist({
     );
   } catch (error) {
     showError({
-      errorType: "recoverable",
+      type: "recoverable",
       message:
         "Failed to create playlist. Please reload the page or try again.",
       error: error,
@@ -208,7 +208,7 @@ async function retrievePlaylists() {
     });
   } catch (error) {
     showError({
-      errorType: "recoverable",
+      type: "recoverable",
       message:
         "Failed to retrieve your playlists. Please reload the page to try again.",
       error: error,
@@ -257,7 +257,7 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
     }
   } catch (error) {
     showError({
-      errorType: "recoverable",
+      type: "recoverable",
       message:
         "Something went wrong while retrieving videos. Please reload to try again.",
       error: error,
