@@ -1,3 +1,4 @@
+import BugReportButton from "@/components/header/BugReportButton";
 import HomeLinkButton from "@/components/header/HomeLinkButton";
 import ManageAccountButton from "@/components/ManageAccountButton";
 import { createStyleGroup } from "@/lib/styling/styling";
@@ -18,7 +19,10 @@ const Header = () => {
     <AppBar sx={styles.header}>
       <Toolbar>
         <HomeLinkButton />
+
         <Box sx={styles.centerSpace} />
+
+        <BugReportButton />
         <ManageAccountButton />
       </Toolbar>
     </AppBar>
