@@ -20,6 +20,7 @@ import {
 } from "@/lib/utils/playlistUtils";
 import { waitForMs } from "@/lib/utils/miscUtils";
 import { showError } from "@/lib/error";
+import { signInGoogle } from "@/lib/authClient";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -42,8 +43,13 @@ export async function createRandomizedPlaylist({
   const isSignedIn = await isUserSignedIn();
 
   if (!isSignedIn) {
-    console.log("not signed in");
-    return [];
+    showError({
+      errorType: "unrecoverable",
+      message: "Please sign in to create playlists.",
+      retryButtonText: "Sign In",
+      retryAction: signInGoogle,
+    });
+    return;
   }
 
   if (excludedPlaylistNames.length > 0) {
@@ -61,12 +67,21 @@ export async function createRandomizedPlaylist({
 
   const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
 
-  await createPlaylistWithVideos(
-    selectedVideoIds,
-    playlistTitle,
-    privacyStatus,
-    setMessageCallback,
-  );
+  try {
+    await createPlaylistWithVideos(
+      selectedVideoIds,
+      playlistTitle,
+      privacyStatus,
+      setMessageCallback,
+    );
+  } catch (error) {
+    showError({
+      errorType: "recoverable",
+      message:
+        "Failed to create playlist. Please reload the page or try again.",
+      error: error,
+    });
+  }
 }
 
 /**
