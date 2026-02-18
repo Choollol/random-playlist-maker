@@ -41,8 +41,10 @@ const Initializer = ({ isGapiLoaded }: Props) => {
 
   useEffect(() => {
     (async () => {
-      await initDB();
-      setDatabaseInitialized();
+      const success = await initDB();
+      if (success) {
+        setDatabaseInitialized();
+      }
     })();
   }, [setDatabaseInitialized]);
 
