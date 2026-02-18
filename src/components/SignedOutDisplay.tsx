@@ -18,6 +18,9 @@ const styles = createStyleGroup({
   title: {
     marginBottom: "30px",
   },
+  bodyText: {
+    fontSize: "1.5em",
+  },
 });
 
 const SignedOutDisplay = () => {
@@ -27,11 +30,11 @@ const SignedOutDisplay = () => {
         <Typography variant="h3" sx={styles.title}>
           Welcome to PickSome Playlist Maker!
         </Typography>
-        <Typography variant="h5">
+        <Typography sx={styles.bodyText}>
           With this website, you can create randomized playlists with videos
           chosen from your personal YouTube playlist library.
         </Typography>
-        <Typography variant="h5">Sign in to get started!</Typography>
+        <Typography sx={styles.bodyText}>Sign in to get started!</Typography>
         <SignInButton />
       </Box>
     </Stack>
