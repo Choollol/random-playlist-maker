@@ -19,6 +19,7 @@ import {
   trimPlaylistProperties,
 } from "@/lib/utils/playlistUtils";
 import { waitForMs } from "@/lib/utils/miscUtils";
+import { showError } from "@/lib/error";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -169,25 +170,35 @@ export async function retrievePlaylistData(
 }
 
 async function retrievePlaylists() {
-  const playlistList = await getPaginatedItems(
-    gapi.client.youtube.playlists.list,
-    {
-      part: PLAYLIST_PART,
-      mine: true,
-    },
-  );
-  playlistList.forEach(trimPlaylistProperties);
+  try {
+    const playlistList = await getPaginatedItems(
+      gapi.client.youtube.playlists.list,
+      {
+        part: PLAYLIST_PART,
+        mine: true,
+      },
+    );
 
-  playlistData = {};
+    playlistList.forEach(trimPlaylistProperties);
 
-  playlistList.forEach((playlist) => {
-    playlistData[playlist.id!] = {
-      playlist: playlist,
-      // Dummy data that will be replaced later
-      etag: "",
-      playlistItems: [],
-    };
-  });
+    playlistData = {};
+
+    playlistList.forEach((playlist) => {
+      playlistData[playlist.id!] = {
+        playlist: playlist,
+        // Dummy data that will be replaced later
+        etag: "",
+        playlistItems: [],
+      };
+    });
+  } catch (error) {
+    showError({
+      errorType: "recoverable",
+      message:
+        "Failed to retrieve your playlists. Please reload the page to try again.",
+      error: error,
+    });
+  }
 }
 
 async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
