@@ -32,6 +32,11 @@ let theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      defaultProps: {
+        target: "_blank",
+      },
+    },
   },
   typography: {
     h1: {
