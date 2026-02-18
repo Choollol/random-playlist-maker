@@ -1,4 +1,4 @@
-import GoogleSignInButton from "@/components/GoogleSignInButton";
+import SignInButton from "@/components/SignInButton";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -32,7 +32,7 @@ const SignedOutDisplay = () => {
           chosen from your personal YouTube playlist library.
         </Typography>
         <Typography variant="h5">Sign in to get started!</Typography>
-        <GoogleSignInButton />
+        <SignInButton />
       </Box>
     </Stack>
   );

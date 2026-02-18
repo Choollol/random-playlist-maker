@@ -1,4 +1,4 @@
-import GoogleSignInButton from "@/components/GoogleSignInButton";
+import SignInButton from "@/components/SignInButton";
 import UserProfileButton from "@/components/UserProfileButton";
 import useisSignedIn from "@/hooks/useIsSignedIn";
 
@@ -9,7 +9,7 @@ const ManageAccountButton = () => {
   "use no memo";
   const isSignedIn = useisSignedIn();
 
-  return isSignedIn ? <UserProfileButton /> : <GoogleSignInButton />;
+  return isSignedIn ? <UserProfileButton /> : <SignInButton />;
 };
 
 export default ManageAccountButton;
