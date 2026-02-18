@@ -1,12 +1,12 @@
 import Head from "next/head";
 import { ENV } from "@/env";
 import TestButton from "@/components/TestButton";
-import ManageAccountButton from "@/components/ManageAccountButton";
 import { useEffect } from "react";
 import { setEnvVariables } from "@/lib/utils/envUtils";
 import useIsSignedIn from "@/hooks/useIsSignedIn";
 import SignedInDisplay from "@/components/SignedInDisplay";
 import SignedOutDisplay from "@/components/SignedOutDisplay";
+import Header from "@/components/header/Header";
 
 interface Props {
   googleApiKey: string;
@@ -34,6 +34,8 @@ export default function Home({ googleApiKey, googleClientId }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        <Header />
+
         <main>
           {isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}
           <TestButton />
