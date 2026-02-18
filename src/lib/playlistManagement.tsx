@@ -204,39 +204,49 @@ async function retrievePlaylists() {
 async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
   const length = Object.keys(playlistData).length;
   let index = 0;
-  for (const data of Object.values(playlistData)) {
-    const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
-    if (etag !== null) {
-      setMessageCallback(
-        <>
-          {`Fetching items for ${index + 1} of ${length} playlists:`}
-          <br />
-          {data.playlist.snippet!.title!.toString()}
-        </>,
-      );
-      const items = await getPaginatedItems(
-        gapi.client.youtube.playlistItems.list,
-        {
-          part: PLAYLIST_ITEM_PART,
-          playlistId: data.playlist.id,
-        },
-      );
-      items.forEach(trimPlaylistItemProperties);
+  try {
+    for (const data of Object.values(playlistData)) {
+      const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
-      data.etag = etag;
-      data.playlistItems = items;
-    } else {
-      setMessageCallback(
-        <>
-          {`Getting items from cache for ${index + 1} of ${length} playlists:`}
-          <br />
-          {data.playlist.snippet!.title!.toString()}
-        </>,
-      );
+      if (etag !== null) {
+        setMessageCallback(
+          <>
+            {`Fetching items for ${index + 1} of ${length} playlists:`}
+            <br />
+            {data.playlist.snippet!.title!.toString()}
+          </>,
+        );
+        const items = await getPaginatedItems(
+          gapi.client.youtube.playlistItems.list,
+          {
+            part: PLAYLIST_ITEM_PART,
+            playlistId: data.playlist.id,
+          },
+        );
+        items.forEach(trimPlaylistItemProperties);
+
+        data.etag = etag;
+        data.playlistItems = items;
+      } else {
+        setMessageCallback(
+          <>
+            {`Getting items from cache for ${index + 1} of ${length} playlists:`}
+            <br />
+            {data.playlist.snippet!.title!.toString()}
+          </>,
+        );
+      }
+
+      index++;
     }
-
-    index++;
+  } catch (error) {
+    showError({
+      errorType: "recoverable",
+      message:
+        "Something went wrong while retrieving videos. Please reload to try again.",
+      error: error,
+    });
   }
 }
 
