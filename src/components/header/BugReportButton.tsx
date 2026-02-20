@@ -1,15 +1,6 @@
-import { createStyleGroup } from "@/lib/styling/styling";
 import { BUG_REPORT_URL } from "@/lib/utils/miscUtils";
 import { BugReport } from "@mui/icons-material";
-import { IconButton, Link, Popover, Tooltip, Typography } from "@mui/material";
-import { useState } from "react";
-
-const styles = createStyleGroup({
-  popover: {
-    padding: "12px",
-    textAlign: "center",
-  },
-});
+import { IconButton, Link, Tooltip } from "@mui/material";
 
 const BugReportButton = () => {
   return (
