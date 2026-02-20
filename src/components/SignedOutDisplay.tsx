@@ -28,13 +28,16 @@ const SignedOutDisplay = () => {
     <Stack sx={styles.pageContainer}>
       <Box sx={styles.contentContainer}>
         <Typography variant="h3" sx={styles.title}>
-          Welcome to PickSome Playlist Maker!
+          Welcome to
+          <br /> PickSome Playlist Maker!
         </Typography>
         <Typography sx={styles.bodyText}>
           With this website, you can create randomized playlists with videos
           chosen from your personal YouTube playlist library.
         </Typography>
-        <Typography sx={styles.bodyText}>Sign in to get started!</Typography>
+        <Typography sx={styles.bodyText}>
+          Sign in with Google to get started!
+        </Typography>
         <SignInButton />
       </Box>
     </Stack>
