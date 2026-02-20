@@ -10,8 +10,8 @@ const styles = createStyleGroup({
     height: 60,
   },
   toolbar: {
-    paddingLeft: "10px",
-    paddingRight: "10px",
+    paddingLeft: 1,
+    paddingRight: 1,
   },
   centerSpace: {
     flexGrow: 1,

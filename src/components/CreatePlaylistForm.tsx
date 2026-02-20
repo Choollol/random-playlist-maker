@@ -29,7 +29,7 @@ const styles = createStyleGroup({
   form: (theme) => ({
     gap: FORM_GAP,
     [theme.breakpoints.up("sm")]: {
-      width: "500px",
+      width: 500,
     },
     [theme.breakpoints.down("sm")]: {
       width: "90%",

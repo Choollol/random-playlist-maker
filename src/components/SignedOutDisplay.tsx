@@ -12,11 +12,11 @@ const styles = createStyleGroup({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    maxWidth: "700px",
-    gap: "20px",
+    maxWidth: 700,
+    gap: 3,
   },
   title: {
-    marginBottom: "30px",
+    marginBottom: 3,
   },
   bodyText: {
     fontSize: "1.5em",
