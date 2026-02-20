@@ -1,19 +1,19 @@
-import useIsMobile from "@/hooks/useIsMobile";
-import { Button, IconButton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import Link from "next/link";
-import HomeIcon from "@mui/icons-material/Home";
+import Image from "next/image";
+
+const LOGO_WIDTH = 40;
 
 const HomeLinkButton = () => {
-  const isMobile = useIsMobile();
-
-  return isMobile ? (
-    <IconButton href="/" LinkComponent={Link} size="large">
-      <HomeIcon />
+  return (
+    <IconButton href="/" LinkComponent={Link} size="large" disableRipple>
+      <Image
+        src="/logo.png"
+        width={LOGO_WIDTH}
+        height={LOGO_WIDTH}
+        alt="Home page button"
+      />
     </IconButton>
-  ) : (
-    <Button href="/" LinkComponent={Link}>
-      <Typography variant="h6">PickSome Playlist Maker</Typography>
-    </Button>
   );
 };
 
