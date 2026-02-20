@@ -9,6 +9,10 @@ const styles = createStyleGroup({
     position: "sticky",
     height: 60,
   },
+  toolbar: {
+    paddingLeft: "10px",
+    paddingRight: "10px",
+  },
   centerSpace: {
     flexGrow: 1,
   },
@@ -17,7 +21,7 @@ const styles = createStyleGroup({
 const Header = () => {
   return (
     <AppBar sx={styles.header}>
-      <Toolbar>
+      <Toolbar sx={styles.toolbar} disableGutters>
         <HomeLinkButton />
 
         <Box sx={styles.centerSpace} />
