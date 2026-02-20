@@ -7,6 +7,7 @@ import { useState } from "react";
 import { SnackbarProvider } from "notistack";
 import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
+import Head from "next/head";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
 
@@ -21,6 +22,16 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head>
+        <title>PickSome Playlist Maker</title>
+        <meta
+          name="description"
+          content="Create randomized YouTube playlists!"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/logo.png" />
+      </Head>
+
       <CssBaseline />
       {globalStyles}
 
