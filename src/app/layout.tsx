@@ -7,6 +7,7 @@ import { setEnvVariables } from "@/lib/utils/envUtils";
 import { ENV } from "@/env";
 import Snackbar from "@/components/Snackbar";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { roboto } from "@/lib/styling/font";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
 
@@ -37,7 +38,7 @@ export default function RootLayout({
   setEnvVariables(ENV.GOOGLE_API_KEY, ENV.GOOGLE_CLIENT_ID);
 
   return (
-    <html lang="en">
+    <html lang="en" className={roboto.variable}>
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>

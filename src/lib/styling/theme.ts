@@ -14,7 +14,9 @@ declare module "@mui/material/styles" {
   }
 }
 
-const headerCommonStyles: CSSProperties = {};
+const headerCommonStyles: CSSProperties = {
+  fontWeight: "400",
+};
 
 const defaultMuiTheme = createTheme();
 
@@ -27,13 +29,13 @@ let theme = createTheme({
     overlay: 1600,
   },
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"].join(","),
-        },
-      },
-    },
+    // MuiTypography: {
+    //   styleOverrides: {
+    //     root: {
+    //       fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"].join(","),
+    //     },
+    //   },
+    // },
     MuiLink: {
       defaultProps: {
         target: "_blank",
@@ -41,6 +43,7 @@ let theme = createTheme({
     },
   },
   typography: {
+    // fontFamily: "var(--font-roboto)",
     h1: {
       ...headerCommonStyles,
     },
