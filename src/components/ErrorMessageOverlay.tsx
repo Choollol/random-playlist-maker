@@ -1,3 +1,5 @@
+"use client";
+
 import { createStyleGroup } from "@/lib/styling/styling";
 import { BUG_REPORT_URL } from "@/lib/utils/miscUtils";
 import { useErrorMessageStore } from "@/store/useErrorMessageStore";

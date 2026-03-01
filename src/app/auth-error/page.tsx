@@ -1,9 +1,9 @@
 import { useErrorMessageStore } from "@/store/useErrorMessageStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-const AuthError = () => {
+export default function AuthError() {
   const { setErrorMessage, clearErrorMessage } = useErrorMessageStore(
     useShallow((state) => ({
       setErrorMessage: state.setErrorMessage,
@@ -32,6 +32,4 @@ const AuthError = () => {
     [],
   );
   return null;
-};
-
-export default AuthError;
+}

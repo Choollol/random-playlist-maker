@@ -40,6 +40,7 @@ export async function createRandomizedPlaylist({
   excludedPlaylistNames,
   setMessageCallback,
 }: CreateRandomizedPlaylistOptions) {
+  setMessageCallback("Setting up...");
   const isSignedIn = await isUserSignedIn();
 
   if (!isSignedIn) {

@@ -1,3 +1,5 @@
+"use client";
+
 import { createStyleGroup } from "@/lib/styling/styling";
 import { isDefined } from "@/lib/utils/typeUtils";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
