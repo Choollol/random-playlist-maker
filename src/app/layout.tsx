@@ -6,7 +6,7 @@ import { Metadata, Viewport } from "next";
 import { setEnvVariables } from "@/lib/utils/envUtils";
 import { ENV } from "@/env";
 import Snackbar from "@/components/Snackbar";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { roboto } from "@/lib/styling/font";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
