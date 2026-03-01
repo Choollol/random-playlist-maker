@@ -1,4 +1,4 @@
-import { defaultStyles, theme } from "@/lib/styling/defaultStyling";
+import { defaultStyles, theme } from "@/lib/styling/theme";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";

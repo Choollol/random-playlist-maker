@@ -1,4 +1,4 @@
-import { theme } from "@/lib/styling/defaultStyling";
+import { theme } from "@/lib/styling/theme";
 import { SxProps } from "@mui/material";
 
 export type StyleProps = SxProps<typeof theme>;
