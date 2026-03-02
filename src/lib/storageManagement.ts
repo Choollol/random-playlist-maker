@@ -11,7 +11,9 @@ interface AllUserData {
 
 let allUserData: AllUserData;
 
-export async function getUserPlaylistData(userId: string): Promise<PlaylistData | null> {
+export async function getStoredPlaylistData(
+  userId: string,
+): Promise<PlaylistData | null> {
   if (allUserData === undefined) {
     await loadAllData();
   }
@@ -20,7 +22,7 @@ export async function getUserPlaylistData(userId: string): Promise<PlaylistData 
 
 export async function setUserPlaylistData(
   userId: string,
-  playlistData: PlaylistData
+  playlistData: PlaylistData,
 ) {
   allUserData[userId] = playlistData;
 
@@ -28,5 +30,5 @@ export async function setUserPlaylistData(
 }
 
 async function loadAllData() {
-  allUserData = await dbGet<AllUserData>(LocalStorageKey.AllUserData) ?? {};
+  allUserData = (await dbGet<AllUserData>(LocalStorageKey.AllUserData)) ?? {};
 }

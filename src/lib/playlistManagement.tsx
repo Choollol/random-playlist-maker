@@ -1,5 +1,5 @@
 import {
-  getUserPlaylistData,
+  getStoredPlaylistData,
   setUserPlaylistData,
 } from "@/lib/storageManagement";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
@@ -159,7 +159,7 @@ export async function retrievePlaylistData(
     setMessageCallback("Retrieving user data...");
     const userId = await getUserId();
 
-    const storedData = await getUserPlaylistData(userId);
+    const storedData = await getStoredPlaylistData(userId);
     if (storedData !== null) {
       for (const [playlistId, data] of Object.entries(storedData)) {
         if (Object.hasOwn(playlistData, playlistId)) {
