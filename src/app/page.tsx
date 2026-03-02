@@ -1,31 +1,17 @@
-"use client";
-
-import { useState } from "react";
-import useIsSignedIn from "@/hooks/useIsSignedIn";
 import SignedInDisplay from "@/components/SignedInDisplay";
 import SignedOutDisplay from "@/components/SignedOutDisplay";
 import Header from "@/components/header/Header";
-import Script from "next/script";
-import Initializer from "@/components/Initializer";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function Home() {
-  const isSignedIn = useIsSignedIn();
-
-  const [isGapiLoaded, setIsGapiLoaded] = useState(false);
-
-  const handleGapiLoad = () => {
-    gapi.load("client", () => {
-      setIsGapiLoaded(true);
-    });
-  };
+export default async function Home() {
+  const requestHeaders = await headers();
+  const data = await auth.api.getSession({ headers: requestHeaders });
+  const isSignedIn = !!data?.session;
 
   return (
     <>
-      <Script src="https://apis.google.com/js/api.js" onLoad={handleGapiLoad} />
-
-      <Initializer isGapiLoaded={isGapiLoaded} />
-
-      <Header />
+      <Header isSignedIn={isSignedIn} />
 
       <main>{isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}</main>
     </>

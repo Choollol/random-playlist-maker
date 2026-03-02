@@ -1,4 +1,3 @@
-import useIsSignedIn from "@/hooks/useIsSignedIn";
 import { initDB } from "@/lib/db";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
@@ -10,8 +9,6 @@ interface Props {
 }
 
 const Initializer = ({ isGapiLoaded }: Props) => {
-  const isSignedIn = useIsSignedIn();
-
   const {
     isGapiInitialized,
     isDatabaseInitialized,
@@ -29,7 +26,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   );
 
   useEffect(() => {
-    if (isSignedIn && isGapiLoaded) {
+    if (isGapiLoaded) {
       (async function () {
         const success = await initGapiClient();
         if (success) {
@@ -37,7 +34,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         }
       })();
     }
-  }, [isSignedIn, isGapiLoaded, setGapiInitialized]);
+  }, [isGapiLoaded, setGapiInitialized]);
 
   useEffect(() => {
     (async () => {

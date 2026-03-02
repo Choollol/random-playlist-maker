@@ -1,3 +1,5 @@
+"use client";
+
 import { IconButton } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";

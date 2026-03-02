@@ -1,3 +1,5 @@
+"use client";
+
 import UserProfilePicture from "@/components/UserProfilePicture";
 import { authClient } from "@/lib/authClient";
 import { createStyleGroup } from "@/lib/styling/styling";
@@ -9,6 +11,7 @@ import {
   MenuItem,
   Popover,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const styles = createStyleGroup({
@@ -24,6 +27,8 @@ const UserProfileButton = () => {
   const [doOpenPopver, setDoOpenPopover] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  const router = useRouter();
+
   const handleAnchorButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -35,8 +40,9 @@ const UserProfileButton = () => {
     setDoOpenPopover(false);
   };
 
-  const handleSignOutClick = () => {
-    authClient.signOut();
+  const handleSignOutClick = async () => {
+    await authClient.signOut();
+    router.refresh();
   };
 
   return (

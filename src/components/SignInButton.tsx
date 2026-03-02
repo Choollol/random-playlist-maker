@@ -1,3 +1,5 @@
+"use client";
+
 import { signInGoogle } from "@/lib/authClient";
 import { Button, Tooltip, Typography } from "@mui/material";
 

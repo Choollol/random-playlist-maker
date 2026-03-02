@@ -1,3 +1,5 @@
+"use client";
+
 import { useErrorMessageStore } from "@/store/useErrorMessageStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

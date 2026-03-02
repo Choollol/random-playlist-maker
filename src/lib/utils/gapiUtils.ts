@@ -1,3 +1,5 @@
+"use client";
+
 import { authClient } from "@/lib/authClient";
 import { catchUnrecoverableError } from "@/lib/error";
 import { googleApiKey } from "@/lib/utils/envUtils";

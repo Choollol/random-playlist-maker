@@ -4,6 +4,10 @@ import ManageAccountButton from "@/components/ManageAccountButton";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { AppBar, Box, Toolbar } from "@mui/material";
 
+interface Props {
+  isSignedIn: boolean;
+}
+
 const styles = createStyleGroup({
   header: {
     position: "sticky",
@@ -18,7 +22,7 @@ const styles = createStyleGroup({
   },
 });
 
-const Header = () => {
+const Header = ({ isSignedIn }: Props) => {
   return (
     <AppBar sx={styles.header}>
       <Toolbar sx={styles.toolbar} disableGutters>
@@ -27,7 +31,7 @@ const Header = () => {
         <Box sx={styles.centerSpace} />
 
         <BugReportButton />
-        <ManageAccountButton />
+        <ManageAccountButton isSignedIn={isSignedIn} />
       </Toolbar>
     </AppBar>
   );

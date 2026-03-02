@@ -1,13 +1,15 @@
 import SignInButton from "@/components/SignInButton";
 import UserProfileButton from "@/components/UserProfileButton";
-import useisSignedIn from "@/hooks/useIsSignedIn";
+
+interface Props {
+  isSignedIn: boolean;
+}
 
 /**
  * Wrapper around account buttons that changes with signed-in status.
  */
-const ManageAccountButton = () => {
+const ManageAccountButton = ({ isSignedIn }: Props) => {
   "use no memo";
-  const isSignedIn = useisSignedIn();
 
   return isSignedIn ? <UserProfileButton /> : <SignInButton />;
 };
