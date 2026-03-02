@@ -53,7 +53,7 @@ export default function NumberField({
         id={id}
         render={(props, state) => (
           <OutlinedInput
-            label={`Enter a number between ${other.min} and ${other.max}`}
+            label={label}
             inputRef={props.ref}
             value={state.inputValue}
             onBlur={props.onBlur}
