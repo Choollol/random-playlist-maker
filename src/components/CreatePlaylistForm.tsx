@@ -87,9 +87,7 @@ const CreatePlaylistForm = () => {
         sx={styles.form}
       >
         <TextField
-          {...register("playlistTitle", {
-            required: "Give your playlist a name!",
-          })}
+          {...register("playlistTitle", { required: true })}
           defaultValue={DEFAULT_PLAYLIST_TITLE}
           label="Playlist name"
           error={!!errors.playlistTitle}
@@ -101,9 +99,7 @@ const CreatePlaylistForm = () => {
           direction={isMobile ? "column" : "row"}
         >
           <NumberField
-            {...register("numPlaylistItems", {
-              required: "Choose how many videos will be in your playlist!",
-            })}
+            {...register("numPlaylistItems", { required: true })}
             label={`Number of videos (${MIN_VIDEO_COUNT}-${MAX_VIDEO_COUNT})`}
             defaultValue={DEFAULT_VIDEO_COUNT}
             min={MIN_VIDEO_COUNT}
