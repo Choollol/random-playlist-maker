@@ -3,7 +3,7 @@ import {
   CreateRandomizedPlaylistOptions,
   getPlaylistNames,
 } from "@/lib/playlistManagement";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import NumberField from "./NumberField";
 import {
@@ -26,6 +26,9 @@ type FormData = CreateRandomizedPlaylistOptions;
 const FORM_GAP = 2;
 
 const styles = createStyleGroup({
+  title: {
+    marginBottom: 8,
+  },
   form: (theme) => ({
     gap: FORM_GAP,
     [theme.breakpoints.up("sm")]: {
@@ -69,47 +72,53 @@ const CreatePlaylistForm = () => {
   };
 
   return (
-    <Stack
-      component={(props) => <form {...props} />}
-      onSubmit={handleSubmit(submitForm)}
-      sx={styles.form}
-    >
-      <TextField
-        {...register("playlistTitle", { required: true })}
-        defaultValue={DEFAULT_PLAYLIST_TITLE}
-      />
+    <>
+      <Typography variant="h2" sx={styles.title}>
+        Create a playlist!
+      </Typography>
+
       <Stack
-        sx={styles.twoInputContainer}
-        direction={isMobile ? "column" : "row"}
+        component={"form"}
+        onSubmit={handleSubmit(submitForm)}
+        sx={styles.form}
       >
-        <NumberField
-          {...register("numPlaylistItems", { required: true })}
-          id="outlined-required"
-          label={`Enter a number between ${MIN_VIDEO_COUNT} and ${MAX_VIDEO_COUNT}`}
-          defaultValue={DEFAULT_VIDEO_COUNT}
-          min={MIN_VIDEO_COUNT}
-          max={MAX_VIDEO_COUNT}
+        <TextField
+          {...register("playlistTitle", { required: true })}
+          defaultValue={DEFAULT_PLAYLIST_TITLE}
         />
-        <SelectWrapper
-          {...register("privacyStatus")}
-          values={Object.values(PrivacyStatus)}
-          defaultValue={DEFAULT_PRIVACY_LEVEL}
+        <Stack
+          sx={styles.twoInputContainer}
+          direction={isMobile ? "column" : "row"}
+        >
+          <NumberField
+            {...register("numPlaylistItems", { required: true })}
+            id="outlined-required"
+            label={`Enter a number between ${MIN_VIDEO_COUNT} and ${MAX_VIDEO_COUNT}`}
+            defaultValue={DEFAULT_VIDEO_COUNT}
+            min={MIN_VIDEO_COUNT}
+            max={MAX_VIDEO_COUNT}
+          />
+          <SelectWrapper
+            {...register("privacyStatus")}
+            values={Object.values(PrivacyStatus)}
+            defaultValue={DEFAULT_PRIVACY_LEVEL}
+          />
+        </Stack>
+        <ControlledAutocomplete
+          name="excludedPlaylistNames"
+          control={control}
+          defaultValue={[]}
+          multiple
+          options={arePlaylistsRetrieved ? getPlaylistNames() : []}
+          renderInput={(params) => (
+            <TextField {...params} label="Playlists to exclude" />
+          )}
         />
+        <Button type="submit" sx={styles.submitButton}>
+          Submit
+        </Button>
       </Stack>
-      <ControlledAutocomplete
-        name="excludedPlaylistNames"
-        control={control}
-        defaultValue={[]}
-        multiple
-        options={arePlaylistsRetrieved ? getPlaylistNames() : []}
-        renderInput={(params) => (
-          <TextField {...params} label="Playlists to exclude" />
-        )}
-      />
-      <Button type="submit" sx={styles.submitButton}>
-        Submit
-      </Button>
-    </Stack>
+    </>
   );
 };
 
