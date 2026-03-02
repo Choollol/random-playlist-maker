@@ -20,6 +20,7 @@ import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { createStyleGroup } from "@/lib/styling/styling";
 import useIsMobile from "@/hooks/useIsMobile";
+import { useShallow } from "zustand/react/shallow";
 
 type FormData = CreateRandomizedPlaylistOptions;
 
@@ -61,7 +62,12 @@ const CreatePlaylistForm = () => {
     (state) => state.arePlaylistsRetrieved,
   );
 
-  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore();
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
+    useShallow((state) => ({
+      setOverlayTitle: state.setOverlayTitle,
+      setOverlayMessage: state.setOverlayMessage,
+    })),
+  );
 
   const isMobile = useIsMobile();
 
