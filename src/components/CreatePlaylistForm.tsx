@@ -56,7 +56,7 @@ const CreatePlaylistForm = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({ mode: "onChange" });
 
   const arePlaylistsRetrieved = usePlaylistDataStore(
     (state) => state.arePlaylistsRetrieved,
