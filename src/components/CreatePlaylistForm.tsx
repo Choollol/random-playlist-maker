@@ -46,7 +46,6 @@ const styles = createStyleGroup({
   },
   submitButton: {
     alignSelf: "center",
-    width: 80,
   },
 });
 
@@ -115,7 +114,7 @@ const CreatePlaylistForm = () => {
           )}
         />
         <Button type="submit" sx={styles.submitButton}>
-          Submit
+          Create Playlist
         </Button>
       </Stack>
     </>
