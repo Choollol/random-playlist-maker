@@ -40,7 +40,7 @@ export default function NumberField({
           ref={props.ref}
           disabled={state.disabled}
           required={state.required}
-          error={error}
+          error={error || (state.required && state.inputValue.length === 0)}
           variant="outlined"
         >
           {props.children}

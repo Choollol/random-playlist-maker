@@ -50,7 +50,12 @@ const styles = createStyleGroup({
 });
 
 const CreatePlaylistForm = () => {
-  const { register, handleSubmit, control } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const arePlaylistsRetrieved = usePlaylistDataStore(
     (state) => state.arePlaylistsRetrieved,
@@ -82,22 +87,31 @@ const CreatePlaylistForm = () => {
         sx={styles.form}
       >
         <TextField
-          {...register("playlistTitle", { required: true })}
+          {...register("playlistTitle", {
+            required: "Give your playlist a name!",
+          })}
           defaultValue={DEFAULT_PLAYLIST_TITLE}
           label="Playlist name"
+          error={!!errors.playlistTitle}
+          required
         />
+
         <Stack
           sx={styles.twoInputContainer}
           direction={isMobile ? "column" : "row"}
         >
           <NumberField
-            {...register("numPlaylistItems", { required: true })}
-            id="outlined-required"
+            {...register("numPlaylistItems", {
+              required: "Choose how many videos will be in your playlist!",
+            })}
             label={`Number of videos (${MIN_VIDEO_COUNT}-${MAX_VIDEO_COUNT})`}
             defaultValue={DEFAULT_VIDEO_COUNT}
             min={MIN_VIDEO_COUNT}
             max={MAX_VIDEO_COUNT}
+            error={!!errors.numPlaylistItems}
+            required
           />
+
           <SelectWrapper
             {...register("privacyStatus")}
             values={Object.values(PrivacyStatus)}
