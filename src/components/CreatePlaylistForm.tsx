@@ -84,6 +84,7 @@ const CreatePlaylistForm = () => {
         <TextField
           {...register("playlistTitle", { required: true })}
           defaultValue={DEFAULT_PLAYLIST_TITLE}
+          label="Playlist name"
         />
         <Stack
           sx={styles.twoInputContainer}
