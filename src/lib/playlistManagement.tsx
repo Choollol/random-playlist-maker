@@ -21,6 +21,7 @@ import {
 import { waitForMs } from "@/lib/utils/miscUtils";
 import { showError } from "@/lib/error";
 import { signInGoogle } from "@/lib/authClient";
+import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -29,9 +30,6 @@ export interface CreateRandomizedPlaylistOptions {
   excludedPlaylistNames: string[];
   setMessageCallback: SetMessageCallback;
 }
-
-let playlistData: PlaylistData;
-let videoIds: string[];
 
 export async function createRandomizedPlaylist({
   playlistTitle,
@@ -66,7 +64,10 @@ export async function createRandomizedPlaylist({
 
   await waitForMs(EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS);
 
-  const selectedVideoIds = getRandomElements(videoIds, numPlaylistItems);
+  const selectedVideoIds = getRandomElements(
+    usePlaylistDataStore.getState().videoIds,
+    numPlaylistItems,
+  );
 
   try {
     await createPlaylistWithVideos(
@@ -162,8 +163,15 @@ export async function retrievePlaylistData(
     const storedData = await getStoredPlaylistData(userId);
     if (storedData !== null) {
       for (const [playlistId, data] of Object.entries(storedData)) {
-        if (Object.hasOwn(playlistData, playlistId)) {
-          playlistData[data.playlist.id!] = data;
+        if (
+          Object.hasOwn(
+            usePlaylistDataStore.getState().playlistData,
+            playlistId,
+          )
+        ) {
+          usePlaylistDataStore
+            .getState()
+            .addPlaylistData(data.playlist.id!, data);
         }
       }
     }
@@ -174,7 +182,10 @@ export async function retrievePlaylistData(
     updateVideoIds();
 
     setMessageCallback("Caching data...");
-    await setUserPlaylistData(userId, playlistData);
+    await setUserPlaylistData(
+      userId,
+      usePlaylistDataStore.getState().playlistData,
+    );
 
     return true;
   } catch (error) {
@@ -197,15 +208,15 @@ async function retrievePlaylists() {
 
     playlistList.forEach(trimPlaylistProperties);
 
-    playlistData = {};
+    usePlaylistDataStore.getState().clearPlaylistData();
 
     playlistList.forEach((playlist) => {
-      playlistData[playlist.id!] = {
+      usePlaylistDataStore.getState().addPlaylistData(playlist.id!, {
         playlist: playlist,
         // Dummy data that will be replaced later
         etag: "",
         playlistItems: [],
-      };
+      });
     });
   } catch (error) {
     showError({
@@ -218,11 +229,15 @@ async function retrievePlaylists() {
 }
 
 async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
-  const length = Object.keys(playlistData).length;
+  const length = Object.keys(
+    usePlaylistDataStore.getState().playlistData,
+  ).length;
   let index = 0;
 
   try {
-    for (const data of Object.values(playlistData)) {
+    for (const data of Object.values(
+      usePlaylistDataStore.getState().playlistData,
+    )) {
       const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
       if (etag !== null) {
@@ -267,13 +282,20 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
 }
 
 export function getPlaylistNames(): string[] {
-  return Object.values(playlistData).map(
+  return Object.values(usePlaylistDataStore.getState().playlistData).map(
     (data) => data.playlist.snippet!.title!,
   );
 }
 
 function updateVideoIds(excludedPlaylistNames: string[] = []) {
-  videoIds = getVideoIdsFromPlaylistData(playlistData, excludedPlaylistNames);
+  usePlaylistDataStore
+    .getState()
+    .setVideoIds(
+      getVideoIdsFromPlaylistData(
+        usePlaylistDataStore.getState().playlistData,
+        excludedPlaylistNames,
+      ),
+    );
 }
 
 // Uncomment this during development, comment it any other times
