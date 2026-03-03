@@ -2,20 +2,23 @@ import useAuthUserData from "@/hooks/useAuthUserData";
 import { isDefined } from "@/lib/utils/typeUtils";
 import Image from "next/image";
 import { AccountCircle } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
+import { createStyleGroup } from "@/lib/styling/styling";
 
-const IMAGE_WIDTH = 32;
+const styles = createStyleGroup({
+  avatar: {
+    width: 32,
+    height: 32,
+  },
+});
 
 const UserProfilePicture = () => {
   const userData = useAuthUserData();
 
   return isDefined(userData?.image) ? (
-    <Image
-      src={userData.image}
-      alt="User's profile picture"
-      width={IMAGE_WIDTH}
-      height={IMAGE_WIDTH}
-      style={{ borderRadius: "100%" }}
-    />
+    <Avatar sx={styles.avatar}>
+      <Image src={userData.image} alt="User's profile picture" fill />
+    </Avatar>
   ) : (
     <AccountCircle />
   );
