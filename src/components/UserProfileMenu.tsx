@@ -5,6 +5,7 @@ import { authClient } from "@/lib/authClient";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { Logout } from "@mui/icons-material";
 import {
+  Button,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -26,6 +27,7 @@ const styles = createStyleGroup({
 const UserProfileMenu = () => {
   const [doOpenPopver, setDoOpenPopover] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const router = useRouter();
 
@@ -41,6 +43,7 @@ const UserProfileMenu = () => {
   };
 
   const handleSignOutClick = async () => {
+    setIsSigningOut(true);
     await authClient.signOut();
     router.refresh();
   };
@@ -62,7 +65,11 @@ const UserProfileMenu = () => {
           },
         }}
       >
-        <MenuItem onClick={handleSignOutClick}>
+        <MenuItem
+          component={Button}
+          onClick={handleSignOutClick}
+          loading={isSigningOut}
+        >
           <ListItemIcon>
             <Logout />
           </ListItemIcon>
