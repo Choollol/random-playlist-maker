@@ -9,8 +9,6 @@ interface Props {
  * Wrapper around account buttons that changes with signed-in status.
  */
 const ManageAccountButton = ({ isSignedIn }: Props) => {
-  "use no memo";
-
   return isSignedIn ? <UserProfileMenu /> : <SignInButton />;
 };
 
