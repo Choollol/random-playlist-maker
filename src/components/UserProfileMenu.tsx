@@ -23,7 +23,7 @@ const styles = createStyleGroup({
 /**
  * Shown when user _is_ signed in.
  */
-const UserProfileButton = () => {
+const UserProfileMenu = () => {
   const [doOpenPopver, setDoOpenPopover] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -73,4 +73,4 @@ const UserProfileButton = () => {
   );
 };
 
-export default UserProfileButton;
+export default UserProfileMenu;

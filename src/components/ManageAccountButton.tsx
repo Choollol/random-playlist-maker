@@ -1,5 +1,5 @@
 import SignInButton from "@/components/SignInButton";
-import UserProfileButton from "@/components/UserProfileButton";
+import UserProfileMenu from "@/components/UserProfileMenu";
 
 interface Props {
   isSignedIn: boolean;
@@ -11,7 +11,7 @@ interface Props {
 const ManageAccountButton = ({ isSignedIn }: Props) => {
   "use no memo";
 
-  return isSignedIn ? <UserProfileButton /> : <SignInButton />;
+  return isSignedIn ? <UserProfileMenu /> : <SignInButton />;
 };
 
 export default ManageAccountButton;
