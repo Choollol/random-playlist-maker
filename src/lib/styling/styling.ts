@@ -44,5 +44,9 @@ export function extendStyles(
   baseStyles: StyleProps,
   overrideStyles: StyleProps,
 ) {
-  return { ...baseStyles, ...overrideStyles } as StyleProps;
+  return [...asSpreadable(baseStyles), ...asSpreadable(overrideStyles)];
+}
+
+function asSpreadable(styles: StyleProps) {
+  return Array.isArray(styles) ? styles : [styles];
 }
