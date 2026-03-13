@@ -1,6 +1,8 @@
+import { authClient } from "@/lib/authClient";
 import { initDB } from "@/lib/db";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -9,6 +11,8 @@ interface Props {
 }
 
 const Initializer = ({ isGapiLoaded }: Props) => {
+  const router = useRouter();
+
   const {
     isGapiInitialized,
     isDatabaseInitialized,
@@ -31,10 +35,13 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         const success = await initGapiClient();
         if (success) {
           setGapiInitialized();
+        } else {
+          await authClient.signOut();
+          router.refresh();
         }
       })();
     }
-  }, [isGapiLoaded, setGapiInitialized]);
+  }, [isGapiLoaded, setGapiInitialized, router]);
 
   useEffect(() => {
     (async () => {

@@ -35,7 +35,7 @@ export const initGapiClient = catchUnrecoverableError(
       });
       return true;
     } else {
-      throw new Error("Auth access token is undefined!");
+      return false;
     }
   },
 );
