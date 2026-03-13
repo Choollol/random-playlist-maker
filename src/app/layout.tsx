@@ -1,5 +1,10 @@
 import { defaultStyles, theme } from "@/lib/styling/theme";
-import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
+import {
+  CssBaseline,
+  GlobalStyles,
+  InitColorSchemeScript,
+  ThemeProvider,
+} from "@mui/material";
 import StatusMessageOverlay from "@/components/StatusMessageOverlay";
 import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
 import { Metadata, Viewport } from "next";
@@ -38,12 +43,18 @@ export default function RootLayout({
   setEnvVariables(ENV.GOOGLE_API_KEY, ENV.GOOGLE_CLIENT_ID);
 
   return (
-    <html lang="en" className={roboto.variable}>
+    <html
+      lang="en"
+      className={roboto.variable}
+      // Suppress error that comes from using `InitColorSchemeScript`
+      suppressHydrationWarning
+    >
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             {globalStyles}
+            <InitColorSchemeScript attribute="class" />
 
             <Snackbar />
 

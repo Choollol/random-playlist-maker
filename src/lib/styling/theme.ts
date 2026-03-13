@@ -24,6 +24,9 @@ let theme = createTheme({
   colorSchemes: {
     dark: true,
   },
+  cssVariables: {
+    colorSchemeSelector: "class",
+  },
   zIndex: {
     ...defaultMuiTheme.zIndex,
     overlay: 1600,
