@@ -12,6 +12,7 @@ import {
   addArrayElementsToSet,
   createSetFromArray,
 } from "@/lib/utils/collectionUtils";
+import { catchQuotaError } from "@/lib/utils/gapiUtils";
 
 export const MAX_PAGINATED_ITEM_RESULTS = 50;
 
@@ -140,14 +141,16 @@ export async function checkPlaylistEtag(
   cachedEtag: string,
   playlistId: string,
 ): Promise<string | null> {
-  const response = await gapi.client.request({
-    path: "https://www.googleapis.com/youtube/v3/playlists",
-    method: "GET",
-    params: { part: "id", id: playlistId },
-    headers: {
-      "If-None-Match": cachedEtag,
-    },
-  });
+  const response = await catchQuotaError(
+    gapi.client.request({
+      path: "https://www.googleapis.com/youtube/v3/playlists",
+      method: "GET",
+      params: { part: "id", id: playlistId },
+      headers: {
+        "If-None-Match": cachedEtag,
+      },
+    }),
+  );
   if (response.status === 304) {
     return null;
   }

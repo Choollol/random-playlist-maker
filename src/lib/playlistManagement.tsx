@@ -2,8 +2,8 @@ import {
   getStoredPlaylistData,
   setUserPlaylistData,
 } from "@/lib/storageManagement";
-import { PrivacyStatus } from "@/lib/types/gapiTypes";
-import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
+import { Playlist, PrivacyStatus } from "@/lib/types/gapiTypes";
+import { SetMessageCallback } from "@/lib/types/playlistTypes";
 import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
@@ -22,6 +22,10 @@ import { waitForMs } from "@/lib/utils/miscUtils";
 import { showError } from "@/lib/error";
 import { signInGoogle } from "@/lib/authClient";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import {
+  catchQuotaError,
+  PLAYLIST_ITEM_RESOURCE_KIND,
+} from "@/lib/utils/gapiUtils";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -97,19 +101,24 @@ export async function createPlaylistWithVideos(
 ) {
   setMessageCallback(`Creating playlist ${playlistTitle}...`);
   // FIXME
-  // const response = await gapi.client.youtube.playlists.insert({
-  //   part: "id, snippet, status",
-  //   resource: {
-  //     snippet: {
-  //       title: playlistTitle,
-  //     },
-  //     status: {
-  //       privacyStatus: privacyStatus,
-  //     },
-  //   },
-  // });
-  // const playlist: Playlist = JSON.parse(response.body);
+  if (false) {
+    const response = await catchQuotaError(
+      gapi.client.youtube.playlists.insert({
+        part: "id, snippet, status",
+        resource: {
+          snippet: {
+            title: playlistTitle,
+          },
+          status: {
+            privacyStatus: privacyStatus,
+          },
+        },
+      }),
+    );
+    const playlist: Playlist = JSON.parse(response.body);
+  }
   const playlist = {
+    id: "",
     snippet: {
       title: "test playlist",
     },
@@ -118,18 +127,22 @@ export async function createPlaylistWithVideos(
   setMessageCallback("Adding videos to playlist...");
   for (const playlistItemId of videoIds) {
     // FIXME
-    // await gapi.client.youtube.playlistItems.insert({
-    //   part: "snippet",
-    //   resource: {
-    //     snippet: {
-    //       playlistId: playlist.id,
-    //       resourceId: {
-    //         kind: PLAYLIST_ITEM_RESOURCE_KIND,
-    //         videoId: playlistItemId,
-    //       },
-    //     },
-    //   },
-    // });
+    if (false) {
+      await catchQuotaError(
+        gapi.client.youtube.playlistItems.insert({
+          part: "snippet",
+          resource: {
+            snippet: {
+              playlistId: playlist.id,
+              resourceId: {
+                kind: PLAYLIST_ITEM_RESOURCE_KIND,
+                videoId: playlistItemId,
+              },
+            },
+          },
+        }),
+      );
+    }
 
     // TEMP
     await waitForMs(100);
@@ -198,12 +211,11 @@ export async function retrievePlaylistData(
 
 async function retrievePlaylists() {
   try {
-    const playlistList = await getPaginatedItems(
-      gapi.client.youtube.playlists.list,
-      {
+    const playlistList = await catchQuotaError(
+      getPaginatedItems(gapi.client.youtube.playlists.list, {
         part: PLAYLIST_PART,
         mine: true,
-      },
+      }),
     );
 
     playlistList.forEach(trimPlaylistProperties);
@@ -248,12 +260,11 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
             {data.playlist.snippet!.title!.toString()}
           </>,
         );
-        const items = await getPaginatedItems(
-          gapi.client.youtube.playlistItems.list,
-          {
+        const items = await catchQuotaError(
+          getPaginatedItems(gapi.client.youtube.playlistItems.list, {
             part: PLAYLIST_ITEM_PART,
             playlistId: data.playlist.id,
-          },
+          }),
         );
         items.forEach(trimPlaylistItemProperties);
 

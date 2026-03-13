@@ -12,7 +12,7 @@ export type PlaylistRequestCallback =
 export type ConditionalPlaylistType<
   RequestCallbackType,
   PlaylistType,
-  PlaylistItemType
+  PlaylistItemType,
 > = RequestCallbackType extends typeof gapi.client.youtube.playlists.list
   ? PlaylistType
   : PlaylistItemType;
@@ -33,3 +33,13 @@ export type PlaylistListParams = Parameters<
 export type PlaylistItemListParams = Parameters<
   typeof gapi.client.youtube.playlistItems.list
 >[0];
+
+export interface GApiError {
+  code: number;
+  message: string;
+  errors: {
+    message: string;
+    domain: string;
+    reason: string;
+  }[];
+}

@@ -3,6 +3,7 @@
 import { authClient } from "@/lib/authClient";
 import { catchUnrecoverableError } from "@/lib/error";
 import { googleApiKey } from "@/lib/utils/envUtils";
+import { GApiError } from "@/lib/types/gapiTypes";
 
 export const GOOGLE_SCOPES = "https://www.googleapis.com/auth/youtube";
 
@@ -39,3 +40,38 @@ export const initGapiClient = catchUnrecoverableError(
     }
   },
 );
+
+/**
+ * Wrapper around `gapi.client.youtube` calls to handle quota exceeded errors.
+ */
+export async function catchQuotaError<T>(request: Promise<T>): Promise<T> {
+  try {
+    return await request;
+  } catch (error: unknown) {
+    const gapiError = getGapiError(error);
+    if (
+      gapiError !== null &&
+      gapiError.code === 403 &&
+      gapiError.errors[0].reason === "quotaExceeded"
+    ) {
+      window.location.href = "/error/youtube-quota";
+    }
+    throw error;
+  }
+}
+
+/**
+ * @returns gapi error object if valid, null otherwise.
+ */
+function getGapiError(error: unknown): GApiError | null {
+  if (
+    typeof error !== "object" ||
+    error === null ||
+    !("body" in error) ||
+    typeof error.body !== "string"
+  ) {
+    return null;
+  }
+  const body = JSON.parse(error.body);
+  return Object.hasOwn(body, "error") ? body.error : null;
+}
