@@ -13,7 +13,7 @@ export default async function Home() {
     <>
       <Header isSignedIn={isSignedIn} />
 
-      <main>{isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}</main>
+      {isSignedIn ? <SignedInDisplay /> : <SignedOutDisplay />}
     </>
   );
 }

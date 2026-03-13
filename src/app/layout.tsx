@@ -47,7 +47,7 @@ export default function RootLayout({
 
             <Snackbar />
 
-            {children}
+            <main>{children}</main>
 
             <StatusMessageOverlay />
             <ErrorMessageOverlay />
