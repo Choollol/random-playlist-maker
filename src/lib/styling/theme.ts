@@ -29,13 +29,6 @@ let theme = createTheme({
     overlay: 1600,
   },
   components: {
-    // MuiTypography: {
-    //   styleOverrides: {
-    //     root: {
-    //       fontFamily: ["Roboto", "Helvetica", "Arial", "sans-serif"].join(","),
-    //     },
-    //   },
-    // },
     MuiLink: {
       defaultProps: {
         target: "_blank",
@@ -43,7 +36,6 @@ let theme = createTheme({
     },
   },
   typography: {
-    // fontFamily: "var(--font-roboto)",
     h1: {
       ...headerCommonStyles,
     },
