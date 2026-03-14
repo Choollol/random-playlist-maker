@@ -1,6 +1,8 @@
 export const BUG_REPORT_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLScIsd9eAcAM2EcBx9QRpzTnWWsB2NuZyRhtADxzdQw0mvKmgw/viewform";
 
+export const GITHUB_URL = "https://github.com/Choollol/random-playlist-maker";
+
 /**
  * @param min Inclusive
  * @param max Exclusive
