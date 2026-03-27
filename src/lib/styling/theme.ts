@@ -18,7 +18,7 @@ const headerCommonStyles: CSSProperties = {
   fontWeight: "400",
 };
 
-const DEFAULT_HUE = 268;
+export const PRIMARY_HUE = 268;
 
 const defaultMuiTheme = createTheme();
 
@@ -26,15 +26,21 @@ let theme = createTheme({
   colorSchemes: {
     light: {
       palette: {
+        primary: {
+          main: `hsl(${PRIMARY_HUE}, 50%, 30%)`,
+        },
         background: {
-          default: `hsl(${DEFAULT_HUE}, 20%, 98%)`,
+          default: `hsl(${PRIMARY_HUE}, 20%, 98%)`,
         },
       },
     },
     dark: {
       palette: {
+        primary: {
+          main: `hsl(${PRIMARY_HUE}, 50%, 70%)`,
+        },
         background: {
-          default: `hsl(${DEFAULT_HUE}, 10%, 12%)`,
+          default: `hsl(${PRIMARY_HUE}, 10%, 12%)`,
         },
       },
     },
@@ -50,6 +56,13 @@ let theme = createTheme({
     MuiLink: {
       defaultProps: {
         target: "_blank",
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundImage: "none",
+        },
       },
     },
   },

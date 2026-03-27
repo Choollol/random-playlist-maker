@@ -1,7 +1,10 @@
+"use client";
+
 import HomeLinkButton from "@/components/header/HomeLinkButton";
 import IconLinkButton from "@/components/IconLinkButton";
 import ManageAccountButton from "@/components/ManageAccountButton";
 import { createStyleGroup } from "@/lib/styling/styling";
+import { PRIMARY_HUE } from "@/lib/styling/theme";
 import { BUG_REPORT_URL, GITHUB_URL } from "@/lib/utils/miscUtils";
 import { BugReport, GitHub } from "@mui/icons-material";
 import { AppBar, Box, Toolbar } from "@mui/material";
@@ -11,10 +14,20 @@ interface Props {
 }
 
 const styles = createStyleGroup({
-  header: {
-    position: "sticky",
-    height: 60,
-  },
+  header: [
+    (theme) => ({
+      position: "sticky",
+      height: 60,
+      backgroundColor: `hsla(${PRIMARY_HUE}, 30%, 20%, 0.15)`,
+      borderBottom: `solid ${theme.palette.common.black} 1px`,
+      boxShadow: "none",
+    }),
+    (theme) =>
+      theme.applyStyles("dark", {
+        backgroundColor: `hsla(${PRIMARY_HUE}, 30%, 20%, 0.15)`,
+        borderBottom: `solid ${theme.palette.common.white} 1px`,
+      }),
+  ],
   toolbar: {
     paddingLeft: 1,
     paddingRight: 1,
