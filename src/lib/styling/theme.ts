@@ -18,11 +18,26 @@ const headerCommonStyles: CSSProperties = {
   fontWeight: "400",
 };
 
+const DEFAULT_HUE = 268;
+
 const defaultMuiTheme = createTheme();
 
 let theme = createTheme({
   colorSchemes: {
-    dark: true,
+    light: {
+      palette: {
+        background: {
+          default: `hsl(${DEFAULT_HUE}, 20%, 98%)`,
+        },
+      },
+    },
+    dark: {
+      palette: {
+        background: {
+          default: `hsl(${DEFAULT_HUE}, 10%, 12%)`,
+        },
+      },
+    },
   },
   cssVariables: {
     colorSchemeSelector: "class",
