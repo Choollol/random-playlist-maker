@@ -32,6 +32,9 @@ let theme = createTheme({
         background: {
           default: `hsl(${PRIMARY_HUE}, 20%, 98%)`,
         },
+        action: {
+          active: "rgba(0, 0, 0, 0.8)",
+        },
       },
     },
     dark: {
