@@ -40,7 +40,7 @@ let theme = createTheme({
           main: `hsl(${PRIMARY_HUE}, 50%, 70%)`,
         },
         background: {
-          default: `hsl(${PRIMARY_HUE}, 10%, 12%)`,
+          default: `hsl(${PRIMARY_HUE}, 10%, 10%)`,
         },
       },
     },
