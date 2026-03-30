@@ -25,9 +25,6 @@ const styles = createStyleGroup({
   }),
   retryButton: {
     alignSelf: "center",
-    "& .MuiButton-text": {
-      color: "inherit",
-    },
   },
 });
 
