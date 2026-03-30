@@ -16,8 +16,10 @@ import { useShallow } from "zustand/react/shallow";
 
 const styles = createStyleGroup({
   dialog: (theme) => ({
-    color: theme.palette.error.contrastText,
-    "& .MuiPaper-root": { backgroundColor: theme.palette.error.main },
+    "& *": {
+      color: theme.palette.error.contrastText,
+    },
+    "& .MuiPaper-root": { backgroundColor: theme.palette.error.dark },
   }),
   retryButton: (theme) => ({
     alignSelf: "center",
