@@ -19,7 +19,9 @@ const styles = createStyleGroup({
     "& *": {
       color: theme.palette.error.contrastText,
     },
-    "& .MuiPaper-root": { backgroundColor: theme.palette.error.dark },
+  }),
+  dialogPaper: (theme) => ({
+    backgroundColor: theme.palette.error.dark,
   }),
   retryButton: {
     alignSelf: "center",
@@ -47,7 +49,16 @@ const ErrorMessageOverlay = () => {
 
   return message !== null ? (
     <>
-      <Dialog open={true} maxWidth={"xs"} sx={styles.dialog}>
+      <Dialog
+        open={true}
+        maxWidth={"xs"}
+        sx={styles.dialog}
+        slotProps={{
+          paper: {
+            sx: styles.dialogPaper,
+          },
+        }}
+      >
         <DialogTitle>Error</DialogTitle>
 
         <DialogContent>
