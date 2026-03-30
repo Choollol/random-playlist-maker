@@ -125,6 +125,7 @@ const CreatePlaylistForm = () => {
           control={control}
           defaultValue={[]}
           multiple
+          disableCloseOnSelect
           options={arePlaylistsRetrieved ? getPlaylistNames() : []}
           renderInput={(params) => (
             <TextField {...params} label="Playlists to exclude" />
