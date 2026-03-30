@@ -45,6 +45,9 @@ const styles = createStyleGroup({
       flexBasis: "50%",
     },
   },
+  excludePlaylistPopper: {
+    marginBottom: 2,
+  },
   submitButton: {
     alignSelf: "center",
   },
@@ -130,6 +133,7 @@ const CreatePlaylistForm = () => {
           renderInput={(params) => (
             <TextField {...params} label="Playlists to exclude" />
           )}
+          slotProps={{ paper: { sx: styles.excludePlaylistPopper } }}
         />
         <Button type="submit" sx={styles.submitButton}>
           Create Playlist
