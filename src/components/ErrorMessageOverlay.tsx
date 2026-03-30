@@ -21,16 +21,12 @@ const styles = createStyleGroup({
     },
     "& .MuiPaper-root": { backgroundColor: theme.palette.error.dark },
   }),
-  retryButton: (theme) => ({
+  retryButton: {
     alignSelf: "center",
     "& .MuiButton-text": {
-      color: theme.palette.error.contrastText,
+      color: "inherit",
     },
-  }),
-  bugReportLink: (theme) => ({
-    color: theme.palette.error.contrastText,
-    textDecoration: "underline",
-  }),
+  },
 });
 
 const ErrorMessageOverlay = () => {
@@ -61,9 +57,7 @@ const ErrorMessageOverlay = () => {
         <DialogContent>
           <Typography>
             If this error persists, please{" "}
-            <Link href={BUG_REPORT_URL} sx={styles.bugReportLink}>
-              submit a bug report
-            </Link>
+            <Link href={BUG_REPORT_URL}>submit a bug report</Link>
           </Typography>
         </DialogContent>
 

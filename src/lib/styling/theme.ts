@@ -60,6 +60,12 @@ let theme = createTheme({
       defaultProps: {
         target: "_blank",
       },
+      styleOverrides: {
+        root: {
+          color: "inherit",
+          textDecoration: "underline",
+        },
+      },
     },
     MuiAppBar: {
       styleOverrides: {
