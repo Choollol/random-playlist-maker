@@ -4,7 +4,6 @@ import { createStyleGroup } from "@/lib/styling/styling";
 import { BUG_REPORT_URL } from "@/lib/utils/miscUtils";
 import { useErrorMessageStore } from "@/store/useErrorMessageStore";
 import {
-  Backdrop,
   Button,
   Dialog,
   DialogActions,
@@ -50,7 +49,6 @@ const ErrorMessageOverlay = () => {
 
   return message !== null ? (
     <>
-      <Backdrop open={true} />
       <Dialog open={true} maxWidth={"xs"} sx={styles.dialog}>
         <DialogTitle>Error</DialogTitle>
 
