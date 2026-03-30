@@ -18,13 +18,13 @@ const styles = createStyleGroup({
     (theme) => ({
       position: "sticky",
       height: 60,
-      backgroundColor: `hsla(${PRIMARY_HUE}, 30%, 20%, 0.15)`,
+      backgroundColor: `hsl(${PRIMARY_HUE}, 30%, 90%)`,
       borderBottom: `solid ${theme.palette.common.black} 1px`,
       boxShadow: "none",
     }),
     (theme) =>
       theme.applyStyles("dark", {
-        backgroundColor: `hsla(${PRIMARY_HUE}, 30%, 20%, 0.15)`,
+        backgroundColor: `hsl(${PRIMARY_HUE}, 40%, 7%)`,
         borderBottom: `solid ${theme.palette.common.white} 1px`,
       }),
   ],
