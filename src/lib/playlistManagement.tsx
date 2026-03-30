@@ -149,7 +149,13 @@ export async function createPlaylistWithVideos(
   }
 
   setMessageCallback(
-    `Created playlist ${playlistTitle} with ${videoIds.length} videos!`,
+    <>
+      Created playlist
+      <br />
+      {`"${playlistTitle}"`}
+      <br />
+      {`with ${videoIds.length} videos!`}
+    </>,
   );
 
   await waitForMs(PLAYLIST_CREATED_MESSAGE_TIME_MS);
@@ -255,7 +261,9 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
       if (etag !== null) {
         setMessageCallback(
           <>
-            {`Fetching items for ${index + 1} of ${length} playlists:`}
+            Fetching items for playlist
+            <br />
+            {`${index + 1} of ${length}:`}
             <br />
             {data.playlist.snippet!.title!.toString()}
           </>,
@@ -273,7 +281,9 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
       } else {
         setMessageCallback(
           <>
-            {`Getting items from cache for ${index + 1} of ${length} playlists:`}
+            Getting items from cache for playlist
+            <br />
+            {`${index + 1} of ${length}:`}
             <br />
             {data.playlist.snippet!.title!.toString()}
           </>,
