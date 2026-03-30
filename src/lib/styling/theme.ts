@@ -31,6 +31,7 @@ let theme = createTheme({
         },
         background: {
           default: `hsl(${PRIMARY_HUE}, 20%, 98%)`,
+          paper: `hsl(${PRIMARY_HUE}, 70%, 98%)`,
         },
         action: {
           active: "rgba(0, 0, 0, 0.8)",
@@ -44,6 +45,7 @@ let theme = createTheme({
         },
         background: {
           default: `hsl(${PRIMARY_HUE}, 10%, 10%)`,
+          paper: `hsl(${PRIMARY_HUE}, 20%, 10%)`,
         },
       },
     },
