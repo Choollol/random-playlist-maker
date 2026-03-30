@@ -19,7 +19,6 @@ export default function AuthError() {
     const navigateToHome = () => {
       push("/");
       clearErrorMessage();
-      console.log("aa");
     };
 
     setErrorMessage({
@@ -28,7 +27,6 @@ export default function AuthError() {
       retryButtonText: "Go Home",
       retryAction: navigateToHome,
     });
-    console.log("hi");
   });
   return null;
 }
