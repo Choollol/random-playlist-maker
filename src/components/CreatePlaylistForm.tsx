@@ -75,8 +75,6 @@ const CreatePlaylistForm = () => {
   const isMobile = useIsMobile();
 
   const submitForm = (formData: FormData) => {
-    console.log(formData);
-
     setOverlayTitle("Creating playlist...");
     createRandomizedPlaylist({
       ...formData,
