@@ -17,7 +17,6 @@
     "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.8",
     "@next/env": "^16.0.10",
-    "@types/gapi": "^0.0.47",
     "better-auth": "^1.4.7",
     "googleapis": "^169.0.0",
     "idb": "^8.0.3",
@@ -30,6 +29,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@types/gapi": "^0.0.47",
     "@types/gapi.client.youtube-v3": "^0.0.4",
     "@types/node": "^20",
     "@types/react": "^19",

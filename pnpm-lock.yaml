@@ -32,9 +32,6 @@ importers:
       '@next/env':
         specifier: ^16.0.10
         version: 16.0.10
-      '@types/gapi':
-        specifier: ^0.0.47
-        version: 0.0.47
       better-auth:
         specifier: ^1.4.7
         version: 1.4.7(next@16.1.6(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -66,6 +63,9 @@ importers:
         specifier: ^5.0.9
         version: 5.0.9(@types/react@19.2.7)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0))
     devDependencies:
+      '@types/gapi':
+        specifier: ^0.0.47
+        version: 0.0.47
       '@types/gapi.client.youtube-v3':
         specifier: ^0.0.4
         version: 0.0.4
@@ -502,11 +502,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
-    resolution: {integrity: sha512-Jeo/KZqK39DI6ExXHcJ4lqnn1O/wEqboQ6eQ8WnNpu5eJ7wUnX/C5KazOgs1aRhnIB/dVzDe8wm62nmtkMIoaw==}
+  '@maxim_mazurok/gapi.client.discovery-v1@0.5.20200806':
+    resolution: {integrity: sha512-oVq9hnnI5VhAtsx55iJbPz8NRfJtWFpI1kINKeuygzCvsx90b1GQDeN3MDUvhADXiQ7+Izs316cqBnJjoDxCow==}
 
-  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260226':
-    resolution: {integrity: sha512-s51cewEPzg0ykXyGRqd9NHWfgzHV6TmUXC3ArkyLjc/odvre3QVCFYYT+/FOVtTMGn0iDm47KGaZuTOzmOZ8NA==}
+  '@maxim_mazurok/gapi.client.youtube-v3@0.2.20260317':
+    resolution: {integrity: sha512-LwzCUqE0dO9SapxO/gH0XsJSABZZYVSDSY3i5mbFQ/tKZQ/OsMo5r8/yPBAFWC6t9jGpaKIyt8Bi8tWT8ANZMg==}
 
   '@mui/core-downloads-tracker@7.3.6':
     resolution: {integrity: sha512-QaYtTHlr8kDFN5mE1wbvVARRKH7Fdw1ZuOjBJcFdVpfNfRYKF3QLT4rt+WaB6CKJvpqxRsmEo0kpYinhH5GeHg==}
@@ -2887,12 +2887,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@maxim_mazurok/gapi.client.discovery-v1@0.4.20200806':
+  '@maxim_mazurok/gapi.client.discovery-v1@0.5.20200806':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
 
-  '@maxim_mazurok/gapi.client.youtube-v3@0.1.20260226':
+  '@maxim_mazurok/gapi.client.youtube-v3@0.2.20260317':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
@@ -3073,11 +3073,11 @@ snapshots:
 
   '@types/gapi.client.discovery-v1@0.0.4':
     dependencies:
-      '@maxim_mazurok/gapi.client.discovery-v1': 0.4.20200806
+      '@maxim_mazurok/gapi.client.discovery-v1': 0.5.20200806
 
   '@types/gapi.client.youtube-v3@0.0.4':
     dependencies:
-      '@maxim_mazurok/gapi.client.youtube-v3': 0.1.20260226
+      '@maxim_mazurok/gapi.client.youtube-v3': 0.2.20260317
 
   '@types/gapi.client@1.0.8': {}
 
