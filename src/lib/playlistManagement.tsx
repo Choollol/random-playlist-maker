@@ -100,8 +100,6 @@ export async function createPlaylistWithVideos(
   setMessageCallback: SetMessageCallback,
 ) {
   setMessageCallback(`Creating playlist ${playlistTitle}...`);
-  // FIXME
-  if (false) {
     const response = await catchQuotaError(
       gapi.client.youtube.playlists.insert({
         part: "id, snippet, status",
@@ -116,18 +114,9 @@ export async function createPlaylistWithVideos(
       }),
     );
     const playlist: Playlist = JSON.parse(response.body);
-  }
-  const playlist = {
-    id: "",
-    snippet: {
-      title: "test playlist",
-    },
-  };
 
   setMessageCallback("Adding videos to playlist...");
   for (const playlistItemId of videoIds) {
-    // FIXME
-    if (false) {
       await catchQuotaError(
         gapi.client.youtube.playlistItems.insert({
           part: "snippet",
@@ -142,10 +131,6 @@ export async function createPlaylistWithVideos(
           },
         }),
       );
-    }
-
-    // TEMP
-    await waitForMs(100);
   }
 
   setMessageCallback(
