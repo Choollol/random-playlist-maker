@@ -5,7 +5,7 @@ import {
   InitColorSchemeScript,
   ThemeProvider,
 } from "@mui/material";
-import StatusMessageOverlay from "@/components/_common/StatusMessageOverlay";
+import StatusMessageOverlay from "@/components/_common/StatusMessageDialog/StatusMessageOverlay";
 import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
 import { Metadata, Viewport } from "next";
 import { setEnvVariables } from "@/lib/utils/envUtils";

@@ -1,11 +1,14 @@
+import { StatusMessageDialog } from "@/components/_common/StatusMessageDialog/StatusMessageDialog";
+import { StatusMessageDialogContent } from "@/components/_common/StatusMessageDialog/StatusMessageDialogContent";
+import { StatusMessageDialogDivider } from "@/components/_common/StatusMessageDialog/StatusMessageDialogDivider";
+import { StatusMessageDialogTitle } from "@/components/_common/StatusMessageDialog/StatusMessageDialogTitle";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
-import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
-import { useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const RetrievePlaylists = () => {
-  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore();
+  const [message, setMessage] = useState<ReactNode>(null);
 
   const isEverythingInitialized = useInitializationStateStore(
     (state) => state.isEverythingInitialized,
@@ -18,8 +21,7 @@ const RetrievePlaylists = () => {
   useEffect(() => {
     if (isEverythingInitialized) {
       (async () => {
-        setOverlayTitle("Retrieving data...");
-        const success = await retrievePlaylistData(setOverlayMessage);
+        const success = await retrievePlaylistData(setMessage);
         if (success) {
           setPlaylistsRetrieved();
         } else {
@@ -27,14 +29,17 @@ const RetrievePlaylists = () => {
         }
       })();
     }
-  }, [
-    isEverythingInitialized,
-    setPlaylistsRetrieved,
-    setOverlayTitle,
-    setOverlayMessage,
-  ]);
+  }, [isEverythingInitialized, setPlaylistsRetrieved]);
 
-  return null;
+  return (
+    <StatusMessageDialog open={Boolean(message)}>
+      <StatusMessageDialogTitle>Retrieving data...</StatusMessageDialogTitle>
+
+      <StatusMessageDialogDivider />
+
+      <StatusMessageDialogContent>{message}</StatusMessageDialogContent>
+    </StatusMessageDialog>
+  );
 };
 
 export default RetrievePlaylists;
