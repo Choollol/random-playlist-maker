@@ -5,12 +5,12 @@ import {
   InitColorSchemeScript,
   ThemeProvider,
 } from "@mui/material";
-import StatusMessageOverlay from "@/components/StatusMessageOverlay";
+import StatusMessageOverlay from "@/components/_common/StatusMessageOverlay";
 import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
 import { Metadata, Viewport } from "next";
 import { setEnvVariables } from "@/lib/utils/envUtils";
 import { ENV } from "@/env";
-import Snackbar from "@/components/Snackbar";
+import Snackbar from "@/components/_common/Snackbar";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { roboto } from "@/lib/styling/font";
 

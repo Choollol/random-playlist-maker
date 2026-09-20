@@ -1,5 +1,5 @@
 import SignInButton from "@/components/SignInButton";
-import UserProfileMenu from "@/components/UserProfileMenu";
+import UserProfileMenu from "@/components/header/UserProfileMenu";
 
 interface Props {
   isSignedIn: boolean;

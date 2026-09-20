@@ -1,6 +1,6 @@
 "use client";
 
-import UserProfilePicture from "@/components/UserProfilePicture";
+import UserProfilePicture from "@/components/header/UserProfilePicture";
 import { authClient } from "@/lib/authClient";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { Logout } from "@mui/icons-material";

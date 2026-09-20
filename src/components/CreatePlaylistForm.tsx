@@ -5,7 +5,7 @@ import {
 } from "@/lib/playlistManagement";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import NumberField from "./NumberField";
+import NumberField from "./_common/NumberField";
 import {
   DEFAULT_PLAYLIST_TITLE,
   DEFAULT_PRIVACY_LEVEL,
@@ -14,8 +14,8 @@ import {
   MIN_VIDEO_COUNT,
 } from "@/lib/utils/playlistUtils";
 import { PrivacyStatus } from "@/lib/types/gapiTypes";
-import SelectWrapper from "@/components/SelectWrapper";
-import ControlledAutocomplete from "@/components/ControlledAutocomplete";
+import SelectWrapper from "@/components/_common/SelectWrapper";
+import ControlledAutocomplete from "@/components/_common/ControlledAutocomplete";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { createStyleGroup } from "@/lib/styling/styling";

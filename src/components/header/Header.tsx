@@ -1,8 +1,8 @@
 "use client";
 
 import HomeLinkButton from "@/components/header/HomeLinkButton";
-import IconLinkButton from "@/components/IconLinkButton";
-import ManageAccountButton from "@/components/ManageAccountButton";
+import IconLinkButton from "@/components/_common/IconLinkButton";
+import ManageAccountButton from "@/components/header/ManageAccountButton";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PRIMARY_HUE } from "@/lib/styling/theme";
 import { BUG_REPORT_URL, GITHUB_URL } from "@/lib/utils/miscUtils";
