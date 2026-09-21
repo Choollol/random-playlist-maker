@@ -9,9 +9,6 @@ export interface PlaylistData {
   };
 }
 
-/**
- * Make this a `string[]` when each element needs to be on a different line.
- */
 export type OverlayMessage = ReactNode;
 
 export type SetMessageCallback = (message: OverlayMessage) => void;
