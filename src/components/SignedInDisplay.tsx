@@ -32,8 +32,9 @@ const SignedInDisplay = () => {
 
       <Initializer isGapiLoaded={isGapiLoaded} />
 
+      <RetrievePlaylists />
+
       <Box sx={styles.container}>
-        <RetrievePlaylists />
         <CreatePlaylistForm />
       </Box>
     </>

@@ -1,6 +1,6 @@
 import { createStyleGroup } from "@/lib/styling/styling";
 import { Box, Dialog } from "@mui/material";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 const styles = createStyleGroup({
   contentContainer: {
@@ -13,12 +13,14 @@ const styles = createStyleGroup({
 
 interface Props {
   children: ReactNode;
-  open: boolean;
 }
 
-export const StatusMessageDialog = ({ children, open }: Props) => {
+export const StatusMessageDialog = ({
+  children,
+  ...dialogProps
+}: Props & ComponentProps<typeof Dialog>) => {
   return (
-    <Dialog open={open}>
+    <Dialog {...dialogProps}>
       <Box sx={styles.contentContainer}>{children}</Box>
     </Dialog>
   );

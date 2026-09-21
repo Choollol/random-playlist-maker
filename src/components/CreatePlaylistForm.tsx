@@ -128,12 +128,19 @@ const CreatePlaylistForm = () => {
           multiple
           disableCloseOnSelect
           options={arePlaylistsRetrieved ? getPlaylistNames() : []}
+          noOptionsText={
+            arePlaylistsRetrieved ? undefined : "Loading playlists..."
+          }
           renderInput={(params) => (
             <TextField {...params} label="Playlists to exclude" />
           )}
           slotProps={{ paper: { sx: styles.excludePlaylistPopper } }}
         />
-        <Button type="submit" sx={styles.submitButton}>
+        <Button
+          type="submit"
+          sx={styles.submitButton}
+          disabled={!arePlaylistsRetrieved}
+        >
           Create Playlist
         </Button>
       </Stack>

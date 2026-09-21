@@ -3,12 +3,26 @@ import { StatusMessageDialogContent } from "@/components/_common/StatusMessageDi
 import { StatusMessageDialogDivider } from "@/components/_common/StatusMessageDialog/StatusMessageDialogDivider";
 import { StatusMessageDialogTitle } from "@/components/_common/StatusMessageDialog/StatusMessageDialogTitle";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
+import { createStyleGroup } from "@/lib/styling/styling";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import { Paper, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
+
+const styles = createStyleGroup({
+  collapsedContainer: {
+    position: "absolute",
+    right: 0,
+    margin: 2,
+    padding: 2,
+    width: "fit-content",
+    textAlign: "center",
+  },
+});
 
 const RetrievePlaylists = () => {
   const [message, setMessage] = useState<ReactNode>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const isEverythingInitialized = useInitializationStateStore(
     (state) => state.isEverythingInitialized,
@@ -18,10 +32,15 @@ const RetrievePlaylists = () => {
     (state) => state.setPlaylistsRetrieved,
   );
 
+  const handleClose = () => {
+    setIsCollapsed(true);
+  };
+
   useEffect(() => {
     if (isEverythingInitialized) {
       (async () => {
         const success = await retrievePlaylistData(setMessage);
+        setIsCollapsed(false);
         if (success) {
           setPlaylistsRetrieved();
         } else {
@@ -31,8 +50,12 @@ const RetrievePlaylists = () => {
     }
   }, [isEverythingInitialized, setPlaylistsRetrieved]);
 
-  return (
-    <StatusMessageDialog open={Boolean(message)}>
+  return isCollapsed ? (
+    <Paper elevation={2} sx={styles.collapsedContainer}>
+      <Typography>{message}</Typography>
+    </Paper>
+  ) : (
+    <StatusMessageDialog open={Boolean(message)} onClose={handleClose}>
       <StatusMessageDialogTitle>Retrieving data...</StatusMessageDialogTitle>
 
       <StatusMessageDialogDivider />
