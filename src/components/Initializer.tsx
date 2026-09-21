@@ -16,16 +16,16 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   const {
     isGapiInitialized,
     isLocalCacheInitialized,
-    setGapiInitialized,
-    setLocalCacheInitialized,
-    setEverythingInitialized,
+    markGapiInitialized,
+    markLocalCacheInitialized,
+    markEverythingInitialized,
   } = useInitializationStateStore(
     useShallow((state) => ({
       isGapiInitialized: state.isGapiInitialized,
       isLocalCacheInitialized: state.isLocalCacheInitialized,
-      setGapiInitialized: state.setGapiInitialized,
-      setLocalCacheInitialized: state.setLocalCacheInitialized,
-      setEverythingInitialized: state.setEverythingInitialized,
+      markGapiInitialized: state.markGapiInitialized,
+      markLocalCacheInitialized: state.markLocalCacheInitialized,
+      markEverythingInitialized: state.markEverythingInitialized,
     })),
   );
 
@@ -34,29 +34,29 @@ const Initializer = ({ isGapiLoaded }: Props) => {
       (async function () {
         const success = await initGapiClient();
         if (success) {
-          setGapiInitialized();
+          markGapiInitialized();
         } else {
           await authClient.signOut();
           router.refresh();
         }
       })();
     }
-  }, [isGapiLoaded, setGapiInitialized, router]);
+  }, [isGapiLoaded, markGapiInitialized, router]);
 
   useEffect(() => {
     (async () => {
       const success = await initLocalCache();
       if (success) {
-        setLocalCacheInitialized();
+        markLocalCacheInitialized();
       }
     })();
-  }, [setLocalCacheInitialized]);
+  }, [markLocalCacheInitialized]);
 
   useEffect(() => {
     if (isGapiInitialized && isLocalCacheInitialized) {
-      setEverythingInitialized();
+      markEverythingInitialized();
     }
-  }, [isGapiInitialized, isLocalCacheInitialized, setEverythingInitialized]);
+  }, [isGapiInitialized, isLocalCacheInitialized, markEverythingInitialized]);
 
   return null;
 };

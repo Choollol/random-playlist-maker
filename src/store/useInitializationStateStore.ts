@@ -9,8 +9,8 @@ const initialState = {
 
 export const useInitializationStateStore = create(
   combine(initialState, (set) => ({
-    setGapiInitialized: () => set({ isGapiInitialized: true }),
-    setLocalCacheInitialized: () => set({ isLocalCacheInitialized: true }),
-    setEverythingInitialized: () => set({ isEverythingInitialized: true }),
+    markGapiInitialized: () => set({ isGapiInitialized: true }),
+    markLocalCacheInitialized: () => set({ isLocalCacheInitialized: true }),
+    markEverythingInitialized: () => set({ isEverythingInitialized: true }),
   })),
 );
