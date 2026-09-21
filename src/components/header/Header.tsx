@@ -8,6 +8,7 @@ import { PRIMARY_HUE } from "@/lib/styling/theme";
 import { BUG_REPORT_URL, GITHUB_URL } from "@/lib/utils/miscUtils";
 import { BugReport, GitHub } from "@mui/icons-material";
 import { AppBar, Box, Toolbar } from "@mui/material";
+import { SaveButton } from "@/components/header/SaveButton";
 
 interface Props {
   isSignedIn: boolean;
@@ -45,6 +46,7 @@ const Header = ({ isSignedIn }: Props) => {
 
         <Box sx={styles.centerSpace} />
 
+        <SaveButton />
         <IconLinkButton
           tooltipText="Check out the source code!"
           linkHref={GITHUB_URL}
