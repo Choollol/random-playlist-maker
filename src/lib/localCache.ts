@@ -8,7 +8,7 @@ let db: IDBPDatabase<unknown>;
 /**
  * @returns `true` if success, `false` if failure
  */
-export const initDB = catchUnrecoverableError(
+export const initLocalCache = catchUnrecoverableError(
   {
     message:
       "Something went wrong while initializing cache (Indexed DB). Please try again or reload the page.",
@@ -25,9 +25,9 @@ export const initDB = catchUnrecoverableError(
   },
 );
 
-export async function dbGet<T>(key: DBKey): Promise<T> {
+export async function localCacheGet<T>(key: DBKey): Promise<T> {
   return db.get("keyval", key);
 }
-export async function dbSet(key: DBKey, val: unknown) {
+export async function localCacheSet(key: DBKey, val: unknown) {
   return db.put("keyval", val, key);
 }

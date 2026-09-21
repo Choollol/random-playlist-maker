@@ -1,4 +1,4 @@
-import { dbGet, dbSet } from "@/lib/db";
+import { localCacheGet, localCacheSet } from "@/lib/localCache";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 
 enum LocalStorageKey {
@@ -26,9 +26,10 @@ export async function setUserPlaylistData(
 ) {
   allUserData[userId] = playlistData;
 
-  await dbSet(LocalStorageKey.AllUserData, allUserData);
+  await localCacheSet(LocalStorageKey.AllUserData, allUserData);
 }
 
 async function loadAllData() {
-  allUserData = (await dbGet<AllUserData>(LocalStorageKey.AllUserData)) ?? {};
+  allUserData =
+    (await localCacheGet<AllUserData>(LocalStorageKey.AllUserData)) ?? {};
 }

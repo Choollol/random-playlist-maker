@@ -3,14 +3,14 @@ import { combine } from "zustand/middleware";
 
 const initialState = {
   isGapiInitialized: false,
-  isDatabaseInitialized: false,
+  isLocalCacheInitialized: false,
   isEverythingInitialized: false,
 };
 
 export const useInitializationStateStore = create(
   combine(initialState, (set) => ({
     setGapiInitialized: () => set({ isGapiInitialized: true }),
-    setDatabaseInitialized: () => set({ isDatabaseInitialized: true }),
+    setLocalCacheInitialized: () => set({ isLocalCacheInitialized: true }),
     setEverythingInitialized: () => set({ isEverythingInitialized: true }),
-  }))
+  })),
 );

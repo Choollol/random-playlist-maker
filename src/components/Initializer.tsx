@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/authClient";
-import { initDB } from "@/lib/db";
+import { initLocalCache } from "@/lib/localCache";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useRouter } from "next/navigation";
@@ -15,16 +15,16 @@ const Initializer = ({ isGapiLoaded }: Props) => {
 
   const {
     isGapiInitialized,
-    isDatabaseInitialized,
+    isLocalCacheInitialized,
     setGapiInitialized,
-    setDatabaseInitialized,
+    setLocalCacheInitialized,
     setEverythingInitialized,
   } = useInitializationStateStore(
     useShallow((state) => ({
       isGapiInitialized: state.isGapiInitialized,
-      isDatabaseInitialized: state.isDatabaseInitialized,
+      isLocalCacheInitialized: state.isLocalCacheInitialized,
       setGapiInitialized: state.setGapiInitialized,
-      setDatabaseInitialized: state.setDatabaseInitialized,
+      setLocalCacheInitialized: state.setLocalCacheInitialized,
       setEverythingInitialized: state.setEverythingInitialized,
     })),
   );
@@ -45,18 +45,18 @@ const Initializer = ({ isGapiLoaded }: Props) => {
 
   useEffect(() => {
     (async () => {
-      const success = await initDB();
+      const success = await initLocalCache();
       if (success) {
-        setDatabaseInitialized();
+        setLocalCacheInitialized();
       }
     })();
-  }, [setDatabaseInitialized]);
+  }, [setLocalCacheInitialized]);
 
   useEffect(() => {
-    if (isGapiInitialized && isDatabaseInitialized) {
+    if (isGapiInitialized && isLocalCacheInitialized) {
       setEverythingInitialized();
     }
-  }, [isGapiInitialized, isDatabaseInitialized, setEverythingInitialized]);
+  }, [isGapiInitialized, isLocalCacheInitialized, setEverythingInitialized]);
 
   return null;
 };
