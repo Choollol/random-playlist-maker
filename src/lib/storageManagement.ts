@@ -1,18 +1,19 @@
 import { localCacheGet, localCacheSet } from "@/lib/localCache";
 import { PlaylistData } from "@/lib/types/playlistTypes";
+import { UserId } from "@/lib/utils/authUtils";
 
 enum LocalStorageKey {
   AllUserData = "allUserData",
 }
 
 interface AllUserData {
-  [userId: string]: PlaylistData;
+  [userId: UserId]: PlaylistData;
 }
 
 let allUserData: AllUserData;
 
 export async function getStoredPlaylistData(
-  userId: string,
+  userId: UserId,
 ): Promise<PlaylistData | null> {
   if (allUserData === undefined) {
     await loadAllData();
@@ -21,7 +22,7 @@ export async function getStoredPlaylistData(
 }
 
 export async function setUserPlaylistData(
-  userId: string,
+  userId: UserId,
   playlistData: PlaylistData,
 ) {
   allUserData[userId] = playlistData;
