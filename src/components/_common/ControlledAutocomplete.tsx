@@ -1,20 +1,11 @@
-import { WithRequired } from "@/lib/types/miscTypes";
+import { ControlledInput } from "@/lib/types/utilTypes";
 import { Autocomplete } from "@mui/material";
 import { ComponentProps } from "react";
-import { Controller, FieldValues, UseControllerProps } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
-type Props<T extends FieldValues> = WithRequired<
-  UseControllerProps<T>,
-  "defaultValue"
-> &
-  ComponentProps<typeof Autocomplete>;
-
-function ControlledAutocomplete<T extends FieldValues>({
-  name,
-  control,
-  defaultValue,
-  ...autocompleteProps
-}: Props<T>) {
+const ControlledAutocomplete: ControlledInput<
+  ComponentProps<typeof Autocomplete>
+> = ({ name, control, defaultValue, ...autocompleteProps }) => {
   return (
     <Controller
       name={name}
@@ -29,6 +20,6 @@ function ControlledAutocomplete<T extends FieldValues>({
       )}
     />
   );
-}
+};
 
 export default ControlledAutocomplete;

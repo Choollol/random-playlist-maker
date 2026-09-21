@@ -16,17 +16,19 @@ function SSRInitialFilled(_: BaseNumberField.Root.Props) {
 }
 SSRInitialFilled.muiName = "Input";
 
+interface CustomProps {
+  label?: React.ReactNode;
+  size?: "small" | "medium";
+  error?: boolean;
+}
+
 export default function NumberField({
   id: idProp,
   label,
   error,
   size = "medium",
   ...other
-}: BaseNumberField.Root.Props & {
-  label?: React.ReactNode;
-  size?: "small" | "medium";
-  error?: boolean;
-}) {
+}: BaseNumberField.Root.Props & CustomProps) {
   let id = useId();
   if (idProp) {
     id = idProp;

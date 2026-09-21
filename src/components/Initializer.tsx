@@ -1,10 +1,12 @@
 import { authClient } from "@/lib/authClient";
+import { initDatabase } from "@/lib/db";
+import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useShallow } from "zustand/react/shallow";
 
 interface Props {
   isGapiLoaded: boolean;
@@ -16,17 +18,15 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   const {
     isGapiInitialized,
     isLocalCacheInitialized,
+    isDatabaseInitialized,
+    markEverythingInitialized,
     markGapiInitialized,
     markLocalCacheInitialized,
-    markEverythingInitialized,
-  } = useInitializationStateStore(
-    useShallow((state) => ({
-      isGapiInitialized: state.isGapiInitialized,
-      isLocalCacheInitialized: state.isLocalCacheInitialized,
-      markGapiInitialized: state.markGapiInitialized,
-      markLocalCacheInitialized: state.markLocalCacheInitialized,
-      markEverythingInitialized: state.markEverythingInitialized,
-    })),
+    markDatabaseInitialized,
+  } = useInitializationStateStore();
+
+  const loadUserPreferences = useUserPreferencesStore(
+    (state) => state.loadUserPreferences,
   );
 
   useEffect(() => {
@@ -53,10 +53,31 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   }, [markLocalCacheInitialized]);
 
   useEffect(() => {
-    if (isGapiInitialized && isLocalCacheInitialized) {
+    (async () => {
+      const initSuccess = await initDatabase();
+      if (initSuccess) {
+        await loadUserPreferences();
+        markDatabaseInitialized();
+      } else {
+        showError({
+          type: "recoverable",
+          message:
+            "Failed to connect with database. User preferences may be unavailable.",
+        });
+      }
+    })();
+  }, [markDatabaseInitialized, loadUserPreferences]);
+
+  useEffect(() => {
+    if (isGapiInitialized && isLocalCacheInitialized && isDatabaseInitialized) {
       markEverythingInitialized();
     }
-  }, [isGapiInitialized, isLocalCacheInitialized, markEverythingInitialized]);
+  }, [
+    isGapiInitialized,
+    isLocalCacheInitialized,
+    isDatabaseInitialized,
+    markEverythingInitialized,
+  ]);
 
   return null;
 };

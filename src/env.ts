@@ -10,6 +10,7 @@ const envSchema = z.object({
   GOOGLE_API_KEY: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  FIREBASE_API_KEY: z.string(),
 });
 
 export const ENV = envSchema.parse(process.env);

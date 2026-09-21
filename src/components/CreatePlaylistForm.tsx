@@ -1,6 +1,5 @@
 import {
   createRandomizedPlaylist,
-  CreateRandomizedPlaylistOptions,
   getPlaylistNames,
 } from "@/lib/playlistManagement";
 import { Button, Stack, TextField, Typography } from "@mui/material";
@@ -21,8 +20,12 @@ import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { createStyleGroup } from "@/lib/styling/styling";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useShallow } from "zustand/react/shallow";
-
-type FormData = CreateRandomizedPlaylistOptions;
+import { useEffect, useEffectEvent } from "react";
+import {
+  FormData,
+  useUserPreferencesStore,
+} from "@/store/useUserPreferencesStore";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 const FORM_GAP = 2;
 
@@ -59,7 +62,34 @@ const CreatePlaylistForm = () => {
     handleSubmit,
     control,
     formState: { errors },
+    subscribe,
+    setValue,
+    setValues,
   } = useForm<FormData>({ mode: "onChange" });
+
+  const { formData, setUserPreferences } = useUserPreferencesStore();
+  const isDatabaseInitialized = useInitializationStateStore(
+    (state) => state.isDatabaseInitialized,
+  );
+
+  const loadSavedUserPreferences = useEffectEvent(() => {
+    setValues(formData);
+  });
+
+  useEffect(() => {
+    if (isDatabaseInitialized) {
+      loadSavedUserPreferences();
+    }
+  }, [isDatabaseInitialized]);
+
+  useEffect(() => {
+    const unsubscribe = subscribe({
+      formState: { values: true },
+
+      callback: (data) => setUserPreferences(data.values),
+    });
+    return () => unsubscribe();
+  }, [subscribe, setUserPreferences]);
 
   const arePlaylistsRetrieved = usePlaylistDataStore(
     (state) => state.arePlaylistsRetrieved,
@@ -107,6 +137,9 @@ const CreatePlaylistForm = () => {
         >
           <NumberField
             {...register("numPlaylistItems", { required: true })}
+            onValueChange={(value) =>
+              setValue("numPlaylistItems", value ?? DEFAULT_VIDEO_COUNT)
+            }
             label={`Number of videos (${MIN_VIDEO_COUNT}-${MAX_VIDEO_COUNT})`}
             defaultValue={DEFAULT_VIDEO_COUNT}
             min={MIN_VIDEO_COUNT}

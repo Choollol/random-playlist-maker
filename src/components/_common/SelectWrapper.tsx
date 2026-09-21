@@ -1,7 +1,7 @@
 import { StyleProps } from "@/lib/styling/styling";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 type Props = {
   values: string[];
@@ -19,8 +19,9 @@ export default function SelectWrapper({
 }: Props) {
   const [value, setValue] = useState(defaultValue);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: SelectChangeEvent, child: ReactNode) => {
     setValue(event.target.value);
+    other.onChange?.(event, child);
   };
 
   return (
