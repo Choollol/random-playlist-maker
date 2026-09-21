@@ -1,7 +1,4 @@
-import {
-  createRandomizedPlaylist,
-  getPlaylistNames,
-} from "@/lib/playlistManagement";
+import { createRandomizedPlaylist } from "@/lib/playlistManagement";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import NumberField from "./_common/NumberField";
@@ -72,6 +69,24 @@ const CreatePlaylistForm = () => {
     (state) => state.isDatabaseInitialized,
   );
 
+  const [arePlaylistsRetrieved, getPlaylistNames, filterForExistingPlaylists] =
+    usePlaylistDataStore(
+      useShallow((state) => [
+        state.arePlaylistsRetrieved,
+        state.getPlaylistNames,
+        state.filterForExistingPlaylists,
+      ]),
+    );
+
+  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
+    useShallow((state) => ({
+      setOverlayTitle: state.setOverlayTitle,
+      setOverlayMessage: state.setOverlayMessage,
+    })),
+  );
+
+  const isMobile = useIsMobile();
+
   const loadSavedUserPreferences = useEffectEvent(() => {
     setValues(formData);
   });
@@ -91,18 +106,18 @@ const CreatePlaylistForm = () => {
     return () => unsubscribe();
   }, [subscribe, setUserPreferences]);
 
-  const arePlaylistsRetrieved = usePlaylistDataStore(
-    (state) => state.arePlaylistsRetrieved,
-  );
+  const filterOutNonexistentPlaylistNames = useEffectEvent(() => {
+    setValue(
+      "excludedPlaylistNames",
+      filterForExistingPlaylists(formData.excludedPlaylistNames ?? []),
+    );
+  });
 
-  const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
-    useShallow((state) => ({
-      setOverlayTitle: state.setOverlayTitle,
-      setOverlayMessage: state.setOverlayMessage,
-    })),
-  );
-
-  const isMobile = useIsMobile();
+  useEffect(() => {
+    if (arePlaylistsRetrieved) {
+      filterOutNonexistentPlaylistNames();
+    }
+  }, [arePlaylistsRetrieved]);
 
   const submitForm = (formData: FormData) => {
     setOverlayTitle("Creating playlist...");

@@ -100,37 +100,37 @@ export async function createPlaylistWithVideos(
   setMessageCallback: SetMessageCallback,
 ) {
   setMessageCallback(`Creating playlist ${playlistTitle}...`);
-    const response = await catchQuotaError(
-      gapi.client.youtube.playlists.insert({
-        part: "id, snippet, status",
+  const response = await catchQuotaError(
+    gapi.client.youtube.playlists.insert({
+      part: "id, snippet, status",
+      resource: {
+        snippet: {
+          title: playlistTitle,
+        },
+        status: {
+          privacyStatus: privacyStatus,
+        },
+      },
+    }),
+  );
+  const playlist: Playlist = JSON.parse(response.body);
+
+  setMessageCallback("Adding videos to playlist...");
+  for (const playlistItemId of videoIds) {
+    await catchQuotaError(
+      gapi.client.youtube.playlistItems.insert({
+        part: "snippet",
         resource: {
           snippet: {
-            title: playlistTitle,
-          },
-          status: {
-            privacyStatus: privacyStatus,
+            playlistId: playlist.id,
+            resourceId: {
+              kind: PLAYLIST_ITEM_RESOURCE_KIND,
+              videoId: playlistItemId,
+            },
           },
         },
       }),
     );
-    const playlist: Playlist = JSON.parse(response.body);
-
-  setMessageCallback("Adding videos to playlist...");
-  for (const playlistItemId of videoIds) {
-      await catchQuotaError(
-        gapi.client.youtube.playlistItems.insert({
-          part: "snippet",
-          resource: {
-            snippet: {
-              playlistId: playlist.id,
-              resourceId: {
-                kind: PLAYLIST_ITEM_RESOURCE_KIND,
-                videoId: playlistItemId,
-              },
-            },
-          },
-        }),
-      );
   }
 
   setMessageCallback(
@@ -285,12 +285,6 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
       error: error,
     });
   }
-}
-
-export function getPlaylistNames(): string[] {
-  return Object.values(usePlaylistDataStore.getState().playlistData).map(
-    (data) => data.playlist.snippet!.title!,
-  );
 }
 
 function updateVideoIds(excludedPlaylistNames: string[] = []) {
