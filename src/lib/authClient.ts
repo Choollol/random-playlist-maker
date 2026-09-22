@@ -9,3 +9,7 @@ export const signInGoogle = () => {
     scopes: [GOOGLE_SCOPES],
   });
 };
+
+export const signOutGoogle = async () => {
+  return await authClient.signOut();
+};

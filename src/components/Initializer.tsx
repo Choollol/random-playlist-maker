@@ -1,4 +1,4 @@
-import { authClient } from "@/lib/authClient";
+import { signOutGoogle } from "@/lib/authClient";
 import { initDatabase } from "@/lib/db";
 import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
@@ -36,7 +36,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         if (success) {
           markGapiInitialized();
         } else {
-          await authClient.signOut();
+          await signOutGoogle();
           router.refresh();
         }
       })();

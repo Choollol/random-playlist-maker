@@ -1,7 +1,7 @@
 "use client";
 
 import UserProfilePicture from "@/components/header/UserProfilePicture";
-import { authClient } from "@/lib/authClient";
+import { signOutGoogle } from "@/lib/authClient";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { Logout } from "@mui/icons-material";
 import {
@@ -44,7 +44,7 @@ const UserProfileMenu = () => {
 
   const handleSignOutClick = async () => {
     setIsSigningOut(true);
-    await authClient.signOut();
+    await signOutGoogle();
     router.refresh();
   };
 
