@@ -100,7 +100,6 @@ const CreatePlaylistForm = () => {
   useEffect(() => {
     const unsubscribe = subscribe({
       formState: { values: true },
-
       callback: (data) => setUserPreferences(data.values),
     });
     return () => unsubscribe();

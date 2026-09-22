@@ -5,8 +5,6 @@ import { catchUnrecoverableError } from "@/lib/error";
 import { googleApiKey } from "@/lib/utils/envUtils";
 import { GApiError } from "@/lib/types/gapiTypes";
 
-export const GOOGLE_SCOPES = "https://www.googleapis.com/auth/youtube";
-
 export const PLAYLIST_ITEM_RESOURCE_KIND = "youtube#video";
 
 /**
@@ -27,9 +25,10 @@ export const initGapiClient = catchUnrecoverableError(
       ],
     });
 
-    const response = await authClient.getAccessToken({ providerId: "google" });
+    const response = await authClient.getAccessToken({
+      useAccountCookie: true,
+    });
     const accessToken = response.data?.accessToken;
-
     if (accessToken !== undefined) {
       gapi.client.setToken({
         access_token: accessToken,

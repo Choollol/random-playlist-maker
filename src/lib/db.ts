@@ -1,7 +1,14 @@
 "use server";
 
 import { ENV } from "@/env";
+import { auth } from "@/lib/auth";
 import { FirebaseApp, initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+  signOut,
+} from "firebase/auth";
 import {
   getFirestore,
   Firestore,
@@ -9,6 +16,7 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
+import { headers } from "next/headers";
 
 export enum CollectionKey {
   userData = "userData",
@@ -44,7 +52,11 @@ export async function saveToDatabase(
   documentKey: string,
   data: object,
 ) {
-  setDoc(doc(db, collectionKey, documentKey), data);
+  setDoc(doc(db, collectionKey, documentKey), {
+    ...data,
+    // This has to match the firestore rule
+    userDbUid: getAuth().currentUser!.uid,
+  });
 }
 
 /**
@@ -55,4 +67,21 @@ export async function loadFromDatabase(
   documentKey: string,
 ) {
   return getDoc(doc(db, collectionKey, documentKey));
+}
+
+export async function signInToDatabase() {
+  const response = await auth.api.getAccessToken({
+    headers: await headers(),
+    body: {
+      useAccountCookie: true,
+    },
+  });
+  await signInWithCredential(
+    getAuth(),
+    GoogleAuthProvider.credential(response.idToken),
+  );
+}
+
+export async function signOutOfDatabase() {
+  await signOut(getAuth());
 }

@@ -1,12 +1,10 @@
 import SignedInDisplay from "@/components/SignedInDisplay";
 import SignedOutDisplay from "@/components/SignedOutDisplay";
 import Header from "@/components/header/Header";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { fetchUserData } from "@/lib/authServerActions";
 
 export default async function Home() {
-  const requestHeaders = await headers();
-  const data = await auth.api.getSession({ headers: requestHeaders });
+  const data = await fetchUserData();
   const isSignedIn = !!data?.session;
 
   return (

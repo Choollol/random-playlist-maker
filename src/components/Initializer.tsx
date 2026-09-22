@@ -1,12 +1,12 @@
 import { signOutGoogle } from "@/lib/authClient";
-import { initDatabase } from "@/lib/db";
+import { signInToDatabase, initDatabase } from "@/lib/db";
 import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
 import { initGapiClient } from "@/lib/utils/gapiUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 
 interface Props {
   isGapiLoaded: boolean;
@@ -52,12 +52,26 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     })();
   }, [markLocalCacheInitialized]);
 
+  const handleDatabaseinitSuccess = useEffectEvent(async () => {
+    try {
+      await signInToDatabase();
+    } catch (error) {
+      showError({
+        type: "recoverable",
+        message: `We ran into an error while setting up your preferences: ${error}`,
+        error,
+      });
+    }
+
+    await loadUserPreferences();
+    markDatabaseInitialized();
+  });
+
   useEffect(() => {
     (async () => {
       const initSuccess = await initDatabase();
       if (initSuccess) {
-        await loadUserPreferences();
-        markDatabaseInitialized();
+        await handleDatabaseinitSuccess();
       } else {
         showError({
           type: "recoverable",
