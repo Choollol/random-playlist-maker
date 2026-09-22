@@ -4,12 +4,14 @@ import { PlaylistData } from "@/lib/types/playlistTypes";
 
 interface State {
   arePlaylistsRetrieved: boolean;
+  arePlaylistItemsRetrieved: boolean;
   playlistData: PlaylistData;
   videoIds: string[];
 }
 
 const initialState: State = {
   arePlaylistsRetrieved: false,
+  arePlaylistItemsRetrieved: false,
   playlistData: {},
   videoIds: [],
 };
@@ -23,11 +25,12 @@ function getPlaylistNamesFromData(playlistData: PlaylistData) {
 export const usePlaylistDataStore = create(
   combine(initialState, (set, get) => ({
     markPlaylistsRetrieved: () => set({ arePlaylistsRetrieved: true }),
-    clearPlaylistData: () => set({ playlistData: {} }),
-    addPlaylistData: (id: string, data: PlaylistData[string]) =>
-      set((state) => ({
-        playlistData: Object.assign(state.playlistData, { [id]: data }),
-      })),
+    markPlaylistItemsRetrieved: () => set({ arePlaylistItemsRetrieved: true }),
+
+    setPlaylistData: (playlistData: PlaylistData) => {
+      set({ playlistData });
+    },
+
     setVideoIds: (videoIds: string[]) => set({ videoIds: videoIds }),
 
     getPlaylistNames(): string[] {

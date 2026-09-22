@@ -28,10 +28,6 @@ const RetrievePlaylists = () => {
     (state) => state.isEverythingInitialized,
   );
 
-  const markPlaylistsRetrieved = usePlaylistDataStore(
-    (state) => state.markPlaylistsRetrieved,
-  );
-
   const handleClose = () => {
     setIsCollapsed(true);
   };
@@ -41,14 +37,12 @@ const RetrievePlaylists = () => {
       (async () => {
         const success = await retrievePlaylistData(setMessage);
         setIsCollapsed(false);
-        if (success) {
-          markPlaylistsRetrieved();
-        } else {
+        if (!success) {
           console.error("Could not retrieve playlists!");
         }
       })();
     }
-  }, [isEverythingInitialized, markPlaylistsRetrieved]);
+  }, [isEverythingInitialized]);
 
   return isCollapsed ? (
     <Paper elevation={2} sx={styles.collapsedContainer}>

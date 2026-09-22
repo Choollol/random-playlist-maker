@@ -69,14 +69,19 @@ const CreatePlaylistForm = () => {
     (state) => state.isDatabaseInitialized,
   );
 
-  const [arePlaylistsRetrieved, getPlaylistNames, filterForExistingPlaylists] =
-    usePlaylistDataStore(
-      useShallow((state) => [
-        state.arePlaylistsRetrieved,
-        state.getPlaylistNames,
-        state.filterForExistingPlaylists,
-      ]),
-    );
+  const [
+    arePlaylistsRetrieved,
+    arePlaylistItemsRetrieved,
+    getPlaylistNames,
+    filterForExistingPlaylists,
+  ] = usePlaylistDataStore(
+    useShallow((state) => [
+      state.arePlaylistsRetrieved,
+      state.arePlaylistItemsRetrieved,
+      state.getPlaylistNames,
+      state.filterForExistingPlaylists,
+    ]),
+  );
 
   const { setOverlayTitle, setOverlayMessage } = useOverlayMessageStore(
     useShallow((state) => ({
@@ -186,7 +191,7 @@ const CreatePlaylistForm = () => {
         <Button
           type="submit"
           sx={styles.submitButton}
-          disabled={!arePlaylistsRetrieved}
+          disabled={!arePlaylistItemsRetrieved}
         >
           Create Playlist
         </Button>

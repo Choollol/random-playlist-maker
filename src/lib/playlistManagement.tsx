@@ -3,7 +3,7 @@ import {
   setUserPlaylistData,
 } from "@/lib/storageManagement";
 import { Playlist, PrivacyStatus } from "@/lib/types/gapiTypes";
-import { SetMessageCallback } from "@/lib/types/playlistTypes";
+import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
 import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import {
@@ -160,28 +160,22 @@ export async function retrievePlaylistData(
   try {
     setMessageCallback("Retrieving playlist data...");
     await retrievePlaylists();
+    usePlaylistDataStore.getState().markPlaylistsRetrieved();
 
     setMessageCallback("Retrieving user data...");
     const userId = await getUserId();
 
     const storedData = await getStoredPlaylistData(userId);
     if (storedData !== null) {
-      for (const [playlistId, data] of Object.entries(storedData)) {
-        if (
-          Object.hasOwn(
-            usePlaylistDataStore.getState().playlistData,
-            playlistId,
-          )
-        ) {
-          usePlaylistDataStore
-            .getState()
-            .addPlaylistData(data.playlist.id!, data);
-        }
-      }
+      usePlaylistDataStore.getState().setPlaylistData({
+        ...usePlaylistDataStore.getState().playlistData,
+        ...storedData,
+      });
     }
 
     setMessageCallback("Retrieving video data...");
     await retrievePlaylistItems(setMessageCallback);
+    usePlaylistDataStore.getState().markPlaylistItemsRetrieved();
 
     updateVideoIds();
 
@@ -211,16 +205,16 @@ async function retrievePlaylists() {
 
     playlistList.forEach(trimPlaylistProperties);
 
-    usePlaylistDataStore.getState().clearPlaylistData();
-
-    playlistList.forEach((playlist) => {
-      usePlaylistDataStore.getState().addPlaylistData(playlist.id!, {
+    const playlistData = playlistList.reduce((data, playlist) => {
+      data[playlist.id!] = {
         playlist: playlist,
         // Dummy data that will be replaced later
         etag: "",
         playlistItems: [],
-      });
-    });
+      };
+      return data;
+    }, {} as PlaylistData);
+    usePlaylistDataStore.getState().setPlaylistData(playlistData);
   } catch (error) {
     showError({
       type: "recoverable",
