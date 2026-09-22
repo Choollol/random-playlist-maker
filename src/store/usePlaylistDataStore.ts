@@ -27,6 +27,9 @@ export const usePlaylistDataStore = create(
     markPlaylistsRetrieved: () => set({ arePlaylistsRetrieved: true }),
     markPlaylistItemsRetrieved: () => set({ arePlaylistItemsRetrieved: true }),
 
+    getCopyOfPlaylistData: () => {
+      return structuredClone(get().playlistData);
+    },
     setPlaylistData: (playlistData: PlaylistData) => {
       set({ playlistData });
     },

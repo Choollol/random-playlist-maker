@@ -5,7 +5,6 @@ import { StatusMessageDialogTitle } from "@/components/_common/StatusMessageDial
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
-import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { Paper, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 

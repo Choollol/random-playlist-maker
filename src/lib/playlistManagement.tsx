@@ -231,10 +231,10 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
   ).length;
   let index = 0;
 
+  const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
+
   try {
-    for (const data of Object.values(
-      usePlaylistDataStore.getState().playlistData,
-    )) {
+    for (const data of Object.values(playlistData)) {
       const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
 
       if (etag !== null) {
@@ -271,6 +271,8 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
 
       index++;
     }
+
+    usePlaylistDataStore.getState().setPlaylistData(playlistData);
   } catch (error) {
     showError({
       type: "recoverable",
