@@ -12,7 +12,7 @@ import {
   addArrayElementsToSet,
   createSetFromArray,
 } from "@/lib/utils/collectionUtils";
-import { catchQuotaError } from "@/lib/utils/gapiUtils";
+import { catchQuotaError } from "@/lib/gapi";
 
 export const MAX_PAGINATED_ITEM_RESULTS = 50;
 

@@ -22,10 +22,7 @@ import { waitForMs } from "@/lib/utils/miscUtils";
 import { showError } from "@/lib/error";
 import { signInGoogle } from "@/lib/authClient";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
-import {
-  catchQuotaError,
-  PLAYLIST_ITEM_RESOURCE_KIND,
-} from "@/lib/utils/gapiUtils";
+import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;

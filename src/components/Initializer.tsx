@@ -2,7 +2,7 @@ import { signOutGoogle } from "@/lib/authClient";
 import { signInToDatabase, initDatabase } from "@/lib/db";
 import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
-import { initGapiClient } from "@/lib/utils/gapiUtils";
+import { initGapiClient } from "@/lib/gapi";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { useRouter } from "next/navigation";
