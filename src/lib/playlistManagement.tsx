@@ -23,6 +23,7 @@ import { showError } from "@/lib/error";
 import { signInGoogle } from "@/lib/authClient";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
+import { withRetries } from "@/lib/utils/apiUtils";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -114,19 +115,22 @@ export async function createPlaylistWithVideos(
 
   setMessageCallback("Adding videos to playlist...");
   for (const playlistItemId of videoIds) {
-    await catchQuotaError(
-      gapi.client.youtube.playlistItems.insert({
-        part: "snippet",
-        resource: {
-          snippet: {
-            playlistId: playlist.id,
-            resourceId: {
-              kind: PLAYLIST_ITEM_RESOURCE_KIND,
-              videoId: playlistItemId,
+    await withRetries(
+      async () =>
+        await catchQuotaError(
+          gapi.client.youtube.playlistItems.insert({
+            part: "snippet",
+            resource: {
+              snippet: {
+                playlistId: playlist.id,
+                resourceId: {
+                  kind: PLAYLIST_ITEM_RESOURCE_KIND,
+                  videoId: playlistItemId,
+                },
+              },
             },
-          },
-        },
-      }),
+          }),
+        ),
     );
   }
 
