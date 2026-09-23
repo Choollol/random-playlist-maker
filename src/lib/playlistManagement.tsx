@@ -167,10 +167,15 @@ export async function retrievePlaylistData(
 
     const storedData = await getStoredPlaylistData(userId);
     if (storedData !== null) {
-      usePlaylistDataStore.getState().setPlaylistData({
-        ...usePlaylistDataStore.getState().playlistData,
-        ...storedData,
-      });
+      const playlistData = usePlaylistDataStore
+        .getState()
+        .getCopyOfPlaylistData();
+      for (const [id, data] of Object.entries(storedData)) {
+        if (Object.hasOwn(playlistData, id)) {
+          playlistData[id] = data;
+        }
+      }
+      usePlaylistDataStore.getState().setPlaylistData(playlistData);
     }
 
     setMessageCallback("Retrieving video data...");
@@ -226,12 +231,10 @@ async function retrievePlaylists() {
 }
 
 async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
-  const length = Object.keys(
-    usePlaylistDataStore.getState().playlistData,
-  ).length;
-  let index = 0;
-
   const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
+
+  let index = 0;
+  const length = Object.keys(playlistData).length;
 
   try {
     for (const data of Object.values(playlistData)) {
