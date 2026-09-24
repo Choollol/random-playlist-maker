@@ -1,4 +1,8 @@
-import { signOutGoogle } from "@/lib/authClient";
+import {
+  getAccessToken,
+  refreshAccessToken,
+  signOutGoogle,
+} from "@/lib/authClient";
 import { signInToDatabase, initDatabase } from "@/lib/db";
 import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
@@ -55,6 +59,9 @@ const Initializer = ({ isGapiLoaded }: Props) => {
   const handleDatabaseinitSuccess = useEffectEvent(async () => {
     try {
       await signInToDatabase();
+
+      await loadUserPreferences();
+      markDatabaseInitialized();
     } catch (error) {
       showError({
         type: "recoverable",
@@ -62,9 +69,6 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         error,
       });
     }
-
-    await loadUserPreferences();
-    markDatabaseInitialized();
   });
 
   useEffect(() => {
@@ -92,6 +96,19 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     isDatabaseInitialized,
     markEverythingInitialized,
   ]);
+
+  useEffect(() => {
+    (async () => {
+      const accessToken = await getAccessToken();
+      if (
+        accessToken.accessTokenExpiresAt &&
+        accessToken.accessTokenExpiresAt < new Date()
+      ) {
+        await refreshAccessToken();
+        router.refresh();
+      }
+    })();
+  }, [router]);
 
   return null;
 };

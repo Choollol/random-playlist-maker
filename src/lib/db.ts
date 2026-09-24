@@ -1,7 +1,7 @@
 "use server";
 
 import { ENV } from "@/env";
-import { auth } from "@/lib/auth";
+import { fetchAccessToken } from "@/lib/authServerActions";
 import { FirebaseApp, initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -16,7 +16,6 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-import { headers } from "next/headers";
 
 export enum CollectionKey {
   userData = "userData",
@@ -70,12 +69,7 @@ export async function loadFromDatabase(
 }
 
 export async function signInToDatabase() {
-  const response = await auth.api.getAccessToken({
-    headers: await headers(),
-    body: {
-      useAccountCookie: true,
-    },
-  });
+  const response = await fetchAccessToken();
   await signInWithCredential(
     getAuth(),
     GoogleAuthProvider.credential(response.idToken),

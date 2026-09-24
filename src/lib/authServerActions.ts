@@ -8,3 +8,13 @@ export async function fetchUserData() {
   const userData = await auth.api.getSession({ headers: requestHeaders });
   return userData;
 }
+
+export async function fetchAccessToken() {
+  const response = await auth.api.getAccessToken({
+    headers: await headers(),
+    body: {
+      useAccountCookie: true,
+    },
+  });
+  return response;
+}
