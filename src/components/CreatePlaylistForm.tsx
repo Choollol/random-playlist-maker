@@ -69,12 +69,14 @@ const CreatePlaylistForm = () => {
   const [
     arePlaylistsRetrieved,
     arePlaylistItemsRetrieved,
+    videoIds,
     getPlaylistNames,
     filterForExistingPlaylists,
   ] = usePlaylistDataStore(
     useShallow((state) => [
       state.arePlaylistsRetrieved,
       state.arePlaylistItemsRetrieved,
+      state.videoIds,
       state.getPlaylistNames,
       state.filterForExistingPlaylists,
     ]),
@@ -172,7 +174,11 @@ const CreatePlaylistForm = () => {
           renderInput={(params) => <TextField {...params} label="Playlists to exclude" />}
           slotProps={{ paper: { sx: styles.excludePlaylistPopper } }}
         />
-        <Button type="submit" sx={styles.submitButton} disabled={!arePlaylistItemsRetrieved}>
+        <Button
+          type="submit"
+          sx={styles.submitButton}
+          disabled={!arePlaylistItemsRetrieved || videoIds.length === 0}
+        >
           Create Playlist
         </Button>
       </Stack>
