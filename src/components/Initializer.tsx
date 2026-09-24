@@ -84,7 +84,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         });
       }
     })();
-  }, [markDatabaseInitialized, loadUserPreferences]);
+  }, []);
 
   useEffect(() => {
     if (isGapiInitialized && isLocalCacheInitialized && isDatabaseInitialized) {
