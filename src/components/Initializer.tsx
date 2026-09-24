@@ -58,7 +58,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
       if (!userData) {
         throw new Error("User is not signed in");
       }
-      await signInToDatabase(userData.user.id);
+      await signInToDatabase(userData.user.email);
 
       await loadUserPreferences();
       markDatabaseInitialized();
