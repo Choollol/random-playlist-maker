@@ -1,8 +1,4 @@
-import {
-  getAccessToken,
-  refreshAccessToken,
-  signOutGoogle,
-} from "@/lib/authClient";
+import { signOutGoogle } from "@/lib/authClient";
 import { signInToDatabase, initDatabase } from "@/lib/db";
 import { showError } from "@/lib/error";
 import { initLocalCache } from "@/lib/localCache";
@@ -11,6 +7,7 @@ import { useInitializationStateStore } from "@/store/useInitializationStateStore
 import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent } from "react";
+import { fetchUserData } from "@/lib/authServerActions";
 
 interface Props {
   isGapiLoaded: boolean;
@@ -58,7 +55,11 @@ const Initializer = ({ isGapiLoaded }: Props) => {
 
   const handleDatabaseinitSuccess = useEffectEvent(async () => {
     try {
-      await signInToDatabase();
+      const userData = await fetchUserData();
+      if (!userData) {
+        throw new Error("User is not signed in");
+      }
+      await signInToDatabase(userData.user.id);
 
       await loadUserPreferences();
       markDatabaseInitialized();
@@ -73,14 +74,15 @@ const Initializer = ({ isGapiLoaded }: Props) => {
 
   useEffect(() => {
     (async () => {
-      const initSuccess = await initDatabase();
-      if (initSuccess) {
+      try {
+        await initDatabase();
         await handleDatabaseinitSuccess();
-      } else {
+      } catch (error) {
         showError({
           type: "recoverable",
           message:
             "Failed to connect with database. User preferences may be unavailable.",
+          error,
         });
       }
     })();
@@ -96,19 +98,6 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     isDatabaseInitialized,
     markEverythingInitialized,
   ]);
-
-  useEffect(() => {
-    (async () => {
-      const accessToken = await getAccessToken();
-      if (
-        accessToken.accessTokenExpiresAt &&
-        accessToken.accessTokenExpiresAt < new Date()
-      ) {
-        await refreshAccessToken();
-        router.refresh();
-      }
-    })();
-  }, [router]);
 
   return null;
 };

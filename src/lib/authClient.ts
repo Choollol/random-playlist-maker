@@ -13,17 +13,3 @@ export const signOutGoogle = async () => {
   await authClient.signOut();
   await signOutOfDatabase();
 };
-
-export async function getAccessToken() {
-  const { data, error } = await authClient.getAccessToken({
-    useAccountCookie: true,
-  });
-  if (!data || error) {
-    throw error;
-  }
-  return data;
-}
-
-export async function refreshAccessToken() {
-  return authClient.refreshToken({ useAccountCookie: true });
-}

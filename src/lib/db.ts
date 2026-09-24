@@ -1,14 +1,10 @@
 "use server";
 
 import { ENV } from "@/env";
-import { fetchAccessToken } from "@/lib/authServerActions";
 import { FirebaseApp, initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithCredential,
-  signOut,
-} from "firebase/auth";
+import { initializeApp as initializeAppAdmin, cert } from "firebase-admin";
+import { getAuth as getAuthAdmin } from "firebase-admin/auth";
+import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import {
   getFirestore,
   Firestore,
@@ -34,12 +30,22 @@ let app: FirebaseApp;
 let db: Firestore;
 
 export async function initDatabase() {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+
   try {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    return true;
+    initializeAppAdmin({
+      credential: cert({
+        projectId: ENV.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
+        clientEmail: ENV.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+        privateKey: ENV.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll(
+          "\\n",
+          "\n",
+        ),
+      }),
+    });
   } catch {
-    return false;
+    // App already initialized, do nothing
   }
 }
 
@@ -68,12 +74,9 @@ export async function loadFromDatabase(
   return getDoc(doc(db, collectionKey, documentKey));
 }
 
-export async function signInToDatabase() {
-  const response = await fetchAccessToken();
-  await signInWithCredential(
-    getAuth(),
-    GoogleAuthProvider.credential(response.idToken),
-  );
+export async function signInToDatabase(uid: string) {
+  const customToken = await getAuthAdmin().createCustomToken(uid);
+  await signInWithCustomToken(getAuth(), customToken);
 }
 
 export async function signOutOfDatabase() {
