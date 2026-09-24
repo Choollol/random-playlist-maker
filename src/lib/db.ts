@@ -3,10 +3,11 @@
 import { initializeApp as initializeAppAdmin, cert } from "firebase-admin";
 import { getAuth as getAuthAdmin } from "firebase-admin/auth";
 import { getApp, initializeApp } from "firebase/app";
-import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithCustomToken, signOut } from "firebase/auth";
 import { getFirestore, getDoc, doc, setDoc } from "firebase/firestore";
 
 import { ENV } from "@/env";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 export enum CollectionKey {
   userData = "userData",
@@ -37,7 +38,15 @@ function getDbApp() {
   try {
     return getApp();
   } catch {
-    return initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
+
+    onAuthStateChanged(getAuth(app), (user) => {
+      if (user) {
+        useInitializationStateStore.getState().markDatabaseInitialized();
+      }
+    });
+
+    return app;
   }
 }
 

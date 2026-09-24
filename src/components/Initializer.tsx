@@ -25,7 +25,6 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     markEverythingInitialized,
     markGapiInitialized,
     markLocalCacheInitialized,
-    markDatabaseInitialized,
   } = useInitializationStateStore();
 
   const loadUserPreferences = useUserPreferencesStore((state) => state.loadUserPreferences);
@@ -63,7 +62,6 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         await signInToDatabase(userData.user.email);
 
         await loadUserPreferences();
-        markDatabaseInitialized();
       } catch (error) {
         showError({
           type: "recoverable",
