@@ -1,3 +1,7 @@
+import { debounce } from "@mui/material";
+import { create } from "zustand";
+import { combine } from "zustand/middleware";
+
 import { showError } from "@/lib/error";
 import { CreateRandomizedPlaylistOptions } from "@/lib/playlistManagement";
 import {
@@ -6,9 +10,6 @@ import {
   UserPreferences,
 } from "@/lib/userPreferences";
 import { getUserId } from "@/lib/utils/authUtils";
-import { debounce } from "@mui/material";
-import { create } from "zustand";
-import { combine } from "zustand/middleware";
 
 export type FormData = CreateRandomizedPlaylistOptions;
 
@@ -16,10 +17,7 @@ type State = UserPreferences & {
   isPending: boolean;
 };
 
-const saveUserPreferences = async (
-  formData: UserPreferences["formData"],
-  onSaved?: () => void,
-) => {
+const saveUserPreferences = async (formData: UserPreferences["formData"], onSaved?: () => void) => {
   const userId = await getUserId();
   try {
     await saveUserPreferencesToDb(userId, { formData });

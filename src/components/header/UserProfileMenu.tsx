@@ -1,19 +1,13 @@
 "use client";
 
+import { Logout } from "@mui/icons-material";
+import { Button, IconButton, ListItemIcon, ListItemText, MenuItem, Popover } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import UserProfilePicture from "@/components/header/UserProfilePicture";
 import { signOutGoogle } from "@/lib/authClient";
 import { createStyleGroup } from "@/lib/styling/styling";
-import { Logout } from "@mui/icons-material";
-import {
-  Button,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Popover,
-} from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const styles = createStyleGroup({
   popover: {
@@ -31,9 +25,7 @@ const UserProfileMenu = () => {
 
   const router = useRouter();
 
-  const handleAnchorButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleAnchorButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setDoOpenPopover(true);
   };
@@ -65,11 +57,7 @@ const UserProfileMenu = () => {
           },
         }}
       >
-        <MenuItem
-          component={Button}
-          onClick={handleSignOutClick}
-          loading={isSigningOut}
-        >
+        <MenuItem component={Button} onClick={handleSignOutClick} loading={isSigningOut}>
           <ListItemIcon>
             <Logout />
           </ListItemIcon>

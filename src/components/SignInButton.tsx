@@ -1,8 +1,9 @@
 "use client";
 
-import { signInGoogle } from "@/lib/authClient";
 import { Button, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
+
+import { signInGoogle } from "@/lib/authClient";
 
 /**
  * Shown when user is _not_ signed in.

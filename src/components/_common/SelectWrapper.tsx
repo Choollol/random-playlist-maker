@@ -1,7 +1,8 @@
-import { StyleProps } from "@/lib/styling/styling";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ReactNode, useState } from "react";
+
+import { StyleProps } from "@/lib/styling/styling";
 
 type Props = {
   values: string[];

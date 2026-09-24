@@ -1,10 +1,8 @@
 "use client";
 
-import {
-  useErrorMessageStore,
-  UseErrorMessageStoreState,
-} from "@/store/useErrorMessageStore";
 import { enqueueSnackbar } from "notistack";
+
+import { useErrorMessageStore, UseErrorMessageStoreState } from "@/store/useErrorMessageStore";
 
 interface BaseErrorParams {
   type: string;
@@ -50,16 +48,12 @@ function showUnrecoverableError({
 }
 
 export function catchUnrecoverableError(
-  errorParams: Omit<
-    UnrecoverableErrorParams,
-    "type" | "retryAction" | "error"
-  > & { failureReturnValue: boolean },
+  errorParams: Omit<UnrecoverableErrorParams, "type" | "retryAction" | "error"> & {
+    failureReturnValue: boolean;
+  },
   target: (...params: unknown[]) => unknown,
 ) {
-  const showUnrecoverableError = (
-    params: unknown[],
-    error: UnrecoverableErrorParams["error"],
-  ) => {
+  const showUnrecoverableError = (params: unknown[], error: UnrecoverableErrorParams["error"]) => {
     showError({
       ...errorParams,
       type: "unrecoverable",

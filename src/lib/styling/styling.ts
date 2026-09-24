@@ -1,5 +1,6 @@
-import { theme } from "@/lib/styling/theme";
 import { SxProps } from "@mui/material";
+
+import { theme } from "@/lib/styling/theme";
 
 export type StyleProps = SxProps<typeof theme>;
 
@@ -40,10 +41,7 @@ export function createStyleGroup<const T extends Styles>(styles: T) {
  * @param overrideStyles Style with additional properties that may override `baseStyles`'s properties.
  * @returns An object with the same structure as the input objects.
  */
-export function extendStyles(
-  baseStyles: StyleProps,
-  overrideStyles: StyleProps,
-) {
+export function extendStyles(baseStyles: StyleProps, overrideStyles: StyleProps) {
   return [...asSpreadable(baseStyles), ...asSpreadable(overrideStyles)];
 }
 

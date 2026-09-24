@@ -1,10 +1,11 @@
-import { useIsSignedIn } from "@/hooks/useIsSignedIn";
-import { useInitializationStateStore } from "@/store/useInitializationStateStore";
-import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { Save } from "@mui/icons-material";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
+
+import { useIsSignedIn } from "@/hooks/useIsSignedIn";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 
 export const SaveButton = () => {
   const isSignedIn = useIsSignedIn();
@@ -13,9 +14,7 @@ export const SaveButton = () => {
     useShallow((state) => [state.isPending, state.saveUserPreferences]),
   );
 
-  const isDatabaseInitialized = useInitializationStateStore(
-    (state) => state.isDatabaseInitialized,
-  );
+  const isDatabaseInitialized = useInitializationStateStore((state) => state.isDatabaseInitialized);
 
   const disabled = !isSignedIn || isPending || !isDatabaseInitialized;
 
@@ -34,11 +33,7 @@ export const SaveButton = () => {
     <Tooltip title={tooltip}>
       <span>
         <IconButton onClick={saveUserPreferences} disabled={disabled}>
-          {isPending ? (
-            <CircularProgress color="inherit" size={24} />
-          ) : (
-            <Save />
-          )}
+          {isPending ? <CircularProgress color="inherit" size={24} /> : <Save />}
         </IconButton>
       </span>
     </Tooltip>

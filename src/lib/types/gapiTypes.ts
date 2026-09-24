@@ -9,13 +9,10 @@ export type PlaylistRequestCallback =
  * @param PlaylistType Narrowed type if callback is part of the playlists API
  * @param PlaylistItemType Narrowed type if callback is part of the playlistItems API
  */
-export type ConditionalPlaylistType<
-  RequestCallbackType,
-  PlaylistType,
-  PlaylistItemType,
-> = RequestCallbackType extends typeof gapi.client.youtube.playlists.list
-  ? PlaylistType
-  : PlaylistItemType;
+export type ConditionalPlaylistType<RequestCallbackType, PlaylistType, PlaylistItemType> =
+  RequestCallbackType extends typeof gapi.client.youtube.playlists.list
+    ? PlaylistType
+    : PlaylistItemType;
 
 export enum PrivacyStatus {
   Public = "public",
@@ -26,13 +23,9 @@ export enum PrivacyStatus {
 export type Playlist = gapi.client.youtube.Playlist;
 export type PlaylistItem = gapi.client.youtube.PlaylistItem;
 
-export type PlaylistListParams = Parameters<
-  typeof gapi.client.youtube.playlists.list
->[0];
+export type PlaylistListParams = Parameters<typeof gapi.client.youtube.playlists.list>[0];
 
-export type PlaylistItemListParams = Parameters<
-  typeof gapi.client.youtube.playlistItems.list
->[0];
+export type PlaylistItemListParams = Parameters<typeof gapi.client.youtube.playlistItems.list>[0];
 
 export interface GApiError {
   code: number;

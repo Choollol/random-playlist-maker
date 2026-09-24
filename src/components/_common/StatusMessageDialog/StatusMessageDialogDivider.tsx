@@ -1,5 +1,6 @@
-import { createStyleGroup } from "@/lib/styling/styling";
 import { Divider } from "@mui/material";
+
+import { createStyleGroup } from "@/lib/styling/styling";
 
 const styles = createStyleGroup({
   divider: {

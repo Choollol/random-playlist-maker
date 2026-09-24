@@ -1,11 +1,13 @@
-import {
-  getStoredPlaylistData,
-  setUserPlaylistData,
-} from "@/lib/storageManagement";
+import { signInGoogle } from "@/lib/authClient";
+import { showError } from "@/lib/error";
+import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
+import { getStoredPlaylistData, setUserPlaylistData } from "@/lib/storageManagement";
 import { Playlist, PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
-import { getRandomElements } from "@/lib/utils/collectionUtils";
+import { withRetries } from "@/lib/utils/apiUtils";
 import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
+import { getRandomElements } from "@/lib/utils/collectionUtils";
+import { waitForMs } from "@/lib/utils/miscUtils";
 import {
   checkPlaylistEtag,
   EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS,
@@ -18,12 +20,7 @@ import {
   trimPlaylistItemProperties,
   trimPlaylistProperties,
 } from "@/lib/utils/playlistUtils";
-import { waitForMs } from "@/lib/utils/miscUtils";
-import { showError } from "@/lib/error";
-import { signInGoogle } from "@/lib/authClient";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
-import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
-import { withRetries } from "@/lib/utils/apiUtils";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -81,8 +78,7 @@ export async function createRandomizedPlaylist({
   } catch (error) {
     showError({
       type: "recoverable",
-      message:
-        "Failed to create playlist. Please reload the page or try again.",
+      message: "Failed to create playlist. Please reload the page or try again.",
       error: error,
     });
   }
@@ -155,9 +151,7 @@ export async function createPlaylistWithVideos(
  *
  * @returns `true` if success, `false` if error.
  */
-export async function retrievePlaylistData(
-  setMessageCallback: SetMessageCallback,
-) {
+export async function retrievePlaylistData(setMessageCallback: SetMessageCallback) {
   try {
     setMessageCallback("Retrieving playlist data...");
     await retrievePlaylists();
@@ -168,9 +162,7 @@ export async function retrievePlaylistData(
 
     const storedData = await getStoredPlaylistData(userId);
     if (storedData !== null) {
-      const playlistData = usePlaylistDataStore
-        .getState()
-        .getCopyOfPlaylistData();
+      const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
       for (const [id, data] of Object.entries(storedData)) {
         if (Object.hasOwn(playlistData, id)) {
           playlistData[id] = data;
@@ -186,10 +178,7 @@ export async function retrievePlaylistData(
     updateVideoIds();
 
     setMessageCallback("Caching data...");
-    await setUserPlaylistData(
-      userId,
-      usePlaylistDataStore.getState().playlistData,
-    );
+    await setUserPlaylistData(userId, usePlaylistDataStore.getState().playlistData);
 
     return true;
   } catch (error) {
@@ -224,8 +213,7 @@ async function retrievePlaylists() {
   } catch (error) {
     showError({
       type: "recoverable",
-      message:
-        "Failed to retrieve your playlists. Please reload the page to try again.",
+      message: "Failed to retrieve your playlists. Please reload the page to try again.",
       error: error,
     });
   }
@@ -280,8 +268,7 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
   } catch (error) {
     showError({
       type: "recoverable",
-      message:
-        "Something went wrong while retrieving videos. Please reload to try again.",
+      message: "Something went wrong while retrieving videos. Please reload to try again.",
       error: error,
     });
   }

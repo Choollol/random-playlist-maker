@@ -12,25 +12,19 @@ interface AllUserData {
 
 let allUserData: AllUserData;
 
-export async function getStoredPlaylistData(
-  userId: UserId,
-): Promise<PlaylistData | null> {
+export async function getStoredPlaylistData(userId: UserId): Promise<PlaylistData | null> {
   if (allUserData === undefined) {
     await loadAllData();
   }
   return allUserData[userId] ?? null;
 }
 
-export async function setUserPlaylistData(
-  userId: UserId,
-  playlistData: PlaylistData,
-) {
+export async function setUserPlaylistData(userId: UserId, playlistData: PlaylistData) {
   allUserData[userId] = playlistData;
 
   await localCacheSet(LocalStorageKey.AllUserData, allUserData);
 }
 
 async function loadAllData() {
-  allUserData =
-    (await localCacheGet<AllUserData>(LocalStorageKey.AllUserData)) ?? {};
+  allUserData = (await localCacheGet<AllUserData>(LocalStorageKey.AllUserData)) ?? {};
 }

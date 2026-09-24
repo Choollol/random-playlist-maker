@@ -1,12 +1,13 @@
 "use client";
 
+import { Box } from "@mui/material";
+import Script from "next/script";
+import { useState } from "react";
+
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
 import Initializer from "@/components/Initializer";
 import RetrievePlaylists from "@/components/RetrievePlaylists";
 import { createStyleGroup } from "@/lib/styling/styling";
-import { Box } from "@mui/material";
-import Script from "next/script";
-import { useState } from "react";
 
 const styles = createStyleGroup({
   container: {

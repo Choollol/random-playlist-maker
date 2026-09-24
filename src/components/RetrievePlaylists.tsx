@@ -1,3 +1,6 @@
+import { Paper, Typography } from "@mui/material";
+import { ReactNode, useEffect, useState } from "react";
+
 import { StatusMessageDialog } from "@/components/_common/StatusMessageDialog/StatusMessageDialog";
 import { StatusMessageDialogContent } from "@/components/_common/StatusMessageDialog/StatusMessageDialogContent";
 import { StatusMessageDialogDivider } from "@/components/_common/StatusMessageDialog/StatusMessageDialogDivider";
@@ -5,8 +8,6 @@ import { StatusMessageDialogTitle } from "@/components/_common/StatusMessageDial
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
-import { Paper, Typography } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
 
 const styles = createStyleGroup({
   collapsedContainer: {

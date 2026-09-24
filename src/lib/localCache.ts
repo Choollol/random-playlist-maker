@@ -1,5 +1,6 @@
-import { catchUnrecoverableError } from "@/lib/error";
 import { IDBPDatabase, openDB } from "idb";
+
+import { catchUnrecoverableError } from "@/lib/error";
 
 type DBKey = IDBKeyRange | IDBValidKey;
 

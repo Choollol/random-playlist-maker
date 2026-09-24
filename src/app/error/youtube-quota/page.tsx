@@ -1,8 +1,9 @@
 "use client";
 
+import { useShallow } from "zustand/react/shallow";
+
 import useOnMount from "@/hooks/useOnMount";
 import { useErrorMessageStore } from "@/store/useErrorMessageStore";
-import { useShallow } from "zustand/react/shallow";
 
 export default function YoutubeQuotaError() {
   const { setErrorMessage } = useErrorMessageStore(

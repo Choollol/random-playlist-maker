@@ -1,6 +1,7 @@
+import { Box, Stack, Typography } from "@mui/material";
+
 import SignInButton from "@/components/SignInButton";
 import { createStyleGroup } from "@/lib/styling/styling";
-import { Box, Stack, Typography } from "@mui/material";
 
 const styles = createStyleGroup({
   pageContainer: {
@@ -32,12 +33,10 @@ const SignedOutDisplay = () => {
           <br /> PickSome Playlist Maker!
         </Typography>
         <Typography sx={styles.bodyText}>
-          With this website, you can create randomized playlists with videos
-          chosen from your personal YouTube playlist library.
+          With this website, you can create randomized playlists with videos chosen from your
+          personal YouTube playlist library.
         </Typography>
-        <Typography sx={styles.bodyText}>
-          Sign in with Google to get started!
-        </Typography>
+        <Typography sx={styles.bodyText}>Sign in with Google to get started!</Typography>
         <SignInButton />
       </Box>
     </Stack>

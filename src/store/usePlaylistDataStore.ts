@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
+
 import { PlaylistData } from "@/lib/types/playlistTypes";
 
 interface State {
@@ -17,9 +18,7 @@ const initialState: State = {
 };
 
 function getPlaylistNamesFromData(playlistData: PlaylistData) {
-  return Object.values(playlistData).map(
-    (data) => data.playlist.snippet!.title!,
-  );
+  return Object.values(playlistData).map((data) => data.playlist.snippet!.title!);
 }
 
 export const usePlaylistDataStore = create(
@@ -40,9 +39,7 @@ export const usePlaylistDataStore = create(
       return getPlaylistNamesFromData(get().playlistData);
     },
     filterForExistingPlaylists(playlistNames: string[]): string[] {
-      const existingPlaylistNames = new Set(
-        getPlaylistNamesFromData(get().playlistData),
-      );
+      const existingPlaylistNames = new Set(getPlaylistNamesFromData(get().playlistData));
       return playlistNames.filter((name) => existingPlaylistNames.has(name));
     },
   })),

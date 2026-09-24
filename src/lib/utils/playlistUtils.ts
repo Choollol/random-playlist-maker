@@ -1,3 +1,4 @@
+import { catchQuotaError } from "@/lib/gapi";
 import {
   PlaylistRequestCallback,
   ConditionalPlaylistType,
@@ -8,11 +9,7 @@ import {
   PlaylistItemListParams,
 } from "@/lib/types/gapiTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import {
-  addArrayElementsToSet,
-  createSetFromArray,
-} from "@/lib/utils/collectionUtils";
-import { catchQuotaError } from "@/lib/gapi";
+import { addArrayElementsToSet, createSetFromArray } from "@/lib/utils/collectionUtils";
 
 export const MAX_PAGINATED_ITEM_RESULTS = 50;
 
@@ -42,17 +39,9 @@ export const EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS = 1000;
  */
 export async function getPaginatedItems<
   RequestCallback extends PlaylistRequestCallback,
-  ResourceType extends ConditionalPlaylistType<
-    RequestCallback,
-    Playlist,
-    PlaylistItem
-  >,
+  ResourceType extends ConditionalPlaylistType<RequestCallback, Playlist, PlaylistItem>,
   RequestOptions extends NonNullable<
-    ConditionalPlaylistType<
-      RequestCallback,
-      PlaylistListParams,
-      PlaylistItemListParams
-    >
+    ConditionalPlaylistType<RequestCallback, PlaylistListParams, PlaylistItemListParams>
   >,
   ResponseData extends ConditionalPlaylistType<
     RequestCallback,
@@ -92,9 +81,7 @@ export function getVideoIdsFromPlaylistData(
     if (!excludedPlaylistNamesSet.has(playlistTitle)) {
       addArrayElementsToSet(
         uniqueVideoIds,
-        data.playlistItems.map(
-          (playlistItem) => playlistItem.contentDetails!.videoId!,
-        ),
+        data.playlistItems.map((playlistItem) => playlistItem.contentDetails!.videoId!),
       );
     }
   }
@@ -154,9 +141,7 @@ export async function checkPlaylistEtag(
   if (response.status === 304) {
     return null;
   }
-  const body: gapi.client.youtube.PlaylistListResponse = JSON.parse(
-    response.body,
-  );
+  const body: gapi.client.youtube.PlaylistListResponse = JSON.parse(response.body);
   const newEtag = body.etag!;
   return newEtag;
 }

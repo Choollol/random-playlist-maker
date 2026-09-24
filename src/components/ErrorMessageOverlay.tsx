@@ -1,8 +1,5 @@
 "use client";
 
-import { createStyleGroup } from "@/lib/styling/styling";
-import { BUG_REPORT_URL } from "@/lib/utils/miscUtils";
-import { useErrorMessageStore } from "@/store/useErrorMessageStore";
 import {
   Button,
   Dialog,
@@ -13,6 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useShallow } from "zustand/react/shallow";
+
+import { createStyleGroup } from "@/lib/styling/styling";
+import { BUG_REPORT_URL } from "@/lib/utils/miscUtils";
+import { useErrorMessageStore } from "@/store/useErrorMessageStore";
 
 const styles = createStyleGroup({
   dialog: (theme) => ({
@@ -29,15 +30,14 @@ const styles = createStyleGroup({
 });
 
 const ErrorMessageOverlay = () => {
-  const { message, retryButtonText, retryAction, clearErrorMessage } =
-    useErrorMessageStore(
-      useShallow((state) => ({
-        message: state.message,
-        retryButtonText: state.retryButtonText,
-        retryAction: state.retryAction,
-        clearErrorMessage: state.clearErrorMessage,
-      })),
-    );
+  const { message, retryButtonText, retryAction, clearErrorMessage } = useErrorMessageStore(
+    useShallow((state) => ({
+      message: state.message,
+      retryButtonText: state.retryButtonText,
+      retryAction: state.retryAction,
+      clearErrorMessage: state.clearErrorMessage,
+    })),
+  );
 
   const handleClick = () => {
     retryAction!();
@@ -64,8 +64,7 @@ const ErrorMessageOverlay = () => {
 
         <DialogContent>
           <Typography>
-            If this error persists, please{" "}
-            <Link href={BUG_REPORT_URL}>submit a bug report</Link>
+            If this error persists, please <Link href={BUG_REPORT_URL}>submit a bug report</Link>
           </Typography>
         </DialogContent>
 

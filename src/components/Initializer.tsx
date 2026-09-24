@@ -1,13 +1,14 @@
-import { signOutGoogle } from "@/lib/authClient";
-import { signInToDatabase, initDatabase } from "@/lib/db";
-import { showError } from "@/lib/error";
-import { initLocalCache } from "@/lib/localCache";
-import { initGapiClient } from "@/lib/gapi";
-import { useInitializationStateStore } from "@/store/useInitializationStateStore";
-import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent } from "react";
+
+import { signOutGoogle } from "@/lib/authClient";
 import { fetchUserData } from "@/lib/authServerActions";
+import { signInToDatabase, initDatabase } from "@/lib/db";
+import { showError } from "@/lib/error";
+import { initGapiClient } from "@/lib/gapi";
+import { initLocalCache } from "@/lib/localCache";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 
 interface Props {
   isGapiLoaded: boolean;
@@ -26,9 +27,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     markDatabaseInitialized,
   } = useInitializationStateStore();
 
-  const loadUserPreferences = useUserPreferencesStore(
-    (state) => state.loadUserPreferences,
-  );
+  const loadUserPreferences = useUserPreferencesStore((state) => state.loadUserPreferences);
 
   useEffect(() => {
     if (isGapiLoaded) {
@@ -80,8 +79,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
       } catch (error) {
         showError({
           type: "recoverable",
-          message:
-            "Failed to connect with database. User preferences may be unavailable.",
+          message: "Failed to connect with database. User preferences may be unavailable.",
           error,
         });
       }

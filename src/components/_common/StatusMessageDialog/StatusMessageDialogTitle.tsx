@@ -1,6 +1,7 @@
-import { createStyleGroup } from "@/lib/styling/styling";
 import { Typography } from "@mui/material";
 import { ReactNode } from "react";
+
+import { createStyleGroup } from "@/lib/styling/styling";
 
 const styles = createStyleGroup({
   title: {

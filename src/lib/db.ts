@@ -1,11 +1,12 @@
 "use server";
 
-import { ENV } from "@/env";
-import { getApp, initializeApp } from "firebase/app";
 import { initializeApp as initializeAppAdmin, cert } from "firebase-admin";
 import { getAuth as getAuthAdmin } from "firebase-admin/auth";
+import { getApp, initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import { getFirestore, getDoc, doc, setDoc } from "firebase/firestore";
+
+import { ENV } from "@/env";
 
 export enum CollectionKey {
   userData = "userData",
@@ -28,10 +29,7 @@ export async function initDatabase() {
       credential: cert({
         projectId: ENV.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
         clientEmail: ENV.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-        privateKey: ENV.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll(
-          "\\n",
-          "\n",
-        ),
+        privateKey: ENV.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll("\\n", "\n"),
       }),
     });
   } catch {
@@ -42,11 +40,7 @@ export async function initDatabase() {
 /**
  * @throws
  */
-export async function saveToDatabase(
-  collectionKey: string,
-  documentKey: string,
-  data: object,
-) {
+export async function saveToDatabase(collectionKey: string, documentKey: string, data: object) {
   setDoc(doc(getFirestore(getApp()), collectionKey, documentKey), {
     ...data,
     // This has to match the firestore rule
@@ -57,10 +51,7 @@ export async function saveToDatabase(
 /**
  * @throws
  */
-export async function loadFromDatabase(
-  collectionKey: string,
-  documentKey: string,
-) {
+export async function loadFromDatabase(collectionKey: string, documentKey: string) {
   return getDoc(doc(getFirestore(getApp()), collectionKey, documentKey));
 }
 

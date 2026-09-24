@@ -1,14 +1,15 @@
 "use client";
 
-import HomeLinkButton from "@/components/header/HomeLinkButton";
+import { BugReport, GitHub } from "@mui/icons-material";
+import { AppBar, Box, Toolbar } from "@mui/material";
+
 import IconLinkButton from "@/components/_common/IconLinkButton";
+import HomeLinkButton from "@/components/header/HomeLinkButton";
 import ManageAccountButton from "@/components/header/ManageAccountButton";
+import { SaveButton } from "@/components/header/SaveButton";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PRIMARY_HUE } from "@/lib/styling/theme";
 import { BUG_REPORT_URL, GITHUB_URL } from "@/lib/utils/miscUtils";
-import { BugReport, GitHub } from "@mui/icons-material";
-import { AppBar, Box, Toolbar } from "@mui/material";
-import { SaveButton } from "@/components/header/SaveButton";
 
 interface Props {
   isSignedIn: boolean;

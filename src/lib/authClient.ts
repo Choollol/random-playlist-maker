@@ -1,5 +1,6 @@
-import { signOutOfDatabase } from "@/lib/db";
 import { createAuthClient } from "better-auth/react";
+
+import { signOutOfDatabase } from "@/lib/db";
 
 export const authClient = createAuthClient({});
 

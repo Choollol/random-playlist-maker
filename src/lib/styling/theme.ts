@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  createTheme,
-  CSSProperties,
-  responsiveFontSizes,
-  Theme,
-} from "@mui/material";
+import { createTheme, CSSProperties, responsiveFontSizes, Theme } from "@mui/material";
 import "@fontsource/roboto";
 
 declare module "@mui/material/styles" {

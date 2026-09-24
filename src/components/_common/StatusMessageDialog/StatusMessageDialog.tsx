@@ -1,6 +1,7 @@
-import { createStyleGroup } from "@/lib/styling/styling";
 import { Box, Dialog } from "@mui/material";
 import { ComponentProps, ReactNode } from "react";
+
+import { createStyleGroup } from "@/lib/styling/styling";
 
 const styles = createStyleGroup({
   contentContainer: {

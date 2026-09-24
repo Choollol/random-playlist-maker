@@ -1,8 +1,9 @@
 "use client";
 
 import { IconButton, Tooltip } from "@mui/material";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
 import { createStyleGroup } from "@/lib/styling/styling";
 
 const LOGO_WIDTH = 36;
@@ -17,19 +18,8 @@ const styles = createStyleGroup({
 const HomeLinkButton = () => {
   return (
     <Tooltip title="Home">
-      <IconButton
-        href="/"
-        LinkComponent={Link}
-        size="large"
-        disableRipple
-        sx={styles.button}
-      >
-        <Image
-          src="/logo.png"
-          width={LOGO_WIDTH}
-          height={LOGO_WIDTH}
-          alt="Home page button"
-        />
+      <IconButton href="/" LinkComponent={Link} size="large" disableRipple sx={styles.button}>
+        <Image src="/logo.png" width={LOGO_WIDTH} height={LOGO_WIDTH} alt="Home page button" />
       </IconButton>
     </Tooltip>
   );

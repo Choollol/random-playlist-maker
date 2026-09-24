@@ -1,7 +1,14 @@
-import { createRandomizedPlaylist } from "@/lib/playlistManagement";
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import { useEffect, useEffectEvent } from "react";
 import { useForm } from "react-hook-form";
-import NumberField from "./_common/NumberField";
+import { useShallow } from "zustand/react/shallow";
+
+import ControlledAutocomplete from "@/components/_common/ControlledAutocomplete";
+import SelectWrapper from "@/components/_common/SelectWrapper";
+import useIsMobile from "@/hooks/useIsMobile";
+import { createRandomizedPlaylist } from "@/lib/playlistManagement";
+import { createStyleGroup } from "@/lib/styling/styling";
+import { PrivacyStatus } from "@/lib/types/gapiTypes";
 import {
   DEFAULT_PLAYLIST_TITLE,
   DEFAULT_PRIVACY_LEVEL,
@@ -9,20 +16,12 @@ import {
   MAX_VIDEO_COUNT,
   MIN_VIDEO_COUNT,
 } from "@/lib/utils/playlistUtils";
-import { PrivacyStatus } from "@/lib/types/gapiTypes";
-import SelectWrapper from "@/components/_common/SelectWrapper";
-import ControlledAutocomplete from "@/components/_common/ControlledAutocomplete";
-import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
-import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
-import { createStyleGroup } from "@/lib/styling/styling";
-import useIsMobile from "@/hooks/useIsMobile";
-import { useShallow } from "zustand/react/shallow";
-import { useEffect, useEffectEvent } from "react";
-import {
-  FormData,
-  useUserPreferencesStore,
-} from "@/store/useUserPreferencesStore";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
+import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import { FormData, useUserPreferencesStore } from "@/store/useUserPreferencesStore";
+
+import NumberField from "./_common/NumberField";
 
 const FORM_GAP = 2;
 
@@ -65,9 +64,7 @@ const CreatePlaylistForm = () => {
   } = useForm<FormData>({ mode: "onChange" });
 
   const { formData, setFormData } = useUserPreferencesStore();
-  const isDatabaseInitialized = useInitializationStateStore(
-    (state) => state.isDatabaseInitialized,
-  );
+  const isDatabaseInitialized = useInitializationStateStore((state) => state.isDatabaseInitialized);
 
   const [
     arePlaylistsRetrieved,
@@ -137,11 +134,7 @@ const CreatePlaylistForm = () => {
         Create a playlist!
       </Typography>
 
-      <Stack
-        component={"form"}
-        onSubmit={handleSubmit(submitForm)}
-        sx={styles.form}
-      >
+      <Stack component={"form"} onSubmit={handleSubmit(submitForm)} sx={styles.form}>
         <TextField
           {...register("playlistTitle", { required: true })}
           defaultValue={DEFAULT_PLAYLIST_TITLE}
@@ -150,15 +143,10 @@ const CreatePlaylistForm = () => {
           required
         />
 
-        <Stack
-          sx={styles.twoInputContainer}
-          direction={isMobile ? "column" : "row"}
-        >
+        <Stack sx={styles.twoInputContainer} direction={isMobile ? "column" : "row"}>
           <NumberField
             {...register("numPlaylistItems", { required: true })}
-            onValueChange={(value) =>
-              setValue("numPlaylistItems", value ?? DEFAULT_VIDEO_COUNT)
-            }
+            onValueChange={(value) => setValue("numPlaylistItems", value ?? DEFAULT_VIDEO_COUNT)}
             label={`Number of videos (${MIN_VIDEO_COUNT}-${MAX_VIDEO_COUNT})`}
             value={formData.numPlaylistItems ?? DEFAULT_VIDEO_COUNT}
             min={MIN_VIDEO_COUNT}
@@ -180,19 +168,11 @@ const CreatePlaylistForm = () => {
           multiple
           disableCloseOnSelect
           options={arePlaylistsRetrieved ? getPlaylistNames() : []}
-          noOptionsText={
-            arePlaylistsRetrieved ? undefined : "Loading playlists..."
-          }
-          renderInput={(params) => (
-            <TextField {...params} label="Playlists to exclude" />
-          )}
+          noOptionsText={arePlaylistsRetrieved ? undefined : "Loading playlists..."}
+          renderInput={(params) => <TextField {...params} label="Playlists to exclude" />}
           slotProps={{ paper: { sx: styles.excludePlaylistPopper } }}
         />
-        <Button
-          type="submit"
-          sx={styles.submitButton}
-          disabled={!arePlaylistItemsRetrieved}
-        >
+        <Button type="submit" sx={styles.submitButton} disabled={!arePlaylistItemsRetrieved}>
           Create Playlist
         </Button>
       </Stack>

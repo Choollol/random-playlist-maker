@@ -9,9 +9,7 @@ export interface UserPreferences {
   formData: Partial<PickNonFunctions<FormData>>;
 }
 
-export async function getUserPreferencesFromDb(
-  userId: UserId,
-): Promise<UserPreferences> {
+export async function getUserPreferencesFromDb(userId: UserId): Promise<UserPreferences> {
   const response = await loadFromDatabase(CollectionKey.userData, userId);
   return response.data()?.preferences || { formData: {} };
 }
@@ -19,9 +17,6 @@ export async function getUserPreferencesFromDb(
 /**
  * @throws
  */
-export async function saveUserPreferencesToDb(
-  userId: UserId,
-  data: UserPreferences,
-) {
+export async function saveUserPreferencesToDb(userId: UserId, data: UserPreferences) {
   await saveToDatabase(CollectionKey.userData, userId, { preferences: data });
 }

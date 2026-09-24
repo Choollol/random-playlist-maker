@@ -1,9 +1,10 @@
-import useAuthUserData from "@/hooks/useAuthUserData";
-import { isDefined } from "@/lib/utils/typeUtils";
-import Image from "next/image";
 import { AccountCircle } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
+import Image from "next/image";
+
+import useAuthUserData from "@/hooks/useAuthUserData";
 import { createStyleGroup } from "@/lib/styling/styling";
+import { isDefined } from "@/lib/utils/typeUtils";
 
 const styles = createStyleGroup({
   avatar: {

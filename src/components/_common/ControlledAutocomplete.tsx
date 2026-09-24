@@ -1,11 +1,15 @@
-import { ControlledInput } from "@/lib/types/utilTypes";
 import { Autocomplete } from "@mui/material";
 import { ComponentProps } from "react";
 import { Controller } from "react-hook-form";
 
-const ControlledAutocomplete: ControlledInput<
-  ComponentProps<typeof Autocomplete>
-> = ({ name, control, defaultValue, ...autocompleteProps }) => {
+import { ControlledInput } from "@/lib/types/utilTypes";
+
+const ControlledAutocomplete: ControlledInput<ComponentProps<typeof Autocomplete>> = ({
+  name,
+  control,
+  defaultValue,
+  ...autocompleteProps
+}) => {
   return (
     <Controller
       name={name}

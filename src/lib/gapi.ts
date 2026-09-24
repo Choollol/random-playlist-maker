@@ -2,8 +2,8 @@
 
 import { authClient } from "@/lib/authClient";
 import { catchUnrecoverableError } from "@/lib/error";
-import { googleApiKey } from "@/lib/utils/envUtils";
 import { GApiError } from "@/lib/types/gapiTypes";
+import { googleApiKey } from "@/lib/utils/envUtils";
 
 export const PLAYLIST_ITEM_RESOURCE_KIND = "youtube#video";
 
@@ -20,9 +20,7 @@ export const initGapiClient = catchUnrecoverableError(
   async () => {
     await gapi.client.init({
       apiKey: googleApiKey,
-      discoveryDocs: [
-        "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-      ],
+      discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"],
     });
 
     const response = await authClient.getAccessToken({
