@@ -179,44 +179,34 @@ export async function retrievePlaylistData(setMessageCallback: SetMessageCallbac
 
     setMessageCallback("Caching data...");
     await setUserPlaylistData(userId, usePlaylistDataStore.getState().playlistData);
-
-    return true;
   } catch (error) {
     console.error(error);
-    return false;
+    throw error;
   } finally {
     setMessageCallback(NO_OVERLAY_MESSAGE);
   }
 }
 
 async function retrievePlaylists() {
-  try {
-    const playlistList = await catchQuotaError(
-      getPaginatedItems(gapi.client.youtube.playlists.list, {
-        part: PLAYLIST_PART,
-        mine: true,
-      }),
-    );
+  const playlistList = await catchQuotaError(
+    getPaginatedItems(gapi.client.youtube.playlists.list, {
+      part: PLAYLIST_PART,
+      mine: true,
+    }),
+  );
 
-    playlistList.forEach(trimPlaylistProperties);
+  playlistList.forEach(trimPlaylistProperties);
 
-    const playlistData = playlistList.reduce((data, playlist) => {
-      data[playlist.id!] = {
-        playlist: playlist,
-        // Dummy data that will be replaced later
-        etag: "",
-        playlistItems: [],
-      };
-      return data;
-    }, {} as PlaylistData);
-    usePlaylistDataStore.getState().setPlaylistData(playlistData);
-  } catch (error) {
-    showError({
-      type: "recoverable",
-      message: "Failed to retrieve your playlists. Please reload the page to try again.",
-      error: error,
-    });
-  }
+  const playlistData = playlistList.reduce((data, playlist) => {
+    data[playlist.id!] = {
+      playlist: playlist,
+      // Dummy data that will be replaced later
+      etag: "",
+      playlistItems: [],
+    };
+    return data;
+  }, {} as PlaylistData);
+  usePlaylistDataStore.getState().setPlaylistData(playlistData);
 }
 
 async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {

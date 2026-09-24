@@ -1,10 +1,12 @@
 import { Paper, Typography } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect, useEffectEvent, useState } from "react";
 
 import { StatusMessageDialog } from "@/components/_common/StatusMessageDialog/StatusMessageDialog";
 import { StatusMessageDialogContent } from "@/components/_common/StatusMessageDialog/StatusMessageDialogContent";
 import { StatusMessageDialogDivider } from "@/components/_common/StatusMessageDialog/StatusMessageDialogDivider";
 import { StatusMessageDialogTitle } from "@/components/_common/StatusMessageDialog/StatusMessageDialogTitle";
+import { signOutGoogle } from "@/lib/authClient";
 import { retrievePlaylistData } from "@/lib/playlistManagement";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
@@ -28,17 +30,27 @@ const RetrievePlaylists = () => {
     (state) => state.isEverythingInitialized,
   );
 
+  const router = useRouter();
+
   const handleClose = () => {
     setIsCollapsed(true);
   };
 
+  const signOut = useEffectEvent(async () => {
+    await signOutGoogle();
+    router.refresh();
+  });
+
   useEffect(() => {
     if (isEverythingInitialized) {
       (async () => {
-        const success = await retrievePlaylistData(setMessage);
-        setIsCollapsed(false);
-        if (!success) {
-          console.error("Could not retrieve playlists!");
+        try {
+          await retrievePlaylistData(setMessage);
+          setIsCollapsed(false);
+        } catch (error) {
+          if ((error as gapi.client.HttpRequestRejected).status === 401) {
+            signOut();
+          }
         }
       })();
     }
