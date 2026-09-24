@@ -20,6 +20,9 @@ export async function getStoredPlaylistData(userId: UserId): Promise<PlaylistDat
 }
 
 export async function setUserPlaylistData(userId: UserId, playlistData: PlaylistData) {
+  if (Object.keys(playlistData).length === 0) {
+    return;
+  }
   allUserData[userId] = playlistData;
 
   await localCacheSet(LocalStorageKey.AllUserData, allUserData);
