@@ -160,7 +160,7 @@ const CreatePlaylistForm = () => {
               setValue("numPlaylistItems", value ?? DEFAULT_VIDEO_COUNT)
             }
             label={`Number of videos (${MIN_VIDEO_COUNT}-${MAX_VIDEO_COUNT})`}
-            defaultValue={DEFAULT_VIDEO_COUNT}
+            value={formData.numPlaylistItems ?? DEFAULT_VIDEO_COUNT}
             min={MIN_VIDEO_COUNT}
             max={MAX_VIDEO_COUNT}
             error={!!errors.numPlaylistItems}
