@@ -21,8 +21,17 @@ const firebaseConfig = {
   appId: "1:889182891099:web:4d18ef911a5a4072e5637e",
 };
 
-export async function initDatabase() {
-  initializeApp(firebaseConfig);
+function getDbApp() {
+  try {
+    return getApp();
+  } catch {
+    return initializeApp(firebaseConfig);
+  }
+}
+
+function initDbIfNot() {
+  // Initialize and ignore result
+  getDbApp();
 
   try {
     initializeAppAdmin({
@@ -41,7 +50,8 @@ export async function initDatabase() {
  * @throws
  */
 export async function saveToDatabase(collectionKey: string, documentKey: string, data: object) {
-  setDoc(doc(getFirestore(getApp()), collectionKey, documentKey), {
+  const app = getDbApp();
+  setDoc(doc(getFirestore(app), collectionKey, documentKey), {
     ...data,
     // This has to match the firestore rule
     userDbUid: getAuth().currentUser!.uid,
@@ -52,14 +62,17 @@ export async function saveToDatabase(collectionKey: string, documentKey: string,
  * @throws
  */
 export async function loadFromDatabase(collectionKey: string, documentKey: string) {
-  return getDoc(doc(getFirestore(getApp()), collectionKey, documentKey));
+  const app = getDbApp();
+  return getDoc(doc(getFirestore(app), collectionKey, documentKey));
 }
 
 export async function signInToDatabase(uid: string) {
+  initDbIfNot();
   const customToken = await getAuthAdmin().createCustomToken(uid);
   await signInWithCustomToken(getAuth(), customToken);
 }
 
 export async function signOutOfDatabase() {
+  initDbIfNot();
   await signOut(getAuth());
 }
