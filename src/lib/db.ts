@@ -7,7 +7,6 @@ import { getAuth, onAuthStateChanged, signInWithCustomToken, signOut } from "fir
 import { getFirestore, getDoc, doc, setDoc } from "firebase/firestore";
 
 import { ENV } from "@/env";
-import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 export enum CollectionKey {
   userData = "userData",
@@ -38,15 +37,7 @@ function getDbApp() {
   try {
     return getApp();
   } catch {
-    const app = initializeApp(firebaseConfig);
-
-    onAuthStateChanged(getAuth(app), (user) => {
-      if (user) {
-        useInitializationStateStore.getState().markDatabaseInitialized();
-      }
-    });
-
-    return app;
+    return initializeApp(firebaseConfig);
   }
 }
 
@@ -74,6 +65,17 @@ export async function signInToDatabase(uid: string) {
   const app = getDbApp();
   const customToken = await getAuthAdmin().createCustomToken(uid);
   await signInWithCustomToken(getAuth(app), customToken);
+  await new Promise<void>((resolve) => {
+    if (getAuth(app).currentUser !== null) {
+      resolve();
+    }
+    const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
+      if (user) {
+        unsubscribe();
+        resolve();
+      }
+    });
+  });
 }
 
 export async function signOutOfDatabase() {
