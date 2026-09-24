@@ -48,7 +48,9 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "*.[tj]{s,sx}": "oxlint --fix",
-    "*": "oxfmt --write"
+    "*": [
+      "oxlint --fix --no-error-on-unmatched-pattern",
+      "oxfmt --write --no-error-on-unmatched-pattern"
+    ]
   }
 }
