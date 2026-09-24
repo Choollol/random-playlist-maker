@@ -1,32 +1,37 @@
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 
 import { StyleProps } from "@/lib/styling/styling";
 
 type Props = {
   values: string[];
   defaultValue?: string;
+  value?: string;
   selectSx?: StyleProps;
   itemSx?: StyleProps;
 } & Parameters<typeof Select>[0];
 
 export default function SelectWrapper({
   values,
-  defaultValue = "",
+  defaultValue,
+  value,
   selectSx,
   itemSx,
   ...other
 }: Props) {
-  const [value, setValue] = useState(defaultValue);
-
   const handleChange = (event: SelectChangeEvent, child: ReactNode) => {
-    setValue(event.target.value);
     other.onChange?.(event, child);
   };
 
   return (
-    <Select {...other} sx={selectSx} onChange={handleChange} value={value}>
+    <Select
+      {...other}
+      sx={selectSx}
+      onChange={handleChange}
+      value={value}
+      defaultValue={defaultValue}
+    >
       {values.map((value, index) => (
         <MenuItem key={index} value={value} sx={itemSx}>
           {value}

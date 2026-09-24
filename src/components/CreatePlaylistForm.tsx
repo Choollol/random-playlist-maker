@@ -160,7 +160,7 @@ const CreatePlaylistForm = () => {
           <SelectWrapper
             {...register("privacyStatus")}
             values={Object.values(PrivacyStatus)}
-            defaultValue={DEFAULT_PRIVACY_LEVEL}
+            value={formData.privacyStatus ?? DEFAULT_PRIVACY_LEVEL}
           />
         </Stack>
         <ControlledAutocomplete
