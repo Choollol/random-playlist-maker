@@ -10,6 +10,7 @@ import {
   UserPreferences,
 } from "@/lib/userPreferences";
 import { getUserId } from "@/lib/utils/authUtils";
+import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 
 export type FormData = CreateRandomizedPlaylistOptions;
 
@@ -62,7 +63,9 @@ export const useUserPreferencesStore = create(
     },
     setFormData: (formData: UserPreferences["formData"]) => {
       set({ formData, isPending: true });
-      saveUserPreferencesDebounced(formData, () => set({ isPending: false }));
+      if (useInitializationStateStore.getState().isDatabaseInitialized) {
+        saveUserPreferencesDebounced(formData, () => set({ isPending: false }));
+      }
     },
   })),
 );
