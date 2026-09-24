@@ -4,6 +4,7 @@ import { ENV } from "@/env";
 
 export const auth = betterAuth({
   baseURL: ENV.BETTER_AUTH_URL,
+  trustedOrigins: ENV.VERCEL_URL ? [ENV.VERCEL_URL] : [],
   socialProviders: {
     google: {
       clientId: ENV.GOOGLE_CLIENT_ID,

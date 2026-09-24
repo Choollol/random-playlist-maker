@@ -15,6 +15,7 @@ const envSchema = z.object({
   FIREBASE_SERVICE_ACCOUNT_PROJECT_ID: z.string(),
   FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL: z.string(),
   FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
+  VERCEL_URL: z.string().optional(),
 });
 
 export const ENV = envSchema.parse(process.env);
