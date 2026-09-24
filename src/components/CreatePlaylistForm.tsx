@@ -64,7 +64,7 @@ const CreatePlaylistForm = () => {
     setValues,
   } = useForm<FormData>({ mode: "onChange" });
 
-  const { formData, setUserPreferences } = useUserPreferencesStore();
+  const { formData, setFormData } = useUserPreferencesStore();
   const isDatabaseInitialized = useInitializationStateStore(
     (state) => state.isDatabaseInitialized,
   );
@@ -105,10 +105,10 @@ const CreatePlaylistForm = () => {
   useEffect(() => {
     const unsubscribe = subscribe({
       formState: { values: true },
-      callback: (data) => setUserPreferences(data.values),
+      callback: (data) => setFormData(data.values),
     });
     return () => unsubscribe();
-  }, [subscribe, setUserPreferences]);
+  }, [subscribe, setFormData]);
 
   const filterOutNonexistentPlaylistNames = useEffectEvent(() => {
     setValue(

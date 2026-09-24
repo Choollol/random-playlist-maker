@@ -44,10 +44,6 @@ export const useUserPreferencesStore = create(
       set({ isPending: true });
       saveUserPreferences(get().formData, () => set({ isPending: false }));
     },
-    setUserPreferences: (formData: UserPreferences["formData"]) => {
-      set({ formData, isPending: true });
-      saveUserPreferencesDebounced(formData, () => set({ isPending: false }));
-    },
     loadUserPreferences: async () => {
       set({ isPending: true });
       const userId = await getUserId();
@@ -65,6 +61,10 @@ export const useUserPreferencesStore = create(
       } finally {
         set({ isPending: false });
       }
+    },
+    setFormData: (formData: UserPreferences["formData"]) => {
+      set({ formData, isPending: true });
+      saveUserPreferencesDebounced(formData, () => set({ isPending: false }));
     },
   })),
 );
