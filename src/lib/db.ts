@@ -23,17 +23,6 @@ const firebaseConfig = {
 
 function getDbApp() {
   try {
-    return getApp();
-  } catch {
-    return initializeApp(firebaseConfig);
-  }
-}
-
-function initDbIfNot() {
-  // Initialize and ignore result
-  getDbApp();
-
-  try {
     initializeAppAdmin({
       credential: cert({
         projectId: ENV.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
@@ -43,6 +32,12 @@ function initDbIfNot() {
     });
   } catch {
     // App already initialized, do nothing
+  }
+
+  try {
+    return getApp();
+  } catch {
+    return initializeApp(firebaseConfig);
   }
 }
 
@@ -54,7 +49,7 @@ export async function saveToDatabase(collectionKey: string, documentKey: string,
   setDoc(doc(getFirestore(app), collectionKey, documentKey), {
     ...data,
     // This has to match the firestore rule
-    userDbUid: getAuth().currentUser!.uid,
+    userDbUid: getAuth(app).currentUser!.uid,
   });
 }
 
@@ -67,12 +62,12 @@ export async function loadFromDatabase(collectionKey: string, documentKey: strin
 }
 
 export async function signInToDatabase(uid: string) {
-  initDbIfNot();
+  const app = getDbApp();
   const customToken = await getAuthAdmin().createCustomToken(uid);
-  await signInWithCustomToken(getAuth(), customToken);
+  await signInWithCustomToken(getAuth(app), customToken);
 }
 
 export async function signOutOfDatabase() {
-  initDbIfNot();
-  await signOut(getAuth());
+  const app = getDbApp();
+  await signOut(getAuth(app));
 }
