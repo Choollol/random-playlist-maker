@@ -10,6 +10,8 @@ export const auth = betterAuth({
       clientId: ENV.GOOGLE_CLIENT_ID,
       clientSecret: ENV.GOOGLE_CLIENT_SECRET,
       scope: ["https://www.googleapis.com/auth/youtube", "openid", "profile", "email"],
+      accessType: "offline",
+      prompt: "select_account consent",
     },
   },
   onAPIError: {
