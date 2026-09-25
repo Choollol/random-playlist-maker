@@ -80,5 +80,9 @@ export async function signInToDatabase(uid: string) {
 
 export async function signOutOfDatabase() {
   const app = getDbApp();
-  await signOut(getAuth(app));
+  const auth = getAuth(app);
+  if (auth.currentUser === null) {
+    return;
+  }
+  await signOut(auth);
 }
