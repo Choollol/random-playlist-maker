@@ -46,7 +46,6 @@ function getDbApp() {
  */
 export async function saveToDatabase(collectionKey: string, documentKey: string, data: object) {
   const app = getDbApp();
-  console.log(">>", getAuth(app).currentUser);
   setDoc(doc(getFirestore(app), collectionKey, documentKey), {
     ...data,
     // This has to match the firestore rule
@@ -77,7 +76,6 @@ export async function signInToDatabase(uid: string) {
       }
     });
   });
-  console.log(">", getAuth(app).currentUser);
 }
 
 export async function signOutOfDatabase() {
