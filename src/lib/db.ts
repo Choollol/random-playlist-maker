@@ -1,8 +1,13 @@
 "use server";
 
-import { initializeApp as initializeAppAdmin, cert } from "firebase-admin";
+import {
+  initializeApp as initializeAppAdmin,
+  cert,
+  App,
+  getApp as getAppAdmin,
+} from "firebase-admin";
 import { getAuth as getAuthAdmin } from "firebase-admin/auth";
-import { getApp, initializeApp } from "firebase/app";
+import { FirebaseApp, getApp, initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInWithCustomToken, signOut } from "firebase/auth";
 import { getFirestore, getDoc, doc, setDoc } from "firebase/firestore";
 
@@ -21,24 +26,36 @@ const firebaseConfig = {
   appId: "1:889182891099:web:4d18ef911a5a4072e5637e",
 };
 
+let app: FirebaseApp;
+let appAdmin: App;
+
 function getDbApp() {
-  try {
-    initializeAppAdmin({
-      credential: cert({
-        projectId: ENV.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
-        clientEmail: ENV.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-        privateKey: ENV.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll("\\n", "\n"),
-      }),
-    });
-  } catch {
-    // App already initialized, do nothing
+  if (!app) {
+    try {
+      app = getApp();
+    } catch {
+      app = initializeApp(firebaseConfig);
+    }
+  }
+  return app;
+}
+
+function getDbAdminApp() {
+  if (!appAdmin) {
+    try {
+      appAdmin = getAppAdmin();
+    } catch {
+      initializeAppAdmin({
+        credential: cert({
+          projectId: ENV.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
+          clientEmail: ENV.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+          privateKey: ENV.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll("\\n", "\n"),
+        }),
+      });
+    }
   }
 
-  try {
-    return getApp();
-  } catch {
-    return initializeApp(firebaseConfig);
-  }
+  return appAdmin;
 }
 
 /**
@@ -46,7 +63,7 @@ function getDbApp() {
  */
 export async function saveToDatabase(collectionKey: string, documentKey: string, data: object) {
   const app = getDbApp();
-  console.log(">>", getAuth(app).currentUser);
+  console.log(">>", app);
   setDoc(doc(getFirestore(app), collectionKey, documentKey), {
     ...data,
     // This has to match the firestore rule
@@ -64,7 +81,8 @@ export async function loadFromDatabase(collectionKey: string, documentKey: strin
 
 export async function signInToDatabase(uid: string) {
   const app = getDbApp();
-  const customToken = await getAuthAdmin().createCustomToken(uid);
+  const appAdmin = getDbAdminApp();
+  const customToken = await getAuthAdmin(appAdmin).createCustomToken(uid);
   await signInWithCustomToken(getAuth(app), customToken);
   await new Promise<void>((resolve) => {
     if (getAuth(app).currentUser !== null) {
@@ -77,7 +95,7 @@ export async function signInToDatabase(uid: string) {
       }
     });
   });
-  console.log(">", getAuth(app).currentUser);
+  console.log(">", app);
 }
 
 export async function signOutOfDatabase() {
