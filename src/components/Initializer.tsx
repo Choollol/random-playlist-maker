@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import useOnMount from "@/hooks/useOnMount";
 import { signOutGoogle } from "@/lib/authClient";
 import { fetchUserData } from "@/lib/authServerActions";
-import { signInToDatabase } from "@/lib/db";
+import { signInToDatabase } from "@/lib/dbClient";
 import { showError } from "@/lib/error";
 import { initGapiClient } from "@/lib/gapi";
 import { initLocalCache } from "@/lib/localCache";

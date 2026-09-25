@@ -1,6 +1,6 @@
-"use server";
+"use client";
 
-import { CollectionKey, loadFromDatabase, saveToDatabase } from "@/lib/db";
+import { CollectionKey, loadFromDatabase, saveToDatabase } from "@/lib/dbClient";
 import { PickNonFunctions } from "@/lib/types/utilTypes";
 import { UserId } from "@/lib/utils/authUtils";
 import { FormData } from "@/store/useUserPreferencesStore";
