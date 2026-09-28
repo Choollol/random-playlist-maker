@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useEffectEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
@@ -26,18 +26,19 @@ import NumberField from "./_common/NumberField";
 const FORM_GAP = 2;
 
 const styles = createStyleGroup({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+  },
   title: {
     marginBottom: 8,
   },
-  form: (theme) => ({
+  form: {
     gap: FORM_GAP,
-    [theme.breakpoints.up("sm")]: {
-      width: 600,
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-    },
-  }),
+    width: "100%",
+  },
   twoInputContainer: {
     gap: FORM_GAP,
     "& > *": {
@@ -131,7 +132,7 @@ const CreatePlaylistForm = () => {
   };
 
   return (
-    <>
+    <Box sx={styles.container}>
       <Typography variant="h2" sx={styles.title}>
         Create a playlist!
       </Typography>
@@ -182,7 +183,7 @@ const CreatePlaylistForm = () => {
           Create Playlist
         </Button>
       </Stack>
-    </>
+    </Box>
   );
 };
 
