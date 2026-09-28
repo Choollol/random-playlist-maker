@@ -24,10 +24,14 @@ const styles = createStyleGroup({
   searchResultsContainer: {
     width: "100%",
   },
+  loadingSpinner: {
+    marginTop: 10,
+  },
 });
 
 const SEARCH_THRESHOLD = 0.3;
 const MAX_SEARCH_RESULT_COUNT = 50;
+const LOADING = Symbol("Loading");
 
 function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[] {
   const videoIdToItem = new Map<string, FlattenedPlaylistItem>();
@@ -52,7 +56,9 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
 }
 
 export const PlaylistSearch = () => {
-  const [searchResults, setSearchResults] = useState<FuseResult<FlattenedPlaylistItem>[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    FuseResult<FlattenedPlaylistItem>[] | typeof LOADING
+  >([]);
 
   const [playlistData, arePlaylistItemsRetrieved] = usePlaylistDataStore(
     useShallow((state) => [state.playlistData, state.arePlaylistItemsRetrieved]),
@@ -72,8 +78,11 @@ export const PlaylistSearch = () => {
 
   const handleChange: ComponentProps<typeof TextField>["onChange"] = (event) => {
     const query = event.currentTarget.value;
+    setSearchResults(LOADING);
     searchDebounced(query);
   };
+
+  const isPending = searchResults === LOADING || !arePlaylistItemsRetrieved;
 
   return (
     <Stack sx={styles.container} spacing={1}>
@@ -97,15 +106,18 @@ export const PlaylistSearch = () => {
         }}
       />
       <Typography variant="caption">
-        Showing {Math.min(searchResults.length, MAX_SEARCH_RESULT_COUNT)} of {searchResults.length}{" "}
-        results
+        {isPending
+          ? "Loading..."
+          : `Showing ${Math.min(searchResults.length, MAX_SEARCH_RESULT_COUNT)} of ${searchResults.length} results`}
       </Typography>
 
-      <List sx={styles.searchResultsContainer}>
-        {searchResults.slice(0, MAX_SEARCH_RESULT_COUNT).map(({ item }) => {
-          return <PlaylistSearchResultItem key={item.videoId} item={item} />;
-        })}
-      </List>
+      {isPending ? null : (
+        <List sx={styles.searchResultsContainer}>
+          {searchResults.slice(0, MAX_SEARCH_RESULT_COUNT).map(({ item }) => {
+            return <PlaylistSearchResultItem key={item.videoId} item={item} />;
+          })}
+        </List>
+      )}
     </Stack>
   );
 };
