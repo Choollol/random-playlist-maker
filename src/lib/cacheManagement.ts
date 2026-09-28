@@ -6,13 +6,20 @@ enum LocalStorageKey {
   AllUserData = "allUserData",
 }
 
-interface AllUserData {
-  [userId: UserId]: PlaylistData;
+interface CachedPlaylistData {
+  playlistData: PlaylistData;
+  version: number;
 }
+
+interface AllUserData {
+  [userId: UserId]: CachedPlaylistData;
+}
+
+export const CACHE_CURRENT_VERSION = 1;
 
 let allUserData: AllUserData;
 
-export async function getStoredPlaylistData(userId: UserId): Promise<PlaylistData | null> {
+export async function getStoredPlaylistData(userId: UserId): Promise<CachedPlaylistData | null> {
   if (allUserData === undefined) {
     await loadAllData();
   }
@@ -23,9 +30,13 @@ export async function setUserPlaylistData(userId: UserId, playlistData: Playlist
   if (Object.keys(playlistData).length === 0) {
     return;
   }
-  allUserData[userId] = playlistData;
+  allUserData[userId] = { playlistData, version: CACHE_CURRENT_VERSION };
 
   await localCacheSet(LocalStorageKey.AllUserData, allUserData);
+}
+
+export function isCacheVersionStale(cachedVersion: number | undefined) {
+  return cachedVersion !== CACHE_CURRENT_VERSION;
 }
 
 async function loadAllData() {

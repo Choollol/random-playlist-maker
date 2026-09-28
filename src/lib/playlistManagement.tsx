@@ -1,7 +1,11 @@
 import { signInGoogle } from "@/lib/authClient";
+import {
+  getStoredPlaylistData,
+  isCacheVersionStale,
+  setUserPlaylistData,
+} from "@/lib/cacheManagement";
 import { showError } from "@/lib/error";
 import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
-import { getStoredPlaylistData, setUserPlaylistData } from "@/lib/storageManagement";
 import { Playlist, PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
 import { withRetries } from "@/lib/utils/apiUtils";
@@ -161,18 +165,13 @@ export async function retrievePlaylistData(setMessageCallback: SetMessageCallbac
     const userId = await getUserId();
 
     const storedData = await getStoredPlaylistData(userId);
-    if (storedData !== null) {
-      const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
-      for (const [id, data] of Object.entries(storedData)) {
-        if (Object.hasOwn(playlistData, id)) {
-          playlistData[id] = data;
-        }
-      }
-      usePlaylistDataStore.getState().setPlaylistData(playlistData);
+    const isStoredDataStale = isCacheVersionStale(storedData?.version);
+    if (!isStoredDataStale && storedData !== null) {
+      loadStoredData(storedData.playlistData);
     }
 
     setMessageCallback("Retrieving video data...");
-    await retrievePlaylistItems(setMessageCallback);
+    await retrievePlaylistItems(setMessageCallback, isStoredDataStale);
     usePlaylistDataStore.getState().markPlaylistItemsRetrieved();
 
     updateVideoIds();
@@ -209,7 +208,20 @@ async function retrievePlaylists() {
   usePlaylistDataStore.getState().setPlaylistData(playlistData);
 }
 
-async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
+function loadStoredData(storedPlaylistData: PlaylistData) {
+  const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
+  for (const [id, data] of Object.entries(storedPlaylistData)) {
+    if (Object.hasOwn(playlistData, id)) {
+      playlistData[id] = data;
+    }
+  }
+  usePlaylistDataStore.getState().setPlaylistData(playlistData);
+}
+
+async function retrievePlaylistItems(
+  setMessageCallback: SetMessageCallback,
+  isCacheStale: boolean,
+) {
   const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
 
   let index = 0;
@@ -217,9 +229,10 @@ async function retrievePlaylistItems(setMessageCallback: SetMessageCallback) {
 
   try {
     for (const data of Object.values(playlistData)) {
-      const etag = await checkPlaylistEtag(data.etag, data.playlist.id!);
+      const { isEtagStale, etag } = await checkPlaylistEtag(data.etag, data.playlist.id!);
+      const isStale = isCacheStale || isEtagStale;
 
-      if (etag !== null) {
+      if (isStale) {
         setMessageCallback(
           <>
             Fetching items for playlist

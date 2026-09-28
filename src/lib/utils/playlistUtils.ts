@@ -96,7 +96,6 @@ export function trimPlaylistProperties(playlist: Playlist) {
   delete playlist.snippet?.publishedAt;
   delete playlist.snippet?.channelId;
   delete playlist.snippet?.channelTitle;
-  delete playlist.snippet?.description;
 }
 
 /**
@@ -106,7 +105,6 @@ export function trimPlaylistItemProperties(playlistItem: PlaylistItem) {
   delete playlistItem.kind;
   delete playlistItem.snippet?.channelId;
   delete playlistItem.snippet?.channelTitle;
-  delete playlistItem.snippet?.description;
   delete playlistItem.snippet?.playlistId;
   delete playlistItem.snippet?.position;
   delete playlistItem.snippet?.publishedAt;
@@ -114,7 +112,6 @@ export function trimPlaylistItemProperties(playlistItem: PlaylistItem) {
   delete playlistItem.snippet?.resourceId?.channelId;
   delete playlistItem.snippet?.resourceId?.playlistId;
   delete playlistItem.snippet?.videoOwnerChannelId;
-  delete playlistItem.snippet?.videoOwnerChannelTitle;
 }
 
 /**
@@ -127,7 +124,7 @@ export function trimPlaylistItemProperties(playlistItem: PlaylistItem) {
 export async function checkPlaylistEtag(
   cachedEtag: string,
   playlistId: string,
-): Promise<string | null> {
+): Promise<{ isEtagStale: boolean; etag: string }> {
   const response = await catchQuotaError(
     gapi.client.request({
       path: "https://www.googleapis.com/youtube/v3/playlists",
@@ -139,9 +136,9 @@ export async function checkPlaylistEtag(
     }),
   );
   if (response.status === 304) {
-    return null;
+    return { isEtagStale: false, etag: cachedEtag };
   }
   const body: gapi.client.youtube.PlaylistListResponse = JSON.parse(response.body);
   const newEtag = body.etag!;
-  return newEtag;
+  return { isEtagStale: true, etag: newEtag };
 }
