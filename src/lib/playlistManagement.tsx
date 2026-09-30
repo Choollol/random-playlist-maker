@@ -212,7 +212,8 @@ function loadStoredData(storedPlaylistData: PlaylistData) {
   const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
   for (const [id, data] of Object.entries(storedPlaylistData)) {
     if (Object.hasOwn(playlistData, id)) {
-      playlistData[id] = data;
+      playlistData[id].etag = data.etag;
+      playlistData[id].playlistItems = data.playlistItems;
     }
   }
   usePlaylistDataStore.getState().setPlaylistData(playlistData);
