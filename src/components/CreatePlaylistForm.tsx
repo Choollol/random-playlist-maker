@@ -15,7 +15,7 @@ import {
   DEFAULT_VIDEO_COUNT,
   MAX_VIDEO_COUNT,
   MIN_VIDEO_COUNT,
-} from "@/lib/utils/playlistUtils";
+} from "@/lib/utils/youtubeUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useOverlayMessageStore } from "@/store/useOverlayMessageStore";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";

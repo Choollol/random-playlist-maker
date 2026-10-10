@@ -23,7 +23,7 @@ import {
   PLAYLIST_PART,
   trimPlaylistItemProperties,
   trimPlaylistProperties,
-} from "@/lib/utils/playlistUtils";
+} from "@/lib/utils/youtubeUtils";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 
 export interface CreateRandomizedPlaylistOptions {
