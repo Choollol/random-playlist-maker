@@ -2,9 +2,9 @@ import { AccountCircle } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
 
-import useAuthUserData from "@/hooks/useAuthUserData";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { isDefined } from "@/lib/utils/typeUtils";
+import { useSessionStore } from "@/store/useSessionStore";
 
 const styles = createStyleGroup({
   avatar: {
@@ -14,11 +14,13 @@ const styles = createStyleGroup({
 });
 
 const UserProfilePicture = () => {
-  const userData = useAuthUserData();
+  const session = useSessionStore((state) => state.session);
 
-  return isDefined(userData?.image) ? (
+  const avatar = session?.user.image;
+
+  return isDefined(avatar) ? (
     <Avatar sx={styles.avatar}>
-      <Image src={userData.image} alt="User's profile picture" fill />
+      <Image src={avatar} alt="User's profile picture" fill />
     </Avatar>
   ) : (
     <AccountCircle />

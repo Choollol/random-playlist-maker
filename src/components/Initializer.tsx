@@ -1,13 +1,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import useOnMount from "@/hooks/useOnMount";
 import { signOutGoogle } from "@/lib/authClient";
 import { fetchUserData } from "@/lib/authServerActions";
 import { signInToDatabase } from "@/lib/dbClient";
 import { showError } from "@/lib/error";
 import { initGapiClient } from "@/lib/gapi";
 import { initLocalCache } from "@/lib/localCache";
+import { getUserIdFromData } from "@/lib/utils/authUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 
@@ -37,8 +37,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         if (success) {
           markGapiInitialized();
         } else {
-          await signOutGoogle();
-          router.refresh();
+          await signOutGoogle(router);
         }
       })();
     }
@@ -53,14 +52,16 @@ const Initializer = ({ isGapiLoaded }: Props) => {
     })();
   }, [markLocalCacheInitialized]);
 
-  useOnMount(() => {
+  useEffect(() => {
     (async () => {
       try {
         const userData = await fetchUserData();
         if (!userData) {
           throw new Error("User is not signed in");
         }
-        await signInToDatabase(userData.user.email);
+
+        const userId = getUserIdFromData(userData);
+        await signInToDatabase(userId);
 
         await loadUserPreferences();
         markDatabaseInitialized();
@@ -72,7 +73,7 @@ const Initializer = ({ isGapiLoaded }: Props) => {
         });
       }
     })();
-  });
+  }, [loadUserPreferences, markDatabaseInitialized]);
 
   useEffect(() => {
     if (isGapiInitialized && isLocalCacheInitialized && isDatabaseInitialized) {

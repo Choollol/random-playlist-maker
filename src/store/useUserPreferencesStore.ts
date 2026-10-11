@@ -9,8 +9,8 @@ import {
   saveUserPreferencesToDb,
   UserPreferences,
 } from "@/lib/userPreferences";
-import { getUserId } from "@/lib/utils/authUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
+import { useSessionStore } from "@/store/useSessionStore";
 
 export type FormData = CreateRandomizedPlaylistOptions;
 
@@ -19,7 +19,7 @@ type State = UserPreferences & {
 };
 
 const saveUserPreferences = async (formData: UserPreferences["formData"], onSaved?: () => void) => {
-  const userId = await getUserId();
+  const userId = useSessionStore.getState().getUserId();
   try {
     await saveUserPreferencesToDb(userId, { formData });
   } catch (error) {
@@ -45,7 +45,7 @@ export const useUserPreferencesStore = create(
     },
     loadUserPreferences: async () => {
       set({ isPending: true });
-      const userId = await getUserId();
+      const userId = useSessionStore.getState().getUserId();
       try {
         const preferences = await getUserPreferencesFromDb(userId);
         set({ formData: preferences.formData });

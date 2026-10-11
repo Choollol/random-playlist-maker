@@ -8,7 +8,10 @@ import CreatePlaylistForm from "@/components/CreatePlaylistForm";
 import Initializer from "@/components/Initializer";
 import { PlaylistSearch } from "@/components/PlaylistSearch";
 import RetrievePlaylists from "@/components/RetrievePlaylists";
+import useOnMount from "@/hooks/useOnMount";
+import { Session } from "@/lib/auth";
 import { createStyleGroup } from "@/lib/styling/styling";
+import { useSessionStore } from "@/store/useSessionStore";
 
 const styles = createStyleGroup({
   container: (theme) => ({
@@ -26,14 +29,24 @@ const styles = createStyleGroup({
   }),
 });
 
-const SignedInDisplay = () => {
+interface Props {
+  sessionData: Session;
+}
+
+const SignedInDisplay = ({ sessionData }: Props) => {
   const [isGapiLoaded, setIsGapiLoaded] = useState(false);
+
+  const setSession = useSessionStore((state) => state.setSession);
 
   const handleGapiLoad = () => {
     gapi.load("client", () => {
       setIsGapiLoaded(true);
     });
   };
+
+  useOnMount(() => {
+    setSession(sessionData);
+  });
 
   return (
     <>

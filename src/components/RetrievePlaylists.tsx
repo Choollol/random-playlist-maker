@@ -37,8 +37,7 @@ const RetrievePlaylists = () => {
   };
 
   const signOut = useEffectEvent(async () => {
-    await signOutGoogle();
-    router.refresh();
+    await signOutGoogle(router);
   });
 
   useEffect(() => {

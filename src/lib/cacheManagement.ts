@@ -1,6 +1,6 @@
 import { localCacheGet, localCacheSet } from "@/lib/localCache";
+import { UserId } from "@/lib/types/authTypes";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { UserId } from "@/lib/utils/authUtils";
 
 enum LocalStorageKey {
   AllUserData = "allUserData",

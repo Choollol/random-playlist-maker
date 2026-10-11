@@ -36,8 +36,7 @@ const UserProfileMenu = () => {
 
   const handleSignOutClick = async () => {
     setIsSigningOut(true);
-    await signOutGoogle();
-    router.refresh();
+    await signOutGoogle(router);
   };
 
   return (

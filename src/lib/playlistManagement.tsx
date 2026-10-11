@@ -9,7 +9,6 @@ import { catchQuotaError, PLAYLIST_ITEM_RESOURCE_KIND } from "@/lib/gapi";
 import { Playlist, PrivacyStatus } from "@/lib/types/gapiTypes";
 import { PlaylistData, SetMessageCallback } from "@/lib/types/playlistTypes";
 import { withRetries } from "@/lib/utils/apiUtils";
-import { getUserId, isUserSignedIn } from "@/lib/utils/authUtils";
 import { getRandomElements } from "@/lib/utils/collectionUtils";
 import { waitForMs } from "@/lib/utils/miscUtils";
 import {
@@ -25,6 +24,7 @@ import {
   trimPlaylistProperties,
 } from "@/lib/utils/youtubeUtils";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import { useSessionStore } from "@/store/useSessionStore";
 
 export interface CreateRandomizedPlaylistOptions {
   playlistTitle: string;
@@ -42,7 +42,7 @@ export async function createRandomizedPlaylist({
   setMessageCallback,
 }: CreateRandomizedPlaylistOptions) {
   setMessageCallback("Setting up...");
-  const isSignedIn = await isUserSignedIn();
+  const isSignedIn = useSessionStore.getState().isUserSignedIn();
 
   if (!isSignedIn) {
     showError({
@@ -162,7 +162,7 @@ export async function retrievePlaylistData(setMessageCallback: SetMessageCallbac
     usePlaylistDataStore.getState().markPlaylistsRetrieved();
 
     setMessageCallback("Retrieving user data...");
-    const userId = await getUserId();
+    const userId = useSessionStore.getState().getUserId();
 
     const storedData = await getStoredPlaylistData(userId);
     const isStoredDataStale = isCacheVersionStale(storedData?.version);

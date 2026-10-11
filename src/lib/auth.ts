@@ -18,3 +18,5 @@ export const auth = betterAuth({
     errorURL: "/error/auth",
   },
 });
+
+export type Session = typeof auth.$Infer.Session;

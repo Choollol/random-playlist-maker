@@ -1,9 +1,9 @@
-import useAuthUserData from "@/hooks/useAuthUserData";
+import { useSessionStore } from "@/store/useSessionStore";
 
 /**
  * @returns A boolean indicating whether a user is currently signed in
  */
 export function useIsSignedIn() {
-  const userData = useAuthUserData();
-  return Boolean(userData);
+  const session = useSessionStore((state) => state.session);
+  return Boolean(session);
 }
