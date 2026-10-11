@@ -142,3 +142,7 @@ export async function checkPlaylistEtag(
   const newEtag = body.etag!;
   return { isEtagStale: true, etag: newEtag };
 }
+
+export function getVideoLink(videoId: string) {
+  return `https://www.youtube.com/watch?v=${videoId}`;
+}

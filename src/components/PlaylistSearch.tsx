@@ -41,7 +41,7 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
       const videoId = playlistItem.contentDetails!.videoId!;
       if (!videoIdToItem.has(videoId)) {
         videoIdToItem.set(videoId, {
-          videoId: playlistItem.id!,
+          videoId,
           playlistTitles: [],
           videoTitle: playlistItem.snippet!.title!,
           videoDescription: playlistItem.snippet!.description!,

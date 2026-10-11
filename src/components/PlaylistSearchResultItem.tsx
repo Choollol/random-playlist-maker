@@ -2,6 +2,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Collapse, Divider, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { useState } from "react";
 
+import { YoutubeVideoLink } from "@/components/YoutubeVideoLink";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
 
 interface Props {
@@ -26,6 +27,9 @@ export const PlaylistSearchResultItem = ({ item }: Props) => {
           <ListItem>Video title: {item.videoTitle}</ListItem>
           <ListItem>Uploaded by: {item.channelTitle}</ListItem>
           <ListItem>Included in: {item.playlistTitles.join(", ")}</ListItem>
+          <ListItem>
+            <YoutubeVideoLink videoId={item.videoId} />
+          </ListItem>
         </List>
       </Collapse>
       <Divider />
