@@ -3,7 +3,17 @@ import { Collapse, Divider, List, ListItem, ListItemButton, ListItemText } from 
 import { useState } from "react";
 
 import { YoutubeVideoLink } from "@/components/YoutubeVideoLink";
+import { createStyleGroup } from "@/lib/styling/styling";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
+
+const styles = createStyleGroup({
+  rowButtonText: {
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    maxWidth: "100%",
+  },
+});
 
 interface Props {
   item: FlattenedPlaylistItem;
@@ -19,7 +29,9 @@ export const PlaylistSearchResultItem = ({ item }: Props) => {
   return (
     <>
       <ListItemButton onClick={handleClick}>
-        <ListItemText>{item.videoTitle}</ListItemText>
+        <ListItemText slotProps={{ primary: { sx: styles.rowButtonText } }}>
+          {item.videoTitle}
+        </ListItemText>
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open}>
