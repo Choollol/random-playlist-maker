@@ -1,9 +1,10 @@
 import { Search } from "@mui/icons-material";
-import { debounce, InputAdornment, List, Stack, TextField, Typography } from "@mui/material";
+import { debounce, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import Fuse, { FuseResult } from "fuse.js";
 import { ComponentProps, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
+import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
 import { PlaylistSearchResultItem } from "@/components/PlaylistSearchResultItem";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
@@ -30,7 +31,6 @@ const styles = createStyleGroup({
 });
 
 const SEARCH_THRESHOLD = 0.3;
-const MAX_SEARCH_RESULT_COUNT = 50;
 
 function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[] {
   const videoIdToItem = new Map<string, FlattenedPlaylistItem>();
@@ -108,15 +108,17 @@ export const PlaylistSearch = () => {
       <Typography variant="caption">
         {isLoading || !arePlaylistItemsRetrieved
           ? "Loading..."
-          : `Showing ${Math.min(searchResults.length, MAX_SEARCH_RESULT_COUNT)} of ${searchResults.length} results`}
+          : `Showing ${searchResults.length} results`}
       </Typography>
 
       {!arePlaylistItemsRetrieved ? null : (
-        <List sx={styles.searchResultsContainer}>
-          {searchResults.slice(0, MAX_SEARCH_RESULT_COUNT).map(({ item }) => {
-            return <PlaylistSearchResultItem key={item.videoId} item={item} />;
-          })}
-        </List>
+        <div style={styles.searchResultsContainer}>
+          <InfiniteScrollList
+            items={searchResults}
+            showMoreCount={50}
+            renderItem={({ item }) => <PlaylistSearchResultItem key={item.videoId} item={item} />}
+          />
+        </div>
       )}
     </Stack>
   );
