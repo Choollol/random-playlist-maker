@@ -6,6 +6,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
 import { PlaylistSearchResultItem } from "@/components/PlaylistSearchResultItem";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
@@ -120,6 +121,8 @@ export const PlaylistSearch = () => {
           />
         </div>
       )}
+
+      <ScrollToTopButton />
     </Stack>
   );
 };
