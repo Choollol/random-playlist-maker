@@ -1,5 +1,4 @@
-import { Search } from "@mui/icons-material";
-import { debounce, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import { debounce, Stack, TextField, Typography } from "@mui/material";
 import Fuse, { FuseResult } from "fuse.js";
 import { ComponentProps, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
@@ -7,6 +6,7 @@ import { useShallow } from "zustand/react/shallow";
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { PlaylistSearchResultItem } from "@/components/search/PlaylistSearchResultItem";
+import { SearchInput } from "@/components/search/SearchInput";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
@@ -18,9 +18,6 @@ const styles = createStyleGroup({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "100%",
-  },
-  inputField: {
     width: "100%",
   },
   searchResultsContainer: {
@@ -87,25 +84,7 @@ export const PlaylistSearch = () => {
 
   return (
     <Stack sx={styles.container} spacing={1}>
-      <TextField
-        sx={styles.inputField}
-        onChange={handleChange}
-        placeholder={
-          arePlaylistItemsRetrieved
-            ? "Search videos in your playlists"
-            : "Search will be available once your data is retrieved"
-        }
-        disabled={!arePlaylistItemsRetrieved}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
+      <SearchInput onChange={handleChange} disabled={!arePlaylistItemsRetrieved} />
       <Typography variant="caption">
         {isLoading || !arePlaylistItemsRetrieved
           ? "Loading..."
