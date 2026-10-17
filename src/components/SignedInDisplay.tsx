@@ -6,8 +6,8 @@ import { useState } from "react";
 
 import CreatePlaylistForm from "@/components/CreatePlaylistForm";
 import Initializer from "@/components/Initializer";
-import { PlaylistSearch } from "@/components/PlaylistSearch";
 import RetrievePlaylists from "@/components/RetrievePlaylists";
+import { PlaylistSearch } from "@/components/search/PlaylistSearch";
 import useOnMount from "@/hooks/useOnMount";
 import { Session } from "@/lib/auth";
 import { createStyleGroup } from "@/lib/styling/styling";

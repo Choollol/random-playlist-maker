@@ -5,8 +5,8 @@ import { ComponentProps, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
-import { PlaylistSearchResultItem } from "@/components/PlaylistSearchResultItem";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { PlaylistSearchResultItem } from "@/components/search/PlaylistSearchResultItem";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
