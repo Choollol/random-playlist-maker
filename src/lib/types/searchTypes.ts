@@ -10,5 +10,5 @@ export type FlattenedPlaylistItem = Record<
 
 export interface SortOption {
   name: string;
-  sort: (a: FlattenedPlaylistItem, b: FlattenedPlaylistItem) => number;
+  sort: null | ((a: FlattenedPlaylistItem, b: FlattenedPlaylistItem) => number);
 }

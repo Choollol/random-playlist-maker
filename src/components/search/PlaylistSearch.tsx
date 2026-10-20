@@ -11,7 +11,12 @@ import { SortSelect } from "@/components/search/SortSelect";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
 import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
-import { getSortCallback, searchKeys, SortOptionId } from "@/lib/utils/searchUtils";
+import {
+  DEFAULT_SORT_OPTION_ID,
+  getSortCallback,
+  searchKeys,
+  SortOptionId,
+} from "@/lib/utils/searchUtils";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
 
 const styles = createStyleGroup({
@@ -36,6 +41,11 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
   for (const playlist of Object.values(playlistData)) {
     const playlistTitle = playlist.playlist.snippet!.title!;
     for (const playlistItem of playlist.playlistItems) {
+      // Skip private videos that user can't access
+      if (playlistItem.snippet?.videoOwnerChannelTitle === undefined) {
+        continue;
+      }
+
       const videoId = playlistItem.contentDetails!.videoId!;
       if (!videoIdToItem.has(videoId)) {
         videoIdToItem.set(videoId, {
@@ -56,7 +66,7 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
 export const PlaylistSearch = () => {
   const [searchResults, setSearchResults] = useState<FlattenedPlaylistItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOptionId, setSortOptionId] = useState<SortOptionId>("channel-title-ascending");
+  const [sortOptionId, setSortOptionId] = useState(DEFAULT_SORT_OPTION_ID);
 
   const [playlistData, arePlaylistItemsRetrieved] = usePlaylistDataStore(
     useShallow((state) => [state.playlistData, state.arePlaylistItemsRetrieved]),
@@ -72,7 +82,8 @@ export const PlaylistSearch = () => {
   const searchDebounced = useMemo(
     () =>
       debounce((query) => {
-        setSearchResults(searchEngine.search(query).map(({ item }) => item));
+        const results = searchEngine.search(query).map(({ item }) => item);
+        setSearchResults(results);
         setIsLoading(false);
       }, 300),
     [searchEngine],
@@ -85,8 +96,14 @@ export const PlaylistSearch = () => {
   };
 
   const handleSortChange: ComponentProps<typeof SortSelect>["onChange"] = (event) => {
-    setSortOptionId(event.target.value as SortOptionId);
+    const optionId = event.target.value as SortOptionId;
+    setSortOptionId(optionId);
   };
+
+  const searchResultsProcessed = useMemo(() => {
+    const sortCallback = getSortCallback(sortOptionId);
+    return sortCallback === null ? searchResults : searchResults.toSorted(sortCallback);
+  }, [searchResults, sortOptionId]);
 
   return (
     <Stack sx={styles.container} spacing={1}>
@@ -105,10 +122,9 @@ export const PlaylistSearch = () => {
       {!arePlaylistItemsRetrieved ? null : (
         <div style={styles.searchResultsContainer}>
           <InfiniteScrollList
-            items={searchResults}
+            items={searchResultsProcessed}
             showMoreCount={50}
             renderItem={(item) => <PlaylistSearchResultItem key={item.videoId} item={item} />}
-            sortItems={getSortCallback(sortOptionId)}
           />
         </div>
       )}

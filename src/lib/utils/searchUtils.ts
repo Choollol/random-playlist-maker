@@ -8,6 +8,10 @@ export const searchKeys = [
 ] as const;
 
 export const sortOptions = {
+  default: {
+    name: "Default View",
+    sort: null,
+  },
   "channel-title-ascending": {
     name: "Channel Name A-Z",
     sort: (a, b) => a.channelTitle.localeCompare(b.channelTitle),
@@ -35,6 +39,8 @@ export const sortOptions = {
 } as const satisfies Record<string, SortOption>;
 
 export type SortOptionId = keyof typeof sortOptions;
+
+export const DEFAULT_SORT_OPTION_ID: SortOptionId = "default";
 
 export function getSortCallback(id: SortOptionId): SortOption["sort"] {
   return sortOptions[id].sort;

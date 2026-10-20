@@ -8,16 +8,18 @@ const styles = createStyleGroup({
   list: {
     textAlign: "center",
   },
+  endText: {
+    marginTop: 3,
+  },
 });
 
 interface Props<T> {
   items: T[];
   showMoreCount: number;
   renderItem: (item: T) => ReactNode;
-  sortItems?: (a: T, b: T) => number;
 }
 
-export function InfiniteScrollList<T>({ items, showMoreCount, renderItem, sortItems }: Props<T>) {
+export function InfiniteScrollList<T>({ items, showMoreCount, renderItem }: Props<T>) {
   const [itemsShown, setItemsShown] = useState(showMoreCount);
 
   const [prevItems, setPrevItems] = useState(items);
@@ -27,16 +29,13 @@ export function InfiniteScrollList<T>({ items, showMoreCount, renderItem, sortIt
   }
 
   const showMoreItems = () => {
-    setItemsShown(itemsShown + showMoreCount);
+    setItemsShown((current) => current + showMoreCount);
   };
 
   const itemsToRender = useMemo(() => {
     let result = items.slice(0, itemsShown);
-    if (sortItems) {
-      result = result.sort(sortItems);
-    }
     return result;
-  }, [items, itemsShown, sortItems]);
+  }, [items, itemsShown]);
 
   return (
     <List
@@ -45,8 +44,10 @@ export function InfiniteScrollList<T>({ items, showMoreCount, renderItem, sortIt
       dataLength={itemsShown}
       next={showMoreItems}
       hasMore={itemsShown < items.length}
-      loader={<Typography>Loading...</Typography>}
-      endMessage={items.length > 0 ? <Typography>All results shown</Typography> : null}
+      loader={<Typography sx={styles.endText}>Loading...</Typography>}
+      endMessage={
+        items.length > 0 ? <Typography sx={styles.endText}>All results shown</Typography> : null
+      }
     >
       {itemsToRender.map(renderItem)}
     </List>
