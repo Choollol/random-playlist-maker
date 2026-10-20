@@ -7,3 +7,8 @@ export type FlattenedPlaylistItem = Record<
   playlistTitles: string[];
   videoId: string;
 };
+
+export interface SortOption {
+  name: string;
+  sort: (a: FlattenedPlaylistItem, b: FlattenedPlaylistItem) => number;
+}
