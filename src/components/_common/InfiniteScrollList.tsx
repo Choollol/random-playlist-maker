@@ -1,6 +1,14 @@
-import { List } from "@mui/material";
+import { List, Typography } from "@mui/material";
 import { ReactNode, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+import { createStyleGroup } from "@/lib/styling/styling";
+
+const styles = createStyleGroup({
+  list: {
+    textAlign: "center",
+  },
+});
 
 interface Props<T> {
   items: T[];
@@ -32,11 +40,13 @@ export function InfiniteScrollList<T>({ items, showMoreCount, renderItem, sortIt
 
   return (
     <List
+      sx={styles.list}
       component={InfiniteScroll}
       dataLength={itemsShown}
       next={showMoreItems}
       hasMore={itemsShown < items.length}
-      loader={null}
+      loader={<Typography>Loading...</Typography>}
+      endMessage={items.length > 0 ? <Typography>All results shown</Typography> : null}
     >
       {itemsToRender.map(renderItem)}
     </List>
