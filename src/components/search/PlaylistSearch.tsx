@@ -137,7 +137,7 @@ export const PlaylistSearch = () => {
       <Typography variant="caption">
         {isLoading || !arePlaylistItemsRetrieved
           ? "Loading..."
-          : `Showing ${searchResults.length} results`}
+          : `Showing ${searchResultsProcessed.length} results`}
       </Typography>
 
       {!arePlaylistItemsRetrieved ? null : (
