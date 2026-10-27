@@ -12,3 +12,16 @@ export interface SortOption {
   name: string;
   sort: null | ((a: FlattenedPlaylistItem, b: FlattenedPlaylistItem) => number);
 }
+
+export interface SearchFilters {
+  doUseExcludedPlaylists: boolean;
+}
+
+interface UpdateExcludePlaylistsFilterParams {
+  type: "doUseExcludedPlaylists";
+  value: boolean;
+}
+
+export type UpdateFilterParams = UpdateExcludePlaylistsFilterParams;
+
+export type UpdateFilter = (params: UpdateFilterParams) => void;

@@ -1,23 +1,26 @@
 import { debounce, Stack, TextField, Typography } from "@mui/material";
 import Fuse from "fuse.js";
-import { ComponentProps, useMemo, useState } from "react";
+import { ComponentProps, useMemo, useReducer, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { PlaylistSearchResultItem } from "@/components/search/PlaylistSearchResultItem";
+import { SearchFiltersDropdown } from "@/components/search/SearchFiltersDropdown";
 import { SearchInput } from "@/components/search/SearchInput";
 import { SortSelect } from "@/components/search/SortSelect";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { FlattenedPlaylistItem } from "@/lib/types/searchTypes";
+import { FlattenedPlaylistItem, SearchFilters, UpdateFilterParams } from "@/lib/types/searchTypes";
 import {
   DEFAULT_SORT_OPTION_ID,
+  filterOutExcludedPlaylists,
   getSortCallback,
   searchKeys,
   SortOptionId,
 } from "@/lib/utils/searchUtils";
 import { usePlaylistDataStore } from "@/store/usePlaylistDataStore";
+import { useUserPreferencesStore } from "@/store/useUserPreferencesStore";
 
 const styles = createStyleGroup({
   container: {
@@ -63,14 +66,24 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
   return Array.from(videoIdToItem.values());
 }
 
+function filtersReducer(state: SearchFilters, action: UpdateFilterParams): SearchFilters {
+  if (action.type === "doUseExcludedPlaylists") {
+    return { ...state, doUseExcludedPlaylists: action.value };
+  }
+  return state;
+}
+
 export const PlaylistSearch = () => {
   const [searchResults, setSearchResults] = useState<FlattenedPlaylistItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOptionId, setSortOptionId] = useState(DEFAULT_SORT_OPTION_ID);
+  const [filters, updateFilter] = useReducer(filtersReducer, { doUseExcludedPlaylists: false });
 
   const [playlistData, arePlaylistItemsRetrieved] = usePlaylistDataStore(
     useShallow((state) => [state.playlistData, state.arePlaylistItemsRetrieved]),
   );
+
+  const formData = useUserPreferencesStore((state) => state.formData);
 
   const searchEngine = useMemo(() => {
     return new Fuse(flattenPlaylistData(playlistData), {
@@ -101,9 +114,16 @@ export const PlaylistSearch = () => {
   };
 
   const searchResultsProcessed = useMemo(() => {
+    let result = searchResults;
     const sortCallback = getSortCallback(sortOptionId);
-    return sortCallback === null ? searchResults : searchResults.toSorted(sortCallback);
-  }, [searchResults, sortOptionId]);
+    if (sortCallback !== null) {
+      result = searchResults.toSorted(sortCallback);
+    }
+    if (filters.doUseExcludedPlaylists && formData.excludedPlaylistNames) {
+      result = filterOutExcludedPlaylists(result, formData.excludedPlaylistNames);
+    }
+    return result;
+  }, [searchResults, sortOptionId, filters, formData.excludedPlaylistNames]);
 
   return (
     <Stack sx={styles.container} spacing={1}>
@@ -111,6 +131,7 @@ export const PlaylistSearch = () => {
 
       <Stack direction="row">
         <SortSelect value={sortOptionId} onChange={handleSortChange} />
+        <SearchFiltersDropdown filters={filters} updateFilter={updateFilter} />
       </Stack>
 
       <Typography variant="caption">

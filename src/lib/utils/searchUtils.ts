@@ -1,4 +1,4 @@
-import { SortOption } from "@/lib/types/searchTypes";
+import { FlattenedPlaylistItem, SearchFilters, SortOption } from "@/lib/types/searchTypes";
 
 export const searchKeys = [
   "playlistTitles",
@@ -44,4 +44,20 @@ export const DEFAULT_SORT_OPTION_ID: SortOptionId = "default";
 
 export function getSortCallback(id: SortOptionId): SortOption["sort"] {
   return sortOptions[id].sort;
+}
+
+export function filterOutExcludedPlaylists(
+  items: FlattenedPlaylistItem[],
+  excludedPlaylistNames: string[],
+): FlattenedPlaylistItem[] {
+  const excludedPlaylists = new Set(excludedPlaylistNames);
+  return items.filter((item) => !item.playlistTitles.some((title) => excludedPlaylists.has(title)));
+}
+
+export function getActiveFilterCount(filters: SearchFilters) {
+  let activeFilters = 0;
+  if (filters.doUseExcludedPlaylists) {
+    activeFilters++;
+  }
+  return activeFilters;
 }
