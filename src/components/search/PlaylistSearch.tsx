@@ -1,6 +1,6 @@
 import { debounce, Stack, TextField, Typography } from "@mui/material";
 import Fuse from "fuse.js";
-import { ComponentProps, useMemo, useState } from "react";
+import { ComponentProps, useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
@@ -40,7 +40,8 @@ const styles = createStyleGroup({
   },
 });
 
-const SEARCH_THRESHOLD = 0.3;
+const FUZZY_SEARCH_THRESHOLD = 0.3;
+const EXACT_SEARCH_THRESHOLD = 0.0;
 
 function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[] {
   const videoIdToItem = new Map<string, FlattenedPlaylistItem>();
@@ -70,6 +71,7 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
 }
 
 export const PlaylistSearch = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<FlattenedPlaylistItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -87,6 +89,8 @@ export const PlaylistSearch = () => {
   const updateSearchFilter: UpdateSearchFilter = (params: UpdateSearchFilterParams) => {
     if (params.type === "doUseExcludedPlaylists") {
       setSearchFilters({ ...searchFilters, doUseExcludedPlaylists: params.value });
+    } else if (params.type === "matchExact") {
+      setSearchFilters({ ...searchFilters, matchExact: params.value });
     }
   };
 
@@ -97,13 +101,13 @@ export const PlaylistSearch = () => {
   const searchEngine = useMemo(() => {
     return new Fuse(flattenPlaylistData(playlistData), {
       keys: searchKeys.slice(),
-      threshold: SEARCH_THRESHOLD,
+      threshold: searchFilters.matchExact ? EXACT_SEARCH_THRESHOLD : FUZZY_SEARCH_THRESHOLD,
     });
-  }, [playlistData]);
+  }, [playlistData, searchFilters.matchExact]);
 
   const searchDebounced = useMemo(
     () =>
-      debounce((query) => {
+      debounce((query: string) => {
         const results = searchEngine.search(query).map(({ item }) => item);
         setSearchResults(results);
         setIsLoading(false);
@@ -111,10 +115,14 @@ export const PlaylistSearch = () => {
     [searchEngine],
   );
 
+  useEffect(() => {
+    searchDebounced(searchQuery);
+  }, [searchDebounced, searchQuery, searchEngine]);
+
   const handleInputChange: ComponentProps<typeof TextField>["onChange"] = (event) => {
     const query = event.currentTarget.value;
     setIsLoading(true);
-    searchDebounced(query);
+    setSearchQuery(query);
   };
 
   const handleSortChange: ComponentProps<typeof SortSelect>["onChange"] = (event) => {

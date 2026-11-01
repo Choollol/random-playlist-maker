@@ -10,7 +10,7 @@ const styles = createStyleGroup({
   icon: {
     marginRight: 1,
   },
-  useExcludedPlaylists: {
+  checkboxRow: {
     marginLeft: 1,
     marginRight: 2,
   },
@@ -28,6 +28,9 @@ export const SearchFiltersDropdown = ({ searchFilters, updateSearchFilter }: Pro
   const handleExcludedPlaylistsChange: ComponentProps<typeof Checkbox>["onChange"] = (event) => {
     updateSearchFilter({ type: "doUseExcludedPlaylists", value: event.target.checked });
   };
+  const handleMatchExactChange: ComponentProps<typeof Checkbox>["onChange"] = (event) => {
+    updateSearchFilter({ type: "matchExact", value: event.target.checked });
+  };
 
   return (
     <Select
@@ -39,12 +42,16 @@ export const SearchFiltersDropdown = ({ searchFilters, updateSearchFilter }: Pro
       multiple
       value={DUMMY_VALUE}
     >
-      <Box sx={styles.useExcludedPlaylists}>
+      <Box sx={styles.checkboxRow}>
         <Checkbox
           onChange={handleExcludedPlaylistsChange}
           checked={searchFilters.doUseExcludedPlaylists}
         />
         Filter excluded playlists
+      </Box>
+      <Box sx={styles.checkboxRow}>
+        <Checkbox onChange={handleMatchExactChange} checked={searchFilters.matchExact} />
+        Only show exact matches
       </Box>
     </Select>
   );

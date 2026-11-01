@@ -43,7 +43,10 @@ const saveUserPreferencesDebounced = debounce(saveUserPreferences, 1000);
 const initialState: State = {
   formData: {},
   searchSortId: DEFAULT_SORT_OPTION_ID,
-  searchFilters: { doUseExcludedPlaylists: false },
+  searchFilters: {
+    doUseExcludedPlaylists: false,
+    matchExact: false,
+  },
   isPending: false,
 };
 

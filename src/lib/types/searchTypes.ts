@@ -15,6 +15,7 @@ export interface SortOption {
 
 export interface SearchFilters {
   doUseExcludedPlaylists: boolean;
+  matchExact: boolean;
 }
 
 interface UpdateExcludePlaylistsFilterParams {
@@ -22,6 +23,13 @@ interface UpdateExcludePlaylistsFilterParams {
   value: boolean;
 }
 
-export type UpdateSearchFilterParams = UpdateExcludePlaylistsFilterParams;
+interface UpdateMatchExactFilterParams {
+  type: "matchExact";
+  value: boolean;
+}
+
+export type UpdateSearchFilterParams =
+  | UpdateExcludePlaylistsFilterParams
+  | UpdateMatchExactFilterParams;
 
 export type UpdateSearchFilter = (params: UpdateSearchFilterParams) => void;

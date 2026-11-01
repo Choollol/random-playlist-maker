@@ -59,5 +59,8 @@ export function getActiveSearchFilterCount(filters: SearchFilters) {
   if (filters.doUseExcludedPlaylists) {
     activeFilters++;
   }
+  if (filters.matchExact) {
+    activeFilters++;
+  }
   return activeFilters;
 }
