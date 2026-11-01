@@ -54,7 +54,7 @@ export function filterOutExcludedPlaylists(
   return items.filter((item) => !item.playlistTitles.some((title) => excludedPlaylists.has(title)));
 }
 
-export function getActiveFilterCount(filters: SearchFilters) {
+export function getActiveSearchFilterCount(filters: SearchFilters) {
   let activeFilters = 0;
   if (filters.doUseExcludedPlaylists) {
     activeFilters++;

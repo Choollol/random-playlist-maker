@@ -22,6 +22,6 @@ interface UpdateExcludePlaylistsFilterParams {
   value: boolean;
 }
 
-export type UpdateFilterParams = UpdateExcludePlaylistsFilterParams;
+export type UpdateSearchFilterParams = UpdateExcludePlaylistsFilterParams;
 
-export type UpdateFilter = (params: UpdateFilterParams) => void;
+export type UpdateSearchFilter = (params: UpdateSearchFilterParams) => void;

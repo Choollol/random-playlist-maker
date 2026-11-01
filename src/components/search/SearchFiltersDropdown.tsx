@@ -3,8 +3,8 @@ import { Box, Checkbox, Select } from "@mui/material";
 import { ComponentProps } from "react";
 
 import { createStyleGroup } from "@/lib/styling/styling";
-import { SearchFilters, UpdateFilter } from "@/lib/types/searchTypes";
-import { getActiveFilterCount } from "@/lib/utils/searchUtils";
+import { SearchFilters, UpdateSearchFilter } from "@/lib/types/searchTypes";
+import { getActiveSearchFilterCount } from "@/lib/utils/searchUtils";
 
 const styles = createStyleGroup({
   icon: {
@@ -17,23 +17,23 @@ const styles = createStyleGroup({
 });
 
 interface Props {
-  filters: SearchFilters;
-  updateFilter: UpdateFilter;
+  searchFilters: SearchFilters;
+  updateSearchFilter: UpdateSearchFilter;
 }
 
 // Select needs at least 1 value to call renderValue
 const DUMMY_VALUE = [1];
 
-export const SearchFiltersDropdown = ({ filters, updateFilter }: Props) => {
+export const SearchFiltersDropdown = ({ searchFilters, updateSearchFilter }: Props) => {
   const handleExcludedPlaylistsChange: ComponentProps<typeof Checkbox>["onChange"] = (event) => {
-    updateFilter({ type: "doUseExcludedPlaylists", value: event.target.checked });
+    updateSearchFilter({ type: "doUseExcludedPlaylists", value: event.target.checked });
   };
 
   return (
     <Select
       startAdornment={<Tune sx={styles.icon} />}
       renderValue={() => {
-        const activeFilters = getActiveFilterCount(filters);
+        const activeFilters = getActiveSearchFilterCount(searchFilters);
         return `${activeFilters} active filter${activeFilters === 1 ? "" : "s"}`;
       }}
       multiple
@@ -42,7 +42,7 @@ export const SearchFiltersDropdown = ({ filters, updateFilter }: Props) => {
       <Box sx={styles.useExcludedPlaylists}>
         <Checkbox
           onChange={handleExcludedPlaylistsChange}
-          checked={filters.doUseExcludedPlaylists}
+          checked={searchFilters.doUseExcludedPlaylists}
         />
         Filter excluded playlists
       </Box>

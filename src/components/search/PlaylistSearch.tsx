@@ -11,7 +11,11 @@ import { SearchInput } from "@/components/search/SearchInput";
 import { SortSelect } from "@/components/search/SortSelect";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { FlattenedPlaylistItem, UpdateFilter, UpdateFilterParams } from "@/lib/types/searchTypes";
+import {
+  FlattenedPlaylistItem,
+  UpdateSearchFilter,
+  UpdateSearchFilterParams,
+} from "@/lib/types/searchTypes";
 import {
   filterOutExcludedPlaylists,
   getSortCallback,
@@ -80,7 +84,7 @@ export const PlaylistSearch = () => {
       })),
     );
 
-  const updateFilter: UpdateFilter = (params: UpdateFilterParams) => {
+  const updateSearchFilter: UpdateSearchFilter = (params: UpdateSearchFilterParams) => {
     if (params.type === "doUseExcludedPlaylists") {
       setSearchFilters({ ...searchFilters, doUseExcludedPlaylists: params.value });
     }
@@ -136,7 +140,10 @@ export const PlaylistSearch = () => {
 
       <Stack direction="row">
         <SortSelect value={searchSortId} onChange={handleSortChange} />
-        <SearchFiltersDropdown filters={searchFilters} updateFilter={updateFilter} />
+        <SearchFiltersDropdown
+          searchFilters={searchFilters}
+          updateSearchFilter={updateSearchFilter}
+        />
       </Stack>
 
       <Typography variant="caption">
