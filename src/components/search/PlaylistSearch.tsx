@@ -1,6 +1,6 @@
 import { debounce, Stack, TextField, Typography } from "@mui/material";
 import Fuse from "fuse.js";
-import { ComponentProps, useMemo, useReducer, useState } from "react";
+import { ComponentProps, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { InfiniteScrollList } from "@/components/_common/InfiniteScrollList";
@@ -11,9 +11,8 @@ import { SearchInput } from "@/components/search/SearchInput";
 import { SortSelect } from "@/components/search/SortSelect";
 import { createStyleGroup } from "@/lib/styling/styling";
 import { PlaylistData } from "@/lib/types/playlistTypes";
-import { FlattenedPlaylistItem, SearchFilters, UpdateFilterParams } from "@/lib/types/searchTypes";
+import { FlattenedPlaylistItem, UpdateFilter, UpdateFilterParams } from "@/lib/types/searchTypes";
 import {
-  DEFAULT_SORT_OPTION_ID,
   filterOutExcludedPlaylists,
   getSortCallback,
   searchKeys,
@@ -66,24 +65,30 @@ function flattenPlaylistData(playlistData: PlaylistData): FlattenedPlaylistItem[
   return Array.from(videoIdToItem.values());
 }
 
-function filtersReducer(state: SearchFilters, action: UpdateFilterParams): SearchFilters {
-  if (action.type === "doUseExcludedPlaylists") {
-    return { ...state, doUseExcludedPlaylists: action.value };
-  }
-  return state;
-}
-
 export const PlaylistSearch = () => {
   const [searchResults, setSearchResults] = useState<FlattenedPlaylistItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOptionId, setSortOptionId] = useState(DEFAULT_SORT_OPTION_ID);
-  const [filters, updateFilter] = useReducer(filtersReducer, { doUseExcludedPlaylists: false });
+
+  const { formData, searchSortId, setSearchSort, searchFilters, setSearchFilters } =
+    useUserPreferencesStore(
+      useShallow(({ formData, searchSortId, setSearchSort, searchFilters, setSearchFilters }) => ({
+        formData,
+        searchSortId,
+        setSearchSort,
+        searchFilters,
+        setSearchFilters,
+      })),
+    );
+
+  const updateFilter: UpdateFilter = (params: UpdateFilterParams) => {
+    if (params.type === "doUseExcludedPlaylists") {
+      setSearchFilters({ ...searchFilters, doUseExcludedPlaylists: params.value });
+    }
+  };
 
   const [playlistData, arePlaylistItemsRetrieved] = usePlaylistDataStore(
     useShallow((state) => [state.playlistData, state.arePlaylistItemsRetrieved]),
   );
-
-  const formData = useUserPreferencesStore((state) => state.formData);
 
   const searchEngine = useMemo(() => {
     return new Fuse(flattenPlaylistData(playlistData), {
@@ -110,28 +115,28 @@ export const PlaylistSearch = () => {
 
   const handleSortChange: ComponentProps<typeof SortSelect>["onChange"] = (event) => {
     const optionId = event.target.value as SortOptionId;
-    setSortOptionId(optionId);
+    setSearchSort(optionId);
   };
 
   const searchResultsProcessed = useMemo(() => {
     let result = searchResults;
-    const sortCallback = getSortCallback(sortOptionId);
+    const sortCallback = getSortCallback(searchSortId);
     if (sortCallback !== null) {
       result = searchResults.toSorted(sortCallback);
     }
-    if (filters.doUseExcludedPlaylists && formData.excludedPlaylistNames) {
+    if (searchFilters.doUseExcludedPlaylists && formData.excludedPlaylistNames) {
       result = filterOutExcludedPlaylists(result, formData.excludedPlaylistNames);
     }
     return result;
-  }, [searchResults, sortOptionId, filters, formData.excludedPlaylistNames]);
+  }, [searchResults, searchSortId, searchFilters, formData.excludedPlaylistNames]);
 
   return (
     <Stack sx={styles.container} spacing={1}>
       <SearchInput onChange={handleInputChange} disabled={!arePlaylistItemsRetrieved} />
 
       <Stack direction="row">
-        <SortSelect value={sortOptionId} onChange={handleSortChange} />
-        <SearchFiltersDropdown filters={filters} updateFilter={updateFilter} />
+        <SortSelect value={searchSortId} onChange={handleSortChange} />
+        <SearchFiltersDropdown filters={searchFilters} updateFilter={updateFilter} />
       </Stack>
 
       <Typography variant="caption">

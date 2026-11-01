@@ -9,6 +9,7 @@ import {
   saveUserPreferencesToDb,
   UserPreferences,
 } from "@/lib/userPreferences";
+import { DEFAULT_SORT_OPTION_ID } from "@/lib/utils/searchUtils";
 import { useInitializationStateStore } from "@/store/useInitializationStateStore";
 import { useSessionStore } from "@/store/useSessionStore";
 
@@ -18,10 +19,14 @@ type State = UserPreferences & {
   isPending: boolean;
 };
 
-const saveUserPreferences = async (formData: UserPreferences["formData"], onSaved?: () => void) => {
+function pickPreferences({ formData, searchSortId, searchFilters }: State): UserPreferences {
+  return { formData, searchSortId, searchFilters };
+}
+
+const saveUserPreferences = async (userPreferences: UserPreferences, onSaved?: () => void) => {
   const userId = useSessionStore.getState().getUserId();
   try {
-    await saveUserPreferencesToDb(userId, { formData });
+    await saveUserPreferencesToDb(userId, userPreferences);
   } catch (error) {
     showError({
       type: "recoverable",
@@ -35,37 +40,62 @@ const saveUserPreferences = async (formData: UserPreferences["formData"], onSave
 
 const saveUserPreferencesDebounced = debounce(saveUserPreferences, 1000);
 
-const initialState: State = { formData: {}, isPending: false };
+const initialState: State = {
+  formData: {},
+  searchSortId: DEFAULT_SORT_OPTION_ID,
+  searchFilters: { doUseExcludedPlaylists: false },
+  isPending: false,
+};
 
 export const useUserPreferencesStore = create(
-  combine(initialState, (set, get) => ({
-    saveUserPreferences: () => {
+  combine(initialState, (set, get) => {
+    const saveDebounced = () => {
       set({ isPending: true });
-      saveUserPreferences(get().formData, () => set({ isPending: false }));
-    },
-    loadUserPreferences: async () => {
-      set({ isPending: true });
-      const userId = useSessionStore.getState().getUserId();
-      try {
-        const preferences = await getUserPreferencesFromDb(userId);
-        set({ formData: preferences.formData });
-        return true;
-      } catch (error) {
-        showError({
-          type: "recoverable",
-          message: `Something went wrong while loading your preferences: ${error}`,
-          error,
-        });
-        return false;
-      } finally {
-        set({ isPending: false });
-      }
-    },
-    setFormData: (formData: UserPreferences["formData"]) => {
-      set({ formData, isPending: true });
       if (useInitializationStateStore.getState().isDatabaseInitialized) {
-        saveUserPreferencesDebounced(formData, () => set({ isPending: false }));
+        saveUserPreferencesDebounced(pickPreferences(get()), () => set({ isPending: false }));
       }
-    },
-  })),
+    };
+
+    return {
+      saveUserPreferences: () => {
+        set({ isPending: true });
+        saveUserPreferences(pickPreferences(get()), () => set({ isPending: false }));
+      },
+      loadUserPreferences: async () => {
+        set({ isPending: true });
+        const userId = useSessionStore.getState().getUserId();
+        try {
+          const preferences = await getUserPreferencesFromDb(userId);
+          set({
+            formData: preferences.formData,
+            searchSortId: preferences.searchSortId,
+            searchFilters: preferences.searchFilters,
+          });
+          return true;
+        } catch (error) {
+          showError({
+            type: "recoverable",
+            message: `Something went wrong while loading your preferences: ${error}`,
+            error,
+          });
+          return false;
+        } finally {
+          set({ isPending: false });
+        }
+      },
+
+      setFormData: (formData: UserPreferences["formData"]) => {
+        set({ formData });
+        saveDebounced();
+      },
+      setSearchSort: (searchSortId: UserPreferences["searchSortId"]) => {
+        set({ searchSortId });
+        saveDebounced();
+      },
+      setSearchFilters: (searchFilters: UserPreferences["searchFilters"]) => {
+        set({ searchFilters });
+        saveDebounced();
+      },
+    };
+  }),
 );
