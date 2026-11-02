@@ -18,15 +18,14 @@ export interface SearchFilters {
   matchExact: boolean;
 }
 
-interface UpdateExcludePlaylistsFilterParams {
-  type: "doUseExcludedPlaylists";
-  value: boolean;
-}
+type UpdateFilterParams<Type extends string, Value> = {
+  type: Type;
+  value: Value;
+};
 
-interface UpdateMatchExactFilterParams {
-  type: "matchExact";
-  value: boolean;
-}
+type UpdateExcludePlaylistsFilterParams = UpdateFilterParams<"doUseExcludedPlaylists", boolean>;
+
+type UpdateMatchExactFilterParams = UpdateFilterParams<"matchExact", boolean>;
 
 export type UpdateSearchFilterParams =
   | UpdateExcludePlaylistsFilterParams
