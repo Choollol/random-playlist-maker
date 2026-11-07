@@ -127,9 +127,9 @@ export async function checkPlaylistEtag(
 ): Promise<{ isEtagStale: boolean; etag: string }> {
   const response = await catchQuotaError(
     gapi.client.request({
-      path: "https://www.googleapis.com/youtube/v3/playlists",
+      path: "https://www.googleapis.com/youtube/v3/playlistItems",
       method: "GET",
-      params: { part: "id", id: playlistId },
+      params: { part: "id", playlistId: playlistId },
       headers: {
         "If-None-Match": cachedEtag,
       },
