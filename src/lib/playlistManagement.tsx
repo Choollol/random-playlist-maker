@@ -225,48 +225,47 @@ async function retrievePlaylistItems(
 ) {
   const playlistData = usePlaylistDataStore.getState().getCopyOfPlaylistData();
 
-  let index = 0;
-  const length = Object.keys(playlistData).length;
+  let loadedCount = 0;
+  const playlistCount = Object.keys(playlistData).length;
 
   try {
-    for (const data of Object.values(playlistData)) {
-      const { isEtagStale, etag } = await checkPlaylistEtag(data.etag, data.playlist.id!);
-      const isStale = isCacheStale || isEtagStale;
+    await Promise.all(
+      Object.values(playlistData).map(async (data) => {
+        const { isEtagStale, etag } = await checkPlaylistEtag(data.etag, data.playlist.id!);
+        const isStale = isCacheStale || isEtagStale;
 
-      if (isStale) {
-        setMessageCallback(
-          <>
-            Fetching items for playlist
-            <br />
-            {`${index + 1} of ${length}:`}
-            <br />
-            {data.playlist.snippet!.title!.toString()}
-          </>,
-        );
-        const items = await catchQuotaError(
-          getPaginatedItems(gapi.client.youtube.playlistItems.list, {
-            part: PLAYLIST_ITEM_PART,
-            playlistId: data.playlist.id,
-          }),
-        );
-        items.forEach(trimPlaylistItemProperties);
+        if (isStale) {
+          const items = await catchQuotaError(
+            getPaginatedItems(gapi.client.youtube.playlistItems.list, {
+              part: PLAYLIST_ITEM_PART,
+              playlistId: data.playlist.id,
+            }),
+          );
+          items.forEach(trimPlaylistItemProperties);
 
-        data.etag = etag;
-        data.playlistItems = items;
-      } else {
-        setMessageCallback(
-          <>
-            Getting items from cache for playlist
-            <br />
-            {`${index + 1} of ${length}:`}
-            <br />
-            {data.playlist.snippet!.title!.toString()}
-          </>,
-        );
-      }
+          data.etag = etag;
+          data.playlistItems = items;
 
-      index++;
-    }
+          loadedCount++;
+          setMessageCallback(
+            <>
+              Fetched items for playlist
+              <br />
+              {`${loadedCount} of ${playlistCount}:`}
+            </>,
+          );
+        } else {
+          loadedCount++;
+          setMessageCallback(
+            <>
+              Retrieved items from cache for playlist
+              <br />
+              {`${loadedCount} of ${playlistCount}:`}
+            </>,
+          );
+        }
+      }),
+    );
 
     usePlaylistDataStore.getState().setPlaylistData(playlistData);
   } catch (error) {
