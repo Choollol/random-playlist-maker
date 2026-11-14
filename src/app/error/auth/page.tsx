@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 
-import useOnMount from "@/hooks/useOnMount";
-import { useErrorMessageStore } from "@/store/useErrorMessageStore";
+import useOnMount from "@/common/hooks/useOnMount";
+import { useErrorMessageStore } from "@/common/store/useErrorMessageStore";
 
 export default function AuthError() {
   const { setErrorMessage, clearErrorMessage } = useErrorMessageStore(

@@ -2,13 +2,13 @@ import { CssBaseline, GlobalStyles, InitColorSchemeScript, ThemeProvider } from 
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { Metadata, Viewport } from "next";
 
-import Snackbar from "@/components/_common/Snackbar";
-import StatusMessageOverlay from "@/components/_common/StatusMessageDialog/StatusMessageOverlay";
-import ErrorMessageOverlay from "@/components/ErrorMessageOverlay";
+import Snackbar from "@/common/components/Snackbar";
+import { roboto } from "@/common/lib/styling/font";
+import { defaultStyles, theme } from "@/common/lib/styling/theme";
+import { setEnvVariables } from "@/common/lib/utils/envUtils";
 import { ENV } from "@/env";
-import { roboto } from "@/lib/styling/font";
-import { defaultStyles, theme } from "@/lib/styling/theme";
-import { setEnvVariables } from "@/lib/utils/envUtils";
+import ErrorMessageOverlay from "@/features/error-message/ErrorMessageOverlay";
+import StatusMessageOverlay from "@/features/status-message-dialog/StatusMessageOverlay";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
 

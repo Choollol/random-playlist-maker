@@ -1,0 +1,21 @@
+import { create } from "zustand";
+import { combine } from "zustand/middleware";
+
+import { OverlayMessage } from "@/common/lib/playlist-management/playlistTypes";
+
+interface State {
+  overlayTitle: string;
+  overlayMessage: OverlayMessage;
+}
+
+const initialState: State = {
+  overlayTitle: "",
+  overlayMessage: null,
+};
+
+export const useOverlayMessageStore = create(
+  combine(initialState, (set) => ({
+    setOverlayMessage: (overlayMessage: OverlayMessage) => set({ overlayMessage: overlayMessage }),
+    setOverlayTitle: (overlayTitle: string) => set({ overlayTitle: overlayTitle }),
+  })),
+);

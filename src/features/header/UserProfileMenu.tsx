@@ -1,0 +1,70 @@
+"use client";
+
+import { Logout } from "@mui/icons-material";
+import { Button, IconButton, ListItemIcon, ListItemText, MenuItem, Popover } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { signOutGoogle } from "@/common/lib/auth/authClient";
+import { createStyleGroup } from "@/common/lib/styling/styling";
+import UserProfilePicture from "@/features/header/UserProfilePicture";
+
+const styles = createStyleGroup({
+  popover: {
+    padding: "4px",
+  },
+});
+
+/**
+ * Shown when user _is_ signed in.
+ */
+const UserProfileMenu = () => {
+  const [doOpenPopver, setDoOpenPopover] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const router = useRouter();
+
+  const handleAnchorButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    setDoOpenPopover(true);
+  };
+
+  const handlePopoverClose = () => {
+    setDoOpenPopover(false);
+  };
+
+  const handleSignOutClick = async () => {
+    setIsSigningOut(true);
+    await signOutGoogle(router);
+  };
+
+  return (
+    <>
+      <IconButton onClick={handleAnchorButtonClick}>
+        <UserProfilePicture />
+      </IconButton>
+
+      <Popover
+        open={doOpenPopver}
+        onClose={handlePopoverClose}
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        slotProps={{
+          paper: {
+            sx: styles.popover,
+          },
+        }}
+      >
+        <MenuItem component={Button} onClick={handleSignOutClick} loading={isSigningOut}>
+          <ListItemIcon>
+            <Logout />
+          </ListItemIcon>
+          <ListItemText>Sign Out</ListItemText>
+        </MenuItem>
+      </Popover>
+    </>
+  );
+};
+
+export default UserProfileMenu;
