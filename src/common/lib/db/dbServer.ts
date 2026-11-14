@@ -3,7 +3,7 @@
 import { App, cert, getApp, initializeApp } from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
 
-import { ENV } from "@/env";
+import { ENV } from "@/common/lib/env";
 
 const firebaseConfig = {
   apiKey: ENV.FIREBASE_API_KEY,

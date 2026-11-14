@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 
-import { ENV } from "@/env";
+import { ENV } from "@/common/lib/env";
 
 export const auth = betterAuth({
   baseURL: ENV.BETTER_AUTH_URL,

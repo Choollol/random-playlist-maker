@@ -3,10 +3,10 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { Metadata, Viewport } from "next";
 
 import Snackbar from "@/common/components/Snackbar";
+import { ENV } from "@/common/lib/env";
 import { roboto } from "@/common/lib/styling/font";
 import { defaultStyles, theme } from "@/common/lib/styling/theme";
 import { setEnvVariables } from "@/common/lib/utils/envUtils";
-import { ENV } from "@/env";
 import ErrorMessageOverlay from "@/features/error-message/ErrorMessageOverlay";
 import StatusMessageOverlay from "@/features/status-message-dialog/StatusMessageOverlay";
 
