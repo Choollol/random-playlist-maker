@@ -22,7 +22,7 @@ import {
 import { Playlist, PrivacyStatus } from "@/common/lib/types/gapiTypes";
 import { withRetries } from "@/common/lib/utils/apiUtils";
 import { getRandomElements } from "@/common/lib/utils/collectionUtils";
-import { waitForMs } from "@/common/lib/utils/miscUtils";
+import { waitForMs } from "@/common/lib/utils/jsUtils";
 import { usePlaylistDataStore } from "@/common/store/usePlaylistDataStore";
 import { useSessionStore } from "@/common/store/useSessionStore";
 

@@ -6,7 +6,7 @@ import { AppBar, Box, Toolbar } from "@mui/material";
 import IconLinkButton from "@/common/components/IconLinkButton";
 import { createStyleGroup } from "@/common/lib/styling/styling";
 import { PRIMARY_HUE } from "@/common/lib/styling/theme";
-import { BUG_REPORT_URL, GITHUB_URL } from "@/common/lib/utils/miscUtils";
+import { BUG_REPORT_URL, GITHUB_URL } from "@/common/lib/utils/jsUtils";
 import HomeLinkButton from "@/features/header/HomeLinkButton";
 import ManageAccountButton from "@/features/header/ManageAccountButton";
 import { SaveButton } from "@/features/header/SaveButton";

@@ -12,7 +12,7 @@ import {
 import { useShallow } from "zustand/react/shallow";
 
 import { createStyleGroup } from "@/common/lib/styling/styling";
-import { BUG_REPORT_URL } from "@/common/lib/utils/miscUtils";
+import { BUG_REPORT_URL } from "@/common/lib/utils/jsUtils";
 import { useErrorMessageStore } from "@/common/store/useErrorMessageStore";
 
 const styles = createStyleGroup({

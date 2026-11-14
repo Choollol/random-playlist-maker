@@ -1,4 +1,4 @@
-import { waitForMs } from "@/common/lib/utils/miscUtils";
+import { waitForMs } from "@/common/lib/utils/jsUtils";
 
 const BACKOFF_START_MS = 1000;
 const BACKOFF_LIMIT_MS = 8000;
