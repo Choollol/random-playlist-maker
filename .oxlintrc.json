@@ -13,6 +13,24 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": ["src/common/**/*"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["**/features/**"],
+                "message": "features/ should only depend on common/"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
   "env": {
     "builtin": true
   }
