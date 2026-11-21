@@ -44,7 +44,7 @@ export async function createRandomizedPlaylist({
   excludedPlaylistNames,
   setMessageCallback,
 }: CreateRandomizedPlaylistOptions) {
-  setMessageCallback("Setting up...");
+  setMessageCallback("Setting up");
   const isSignedIn = useSessionStore.getState().isUserSignedIn();
 
   if (!isSignedIn) {
@@ -100,7 +100,7 @@ export async function createPlaylistWithVideos(
   privacyStatus: PrivacyStatus,
   setMessageCallback: SetOverlayMessageCallback,
 ) {
-  setMessageCallback(`Creating playlist ${playlistTitle}...`);
+  setMessageCallback(`Creating playlist ${playlistTitle}`);
   const response = await catchQuotaError(
     gapi.client.youtube.playlists.insert({
       part: "id, snippet, status",
@@ -116,7 +116,7 @@ export async function createPlaylistWithVideos(
   );
   const playlist: Playlist = JSON.parse(response.body);
 
-  setMessageCallback("Adding videos to playlist...");
+  setMessageCallback("Adding videos to playlist");
   for (const playlistItemId of videoIds) {
     await withRetries(
       async () =>
@@ -158,11 +158,11 @@ export async function createPlaylistWithVideos(
  */
 export async function retrievePlaylistData(setMessageCallback: SetMessageCallback) {
   try {
-    setMessageCallback("Retrieving playlist data...");
+    setMessageCallback("Retrieving playlist data");
     await retrievePlaylists();
     usePlaylistDataStore.getState().markPlaylistsRetrieved();
 
-    setMessageCallback("Retrieving user data...");
+    setMessageCallback("Retrieving user data");
     const userId = useSessionStore.getState().getUserId();
 
     const storedData = await getStoredPlaylistData(userId);
@@ -171,13 +171,13 @@ export async function retrievePlaylistData(setMessageCallback: SetMessageCallbac
       loadStoredData(storedData.playlistData);
     }
 
-    setMessageCallback("Retrieving video data...");
+    setMessageCallback("Retrieving video data");
     await retrievePlaylistItems(setMessageCallback, isStoredDataStale);
     usePlaylistDataStore.getState().markPlaylistItemsRetrieved();
 
     updateVideoIds();
 
-    setMessageCallback("Caching data...");
+    setMessageCallback("Caching data");
     await setUserPlaylistData(userId, usePlaylistDataStore.getState().playlistData);
   } catch (error) {
     console.error(error);

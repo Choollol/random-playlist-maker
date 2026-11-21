@@ -126,7 +126,7 @@ const CreatePlaylistForm = () => {
   }, [arePlaylistsRetrieved]);
 
   const submitForm = (formData: FormData) => {
-    setOverlayTitle("Creating playlist...");
+    setOverlayTitle("Creating playlist");
     createRandomizedPlaylist({
       ...formData,
       setMessageCallback: setOverlayMessage,

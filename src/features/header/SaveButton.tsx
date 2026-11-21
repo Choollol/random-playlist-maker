@@ -22,7 +22,7 @@ export const SaveButton = () => {
   if (!isSignedIn) {
     tooltip = "Sign in to save your preferences";
   } else if (isPending) {
-    tooltip = "Your preferences are pending...";
+    tooltip = "Your preferences are pending";
   } else if (!isDatabaseInitialized) {
     tooltip = "Something went wrong while connecting to your preferences";
   } else {
