@@ -1,9 +1,6 @@
 "use client";
 
-import { StatusMessageDialog } from "@/common/components/StatusMessageDialog/StatusMessageDialog";
-import { StatusMessageDialogContent } from "@/common/components/StatusMessageDialog/StatusMessageDialogContent";
-import { StatusMessageDialogDivider } from "@/common/components/StatusMessageDialog/StatusMessageDialogDivider";
-import { StatusMessageDialogTitle } from "@/common/components/StatusMessageDialog/StatusMessageDialogTitle";
+import { StatusMessageDialog } from "@/common/components/StatusMessageDialog";
 import { isDefined } from "@/common/lib/utils/typeUtils";
 import { useOverlayMessageStore } from "@/features/status-message-overlay/useOverlayMessageStore";
 
@@ -12,11 +9,11 @@ const StatusMessageOverlay = () => {
 
   return (
     <StatusMessageDialog open={isDefined(overlayMessage)}>
-      <StatusMessageDialogTitle>{overlayTitle}</StatusMessageDialogTitle>
+      <StatusMessageDialog.Title>{overlayTitle}</StatusMessageDialog.Title>
 
-      <StatusMessageDialogDivider />
+      <StatusMessageDialog.Divider />
 
-      <StatusMessageDialogContent>{overlayMessage}</StatusMessageDialogContent>
+      <StatusMessageDialog.Content>{overlayMessage}</StatusMessageDialog.Content>
     </StatusMessageDialog>
   );
 };

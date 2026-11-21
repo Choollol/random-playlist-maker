@@ -2,10 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useEffectEvent, useState } from "react";
 
-import { StatusMessageDialog } from "@/common/components/StatusMessageDialog/StatusMessageDialog";
-import { StatusMessageDialogContent } from "@/common/components/StatusMessageDialog/StatusMessageDialogContent";
-import { StatusMessageDialogDivider } from "@/common/components/StatusMessageDialog/StatusMessageDialogDivider";
-import { StatusMessageDialogTitle } from "@/common/components/StatusMessageDialog/StatusMessageDialogTitle";
+import { StatusMessageDialog } from "@/common/components/StatusMessageDialog";
 import { signOutGoogle } from "@/common/lib/auth/authClient";
 import { retrievePlaylistData } from "@/common/lib/playlist-management/playlistManagement";
 import { createStyleGroup } from "@/common/lib/styling/styling";
@@ -61,16 +58,16 @@ const RetrievePlaylists = () => {
     </Paper>
   ) : (
     <StatusMessageDialog open={Boolean(message)} onClose={handleClose}>
-      <StatusMessageDialogTitle>Retrieving data...</StatusMessageDialogTitle>
+      <StatusMessageDialog.Title>Retrieving data...</StatusMessageDialog.Title>
 
-      <StatusMessageDialogDivider />
+      <StatusMessageDialog.Divider />
 
-      <StatusMessageDialogContent>
+      <StatusMessageDialog.Content>
         {message}
         <Typography variant="caption" sx={{ display: "block", marginTop: 3 }}>
           Click anywhere in the background to collapse this dialog
         </Typography>
-      </StatusMessageDialogContent>
+      </StatusMessageDialog.Content>
     </StatusMessageDialog>
   );
 };
