@@ -64,9 +64,9 @@ const RetrievePlaylists = () => {
 
       <StatusMessageDialog.Content>
         {message}
-        <Typography variant="caption" sx={{ display: "block", marginTop: 3 }}>
+        <StatusMessageDialog.Subtext>
           Click anywhere in the background to collapse this dialog
-        </Typography>
+        </StatusMessageDialog.Subtext>
       </StatusMessageDialog.Content>
     </StatusMessageDialog>
   );

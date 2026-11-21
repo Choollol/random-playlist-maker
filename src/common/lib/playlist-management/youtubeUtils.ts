@@ -24,9 +24,6 @@ export const DEFAULT_PRIVACY_LEVEL: PrivacyStatus = PrivacyStatus.Public;
 
 export const DEFAULT_PLAYLIST_TITLE = "My PickSome";
 
-export const NO_OVERLAY_MESSAGE = null;
-
-export const PLAYLIST_CREATED_MESSAGE_TIME_MS = 2000;
 export const EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS = 1000;
 
 /**

@@ -1,21 +1,38 @@
 import { create } from "zustand";
-import { combine } from "zustand/middleware";
 
-import { OverlayMessage } from "@/common/lib/playlist-management/playlistTypes";
+import {
+  OVERLAY_MESSAGE_WAIT,
+  OverlayMessage,
+  SetOverlayMessageCallback,
+} from "@/common/lib/utils/overlayMessageUtils";
 
 interface State {
   overlayTitle: string;
   overlayMessage: OverlayMessage;
+  doWait: boolean;
 }
 
 const initialState: State = {
   overlayTitle: "",
   overlayMessage: null,
+  doWait: false,
 };
 
-export const useOverlayMessageStore = create(
-  combine(initialState, (set) => ({
-    setOverlayMessage: (overlayMessage: OverlayMessage) => set({ overlayMessage: overlayMessage }),
-    setOverlayTitle: (overlayTitle: string) => set({ overlayTitle: overlayTitle }),
-  })),
-);
+interface Functions {
+  setOverlayMessage: SetOverlayMessageCallback;
+  setOverlayTitle: (overlayTitle: string) => void;
+}
+
+export const useOverlayMessageStore = create<State & Functions>((set) => ({
+  ...initialState,
+  setOverlayMessage: (overlayMessage) => {
+    if (overlayMessage === OVERLAY_MESSAGE_WAIT) {
+      set({ doWait: true });
+    } else {
+      set({ overlayMessage: overlayMessage, doWait: false });
+    }
+  },
+  setOverlayTitle: (overlayTitle) => {
+    set({ overlayTitle: overlayTitle });
+  },
+}));

@@ -10,6 +10,4 @@ export interface PlaylistData {
   };
 }
 
-export type OverlayMessage = ReactNode;
-
-export type SetMessageCallback = (message: OverlayMessage) => void;
+export type SetMessageCallback = (message: ReactNode) => void;

@@ -12,8 +12,6 @@ import {
   EXCLUDING_PLAYLISTS_MESSAGE_TIME_MS,
   getPaginatedItems,
   getVideoIdsFromPlaylistData,
-  NO_OVERLAY_MESSAGE,
-  PLAYLIST_CREATED_MESSAGE_TIME_MS,
   PLAYLIST_ITEM_PART,
   PLAYLIST_PART,
   trimPlaylistItemProperties,
@@ -23,6 +21,11 @@ import { Playlist, PrivacyStatus } from "@/common/lib/types/gapiTypes";
 import { withRetries } from "@/common/lib/utils/apiUtils";
 import { getRandomElements } from "@/common/lib/utils/collectionUtils";
 import { waitForMs } from "@/common/lib/utils/jsUtils";
+import {
+  OVERLAY_MESSAGE_CLOSE,
+  OVERLAY_MESSAGE_WAIT,
+  SetOverlayMessageCallback,
+} from "@/common/lib/utils/overlayMessageUtils";
 import { usePlaylistDataStore } from "@/common/store/usePlaylistDataStore";
 import { useSessionStore } from "@/common/store/useSessionStore";
 
@@ -31,7 +34,7 @@ export interface CreateRandomizedPlaylistOptions {
   numPlaylistItems: number;
   privacyStatus: PrivacyStatus;
   excludedPlaylistNames: string[];
-  setMessageCallback: SetMessageCallback;
+  setMessageCallback: SetOverlayMessageCallback;
 }
 
 export async function createRandomizedPlaylist({
@@ -95,7 +98,7 @@ export async function createPlaylistWithVideos(
   videoIds: string[],
   playlistTitle: string,
   privacyStatus: PrivacyStatus,
-  setMessageCallback: SetMessageCallback,
+  setMessageCallback: SetOverlayMessageCallback,
 ) {
   setMessageCallback(`Creating playlist ${playlistTitle}...`);
   const response = await catchQuotaError(
@@ -144,9 +147,7 @@ export async function createPlaylistWithVideos(
     </>,
   );
 
-  await waitForMs(PLAYLIST_CREATED_MESSAGE_TIME_MS);
-
-  setMessageCallback(NO_OVERLAY_MESSAGE);
+  setMessageCallback(OVERLAY_MESSAGE_WAIT);
 }
 
 /**
@@ -182,7 +183,7 @@ export async function retrievePlaylistData(setMessageCallback: SetMessageCallbac
     console.error(error);
     throw error;
   } finally {
-    setMessageCallback(NO_OVERLAY_MESSAGE);
+    setMessageCallback(OVERLAY_MESSAGE_CLOSE);
   }
 }
 

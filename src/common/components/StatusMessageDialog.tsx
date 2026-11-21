@@ -16,6 +16,10 @@ const styles = createStyleGroup({
   title: {
     marginBottom: "8px",
   },
+  subtext: {
+    display: "block",
+    marginTop: 3,
+  },
 });
 
 type ContainerProps = ComponentProps<typeof Dialog> & {
@@ -55,5 +59,17 @@ StatusMessageDialog.Content = ({ children }: ContentProps) => {
     <DialogContent>
       <Typography variant="h5">{children}</Typography>
     </DialogContent>
+  );
+};
+
+interface SubtextProps {
+  children: ReactNode;
+}
+
+StatusMessageDialog.Subtext = ({ children }: SubtextProps) => {
+  return (
+    <Typography variant="caption" sx={styles.subtext}>
+      {children}
+    </Typography>
   );
 };
