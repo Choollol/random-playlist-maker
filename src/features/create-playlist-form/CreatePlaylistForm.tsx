@@ -19,7 +19,7 @@ import { createStyleGroup } from "@/common/lib/styling/styling";
 import { PrivacyStatus } from "@/common/lib/types/gapiTypes";
 import { useInitializationStateStore } from "@/common/store/useInitializationStateStore";
 import { usePlaylistDataStore } from "@/common/store/usePlaylistDataStore";
-import { useOverlayMessageStore } from "@/features/status-message-dialog/useOverlayMessageStore";
+import { useOverlayMessageStore } from "@/features/status-message-overlay/useOverlayMessageStore";
 import {
   FormData,
   useUserPreferencesStore,

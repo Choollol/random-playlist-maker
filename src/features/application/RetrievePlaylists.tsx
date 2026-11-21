@@ -2,14 +2,14 @@ import { Paper, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useEffectEvent, useState } from "react";
 
+import { StatusMessageDialog } from "@/common/components/StatusMessageDialog/StatusMessageDialog";
+import { StatusMessageDialogContent } from "@/common/components/StatusMessageDialog/StatusMessageDialogContent";
+import { StatusMessageDialogDivider } from "@/common/components/StatusMessageDialog/StatusMessageDialogDivider";
+import { StatusMessageDialogTitle } from "@/common/components/StatusMessageDialog/StatusMessageDialogTitle";
 import { signOutGoogle } from "@/common/lib/auth/authClient";
 import { retrievePlaylistData } from "@/common/lib/playlist-management/playlistManagement";
 import { createStyleGroup } from "@/common/lib/styling/styling";
 import { useInitializationStateStore } from "@/common/store/useInitializationStateStore";
-import { StatusMessageDialog } from "@/features/status-message-dialog/StatusMessageDialog";
-import { StatusMessageDialogContent } from "@/features/status-message-dialog/StatusMessageDialogContent";
-import { StatusMessageDialogDivider } from "@/features/status-message-dialog/StatusMessageDialogDivider";
-import { StatusMessageDialogTitle } from "@/features/status-message-dialog/StatusMessageDialogTitle";
 
 const styles = createStyleGroup({
   collapsedContainer: {

@@ -8,7 +8,7 @@ import { roboto } from "@/common/lib/styling/font";
 import { defaultStyles, theme } from "@/common/lib/styling/theme";
 import { setEnvVariables } from "@/common/lib/utils/envUtils";
 import ErrorMessageOverlay from "@/features/error-message/ErrorMessageOverlay";
-import StatusMessageOverlay from "@/features/status-message-dialog/StatusMessageOverlay";
+import StatusMessageOverlay from "@/features/status-message-overlay/StatusMessageOverlay";
 
 const globalStyles = <GlobalStyles styles={defaultStyles} />;
 
