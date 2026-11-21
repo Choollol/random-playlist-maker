@@ -25,7 +25,7 @@ const StatusMessageOverlay = () => {
         {overlayMessage}
         {doWait ? (
           <StatusMessageDialog.Subtext>
-            Click anywhere in the background to collapse this dialog
+            Click anywhere in the background to close this dialog
           </StatusMessageDialog.Subtext>
         ) : null}
       </StatusMessageDialog.Content>
