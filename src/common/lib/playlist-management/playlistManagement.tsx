@@ -1,3 +1,4 @@
+import { PlaylistLink } from "@/common/components/PlaylistLink";
 import { signInGoogle } from "@/common/lib/auth/authClient";
 import {
   getStoredPlaylistData,
@@ -144,6 +145,9 @@ export async function createPlaylistWithVideos(
       {`"${playlistTitle}"`}
       <br />
       {`with ${videoIds.length} videos!`}
+      <br />
+      <br />
+      <PlaylistLink playlistId={playlist.id!} />
     </>,
   );
 

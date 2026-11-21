@@ -143,3 +143,7 @@ export async function checkPlaylistEtag(
 export function getVideoLink(videoId: string) {
   return `https://www.youtube.com/watch?v=${videoId}`;
 }
+
+export function getPlaylistLink(playlistId: string) {
+  return `https://www.youtube.com/playlist?list=${playlistId}`;
+}
